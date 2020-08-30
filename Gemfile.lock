@@ -2,8 +2,8 @@ PATH
   remote: .
   specs:
     retest (0.1.0)
-      listen
-      string-similarity
+      listen (~> 3.2)
+      string-similarity (~> 2.1)
 
 GEM
   remote: https://rubygems.org/
