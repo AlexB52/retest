@@ -1,28 +1,53 @@
 # Retest
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/retest`. To experiment with that code, run `bin/console` for an interactive prompt.
+Retest is a small gem to help refactor code by watching a file change and running its matching spec. You don't need a configuration file to start refactoring. It is advised to be one `cmd + z` away from green tests when refactoring. This means running tests after every line change. Let retest rerun your tests after every file change you make.
 
-TODO: Delete this and the text above, and describe your gem
+This is my take on solving tests rerun. It is meant to be simple and follow testing conventions encountered in Ruby projects. It is probably unstable and unflexible but covers my need. Give it a go you can uninstall it easily. For stable, yet more and fully fledged solutions, some cli tools already exists: [autotest](https://github.com/grosser/autotest), [guard](https://github.com/guard/guard), [zentest](https://github.com/seattlerb/zentest)
+
+This is a work in progress and the end goal is to have an executable that works as follow:
+
+* Works with RSpec, MiniTest, Rake commands & bash commands (not aliases).
+* When a test file is not found run the last command again.
+* When multiple test files are found, ask  which file to run and save the answer.
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'retest'
-```
-
-And then execute:
-
-    $ bundle install
-
-Or install it yourself as:
+Install it on your machine with:
 
     $ gem install retest
 
 ## Usage
 
-TODO: Write usage instructions here
+Launch `retest` in your terminal after accessing your ruby project folder.
+
+Pass the test command surrounded with quotes. Use the placeholder `<test>` in your command to let `retest` find the matching test and replace the placeholder with the path of the test file.
+
+```bash
+# Let retest find the test file and replace the placeholder with the path of the test file
+$ retest 'bundle exec rake test <test>'
+$ retest 'rails test <test>'
+$ retest 'rspec <test>'
+$ retest 'ruby <test>'
+
+# Run the same command after a file change like all the spec files
+$ retest 'bundle exec rake test'
+$ retest 'rails test'
+$ retest 'rspec'
+
+# Hardcode a test file to run indepdendently from the file you change
+$ retest 'ruby all_tests.rb'
+```
+
+**Disclaimer:**
+* If an error comes in try using `bundle exec` like so: `$ retest 'bundle exec rake test <test>'`
+* Aliases saved on ~/.bashrc or ~/.zshrc cannot be run that way with the `retest` command
+
+## Roadmap
+
+- [x] MVP
+- [ ] When a test file is not found run the last command again.
+- [ ] When multiple test files are found, ask  which file to run and save the answer.
+- [ ] Aliases from oh-my-zsh and bash profiles?
 
 ## Development
 
@@ -32,7 +57,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/retest.
+Bug reports and pull requests are welcome on GitHub at https://github.com/alexb52/retest.
 
 
 ## License
