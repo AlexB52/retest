@@ -1,12 +1,13 @@
 # Retest
 
-Retest is a small gem to help refactor code by watching a file change and running its matching spec. You don't need a configuration file to start refactoring. It is advised to be one `cmd + z` away from green tests when refactoring. This means running tests after every line change. Let retest rerun your tests after every file change you make.
+Retest is a small gem to help refactor code by watching a file change and running its matching spec. You don't need a configuration file to start refactoring. It is advised to be one `cmd + z` away from green tests when refactoring. This means running tests after every line change. Let Retest rerun your tests after every file change you make.
 
 This is my take on solving tests rerun. It is meant to be simple and follow testing conventions encountered in Ruby projects. It is probably unstable and unflexible but covers my need. Give it a go you can uninstall it easily. For stable, yet more and fully fledged solutions, some cli tools already exists: [autotest](https://github.com/grosser/autotest), [guard](https://github.com/guard/guard), [zentest](https://github.com/seattlerb/zentest)
 
 This is a work in progress and the end goal is to have an executable that works as follow:
 
 * Works with RSpec, MiniTest, Rake commands & bash commands (not aliases).
+* Works when run in a Docker container.
 * When a test file is not found run the last command again.
 * When multiple test files are found, ask  which file to run and save the answer.
 
@@ -45,6 +46,7 @@ $ retest 'ruby all_tests.rb'
 ## Roadmap
 
 - [x] MVP
+- [ ] Run withing Docker.
 - [ ] When a test file is not found run the last command again.
 - [ ] When multiple test files are found, ask  which file to run and save the answer.
 - [ ] Aliases from oh-my-zsh and bash profiles?
