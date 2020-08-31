@@ -29,14 +29,25 @@ $ retest 'bundle exec rake test <test>'
 $ retest 'rails test <test>'
 $ retest 'rspec <test>'
 $ retest 'ruby <test>'
+$ retest 'docker-compose exec web bundle exec rails test <test>'
 
 # Run the same command after a file change like all the spec files
 $ retest 'bundle exec rake test'
 $ retest 'rails test'
 $ retest 'rspec'
+$ retest 'docker-compose exec web bundle exec rails test'
 
 # Hardcode a test file to run indepdendently from the file you change
 $ retest 'ruby all_tests.rb'
+```
+
+### Docker
+
+Installing & launching the gem in the Docker container seem to work
+```bash
+$ docker-compose run web bash 
+$ gem install retests
+$ retest 'bundle exec rails test <test>'
 ```
 
 **Disclaimer:**
@@ -46,7 +57,7 @@ $ retest 'ruby all_tests.rb'
 ## Roadmap
 
 - [x] MVP
-- [ ] Run withing Docker.
+- [x] Run withing Docker.
 - [ ] When a test file is not found run the last command again.
 - [ ] When multiple test files are found, ask  which file to run and save the answer.
 - [ ] Aliases from oh-my-zsh and bash profiles?
