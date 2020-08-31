@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 
 require 'retest'
-require 'open3'
 require 'listen'
 
 include Retest
@@ -10,7 +9,6 @@ puts "Launching Retest..."
 command_to_run = ARGV.join(' ')
 
 listener = Listen.to('.', relative: true) do |modified, added, removed|
-  puts "modified absolute path: #{modified}"
   system("clear") || system("cls")
 
   if test_path = find_test(modified.first.strip, files: Dir.glob('**/**'))
@@ -22,5 +20,7 @@ listener = Listen.to('.', relative: true) do |modified, added, removed|
     puts "Could not find matching test to run"
   end
 end
+
 listener.start # not blocking
+puts "Ready to refactor! You can make file changes now"
 sleep
