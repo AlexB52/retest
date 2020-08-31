@@ -7,6 +7,21 @@ class RetestTest < Minitest::Test
     refute_nil ::Retest::VERSION
   end
 
+  def test_find_tests
+    files = %w(
+      core/app/controllers/admin/billing_agent_customers_controller.rb
+      spec/models/billing_agent_customer_spec.rb
+      core/spec/models/billing_agent_customer_spec.rb
+      core/spec/controllers/admin/billing_agent_customers_controller_spec.rb
+    )
+
+    assert_equal %w(
+        spec/models/billing_agent_customer_spec.rb
+        core/spec/models/billing_agent_customer_spec.rb
+      ),
+      find_tests('core/models/billing_agent_customer.rb', files: files)
+  end
+
   def test_find_test
     files = %w(
       test/songs/99bottles.txt
