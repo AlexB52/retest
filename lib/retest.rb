@@ -1,4 +1,5 @@
 require "retest/version"
+require "retest/command"
 require 'string/similarity'
 
 module Retest
