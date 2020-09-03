@@ -46,7 +46,7 @@ $ retest 'ruby all_tests.rb'
 Installing & launching the gem in the Docker container seem to work
 ```bash
 $ docker-compose run web bash 
-$ gem install retests
+$ gem install retest
 $ retest 'bundle exec rails test <test>'
 ```
 
