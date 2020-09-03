@@ -25,7 +25,7 @@ Pass the test command surrounded with quotes. Use the placeholder `<test>` in yo
 
 ```bash
 # Let retest find the test file and replace the placeholder with the path of the test file
-$ retest 'bundle exec rake test <test>'
+$ retest 'bundle exec rake test TEST=<test>'
 $ retest 'rails test <test>'
 $ retest 'rspec <test>'
 $ retest 'ruby <test>'
