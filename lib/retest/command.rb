@@ -11,12 +11,11 @@ module Retest
     end
 
     class VariableCommand
-      attr_reader :command, :files, :cache
+      attr_reader :command, :repository
 
-      def initialize(command, files: nil, cache: {})
+      def initialize(command, repository: nil)
+        @repository = repository || Repository.new
         @command = command
-        @cache = cache
-        @files = files || default_files
       end
 
       def ==(obj)
@@ -24,29 +23,12 @@ module Retest
       end
 
       def run(file_changed)
-        if find_test(file_changed)
-          system command.gsub('<test>', find_test(file_changed))
+        if repository.find_test(file_changed)
+          puts "Test File Selected: #{repository.find_test(file_changed)}"
+          system command.gsub('<test>', repository.find_test(file_changed))
         else
           puts 'Could not find a file test matching'
         end
-      end
-
-      private
-
-      def find_test(path)
-        cache[path] ||= files
-          .select { |file| regex(path) =~ file }
-          .max_by { |file| String::Similarity.cosine(path, file) }
-      end
-
-      def regex(path)
-        extname = File.extname(path)
-        basename = File.basename(path, extname)
-        Regexp.new(".*#{basename}_(?:spec|test)#{extname}")
-      end
-
-      def default_files
-        @default_files ||= Dir.glob('**/*') - Dir.glob('{tmp,node_modules}/**/*')
       end
     end
 

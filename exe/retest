@@ -8,8 +8,12 @@ puts "Launching Retest..."
 command = Retest::Command.for(ARGV.join)
 
 listener = Listen.to('.', ignore: /node_modules|tmp/, relative: true) do |modified, added, removed|
-  system("clear") || system("cls")
-  command.run(modified.first.strip)
+  if modified.any?
+    system("clear") || system("cls")
+    command.run(modified.first.strip)
+  end
+rescue => e
+  puts "Something went wrong: #{e.message}"
 end
 
 listener.start # not blocking
