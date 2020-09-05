@@ -1,13 +1,14 @@
 module Retest
   class Repository
-    attr_accessor :files
+    attr_accessor :files, :cache
 
-    def initialize(files: nil)
+    def initialize(files: nil, cache: {})
+      @cache = cache
       @files = files || default_files
     end
 
     def find_test(path)
-     find_tests(path)
+     cache[path] ||= find_tests(path)
        .max_by { |file| String::Similarity.cosine(path, file) }
     end
 

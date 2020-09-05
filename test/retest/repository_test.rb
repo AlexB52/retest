@@ -54,5 +54,15 @@ module Retest
       assert_equal 'core/spec/models/billing_agent_customer_spec.rb',
         @subject.find_test('core/models/billing_agent_customer.rb')
     end
+
+    def test_cache
+      mock_cache = {}
+      expected = { "file_path.rb" => "file_path_test.rb" }
+
+      Repository.new(files: ['file_path_test.rb'], cache: mock_cache)
+        .find_test('file_path.rb')
+
+      assert_equal expected, mock_cache
+    end
   end
 end
