@@ -32,25 +32,35 @@ module Retest
       include CommandBehaviourTest
 
       def setup
-        @subject = Command::VariableCommand.new(
-          "echo '<test>'",
-          repository: Repository.new(files: [])
-        )
+        @repository = Repository.new
+
+        @subject = Command::VariableCommand.new("echo 'touch <test>'", repository: @repository)
       end
 
       def test_run_with_no_file_found
+        @repository.files = []
+
         out, _ = capture_subprocess_io { @subject.run('file_path.rb') }
 
         assert_match "Could not find a file test matching", out
       end
 
       def test_run_with_a_file_found
-        @subject = Command::VariableCommand.new(
-          "echo 'touch <test>'",
-          repository: Repository.new(files: ['file_path_test.rb'])
-        )
+        @repository.files = ['file_path_test.rb']
 
         out, _ = capture_subprocess_io { @subject.run('file_path.rb') }
+
+        assert_match "touch file_path_test.rb", out
+      end
+
+      def test_last_command
+        @repository.files = ['file_path_test.rb']
+
+        out, _ = capture_subprocess_io { @subject.run('file_path.rb') }
+
+        assert_match "touch file_path_test.rb", out
+
+        out, _ = capture_subprocess_io { @subject.run('unknown_path.rb') }
 
         assert_match "touch file_path_test.rb", out
       end
