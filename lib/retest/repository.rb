@@ -23,7 +23,7 @@ module Retest
       when 0, 1
         tests.first
       else
-        output_question tests.first(3)
+        ask_question tests.first(3)
         tests[get_input]
       end
     end
@@ -38,11 +38,20 @@ module Retest
      Regexp.new(".*#{basename}_(?:spec|test)#{extname}")
     end
 
-    def output_question(tests)
-      output_stream.puts "Which file do you want to use?"
-      tests.each_with_index do |file, index|
-        output_stream.puts "[#{index}] - #{file}"
-      end
+    def ask_question(tests)
+      output_stream.puts <<~QUESTION
+      We found few tests matching:
+      #{list_options(tests)}
+
+      Which file do you want to use?
+      Enter the file number now:
+      QUESTION
+    end
+
+    def list_options(tests)
+      tests.map.with_index do |file, index|
+        "[#{index}] - #{file}"
+      end.join("\n")
     end
 
     def get_input
