@@ -1,4 +1,5 @@
 require 'test_helper'
+require_relative 'repository/multiple_test_files_with_user_input.rb'
 
 module Retest
   class RepositoryTest < MiniTest::Test

@@ -24,6 +24,7 @@ module Retest
 
       def run(file_changed)
         if repository.find_test(file_changed)
+          puts "Test File Selected: #{repository.find_test(file_changed)}"
           system command.gsub('<test>', repository.find_test(file_changed))
         else
           puts 'Could not find a file test matching'
