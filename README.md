@@ -48,7 +48,7 @@ The gem works as follows:
 
 ### Docker
 
-Installing & launching the gem in the Docker container seems to work
+Installing & launching the gem in a Docker container seems to work
 ```bash
 $ docker-compose run web bash
 $ gem install retest
