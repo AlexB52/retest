@@ -1,15 +1,13 @@
 # Retest
 
-Retest is a small gem to help refactor code by watching a file change and running its matching spec. You don't need a configuration file to start refactoring. It is advised to be one `cmd + z` away from green tests when refactoring. This means running tests after every line change. Let Retest rerun your tests after every file change you make.
+Retest is a small command line tool to help refactor code by watching a file change and running its matching spec. You don't need a configuration file to start refactoring.
 
-This is my take on solving tests rerun. It is meant to be simple and follow testing conventions encountered in Ruby projects. It is probably unstable and unflexible but covers my need. Give it a go you can uninstall it easily. For stable, yet more and fully fledged solutions, some cli tools already exists: [autotest](https://github.com/grosser/autotest), [guard](https://github.com/guard/guard), [zentest](https://github.com/seattlerb/zentest)
+## Why?
+It is advised to be one `cmd + z` away from green tests when refactoring. This means running tests after every line change. Let Retest rerun your tests after every file change you make.
 
-This is a work in progress and the end goal is to have an executable that works as follow:
+Retest gem is meant to be simple and follow testing conventions encountered in Ruby projects. It is probably unstable and unflexible. Give it a go you can uninstall it easily. If you think the matching pattern could be improved please raise an issue.
 
-* Works with RSpec, MiniTest, Rake commands & bash commands (not aliases).
-* Works when run in a Docker container.
-* When a test file is not found run the last command again.
-* When multiple test files are found, ask  which file to run and save the answer.
+For stable, yet more and fully fledged solutions, some cli tools already exists: [autotest](https://github.com/grosser/autotest), [guard](https://github.com/guard/guard), [zentest](https://github.com/seattlerb/zentest)
 
 ## Installation
 
@@ -41,11 +39,18 @@ $ retest 'docker-compose exec web bundle exec rails test'
 $ retest 'ruby all_tests.rb'
 ```
 
+The gem works as follows:
+
+* When multiple matching test files are found, the tool asks you to confirm the file and save the answer.
+* When a test file is not found run the last command again. If no command was run before nothing gets run.
+* Works with RSpec, MiniTest, Rake commands & bash commands (not aliases).
+* Works when run in a Docker container
+
 ### Docker
 
-Installing & launching the gem in the Docker container seem to work
+Installing & launching the gem in the Docker container seems to work
 ```bash
-$ docker-compose run web bash 
+$ docker-compose run web bash
 $ gem install retest
 $ retest 'bundle exec rails test <test>'
 ```
@@ -57,9 +62,9 @@ $ retest 'bundle exec rails test <test>'
 ## Roadmap
 
 - [x] MVP
+- [x] When multiple test files are found, ask  which file to run and save the answer.
+- [x] When a test file is not found run the last command again.
 - [x] Run withing Docker.
-- [ ] When a test file is not found run the last command again.
-- [ ] When multiple test files are found, ask  which file to run and save the answer.
 - [ ] Aliases from oh-my-zsh and bash profiles?
 
 ## Development
