@@ -1,6 +1,6 @@
 # Retest
 
-Retest is a small command line tool to help refactor code by watching a file change and running its matching spec. You don't need a configuration file to start refactoring.
+Retest is a small command line tool to help refactor code by watching a file change and running its matching spec. You don't need to add it in your Gemfile or set a configuration file to start refactoring.
 
 ## Why?
 It is advised to be one `cmd + z` away from green tests when refactoring. This means running tests after every line change. Let Retest rerun your tests after every file change you make.
@@ -64,7 +64,7 @@ $ retest 'bundle exec rails test <test>'
 - [x] MVP
 - [x] When multiple test files are found, ask  which file to run and save the answer.
 - [x] When a test file is not found run the last command again.
-- [x] Run withing Docker.
+- [x] Run within Docker.
 - [ ] Aliases from oh-my-zsh and bash profiles?
 
 ## Development
