@@ -10,17 +10,10 @@ module Retest
     end
 
     def find_test(path)
-      cache[path] ||= select_test(path)
+      cache[path] ||= select_from test_options(path)
     end
 
     private
-
-    def select_test(path)
-      select_from files.select { |file| regex(path) =~ file }
-        .sort_by { |file| String::Similarity.levenshtein(path, file) }
-        .reverse
-        .first(5)
-    end
 
     def select_from(tests)
       case tests.count
@@ -30,6 +23,13 @@ module Retest
         ask_question tests
         tests[get_input]
       end
+    end
+
+    def test_options(path)
+      files.select { |file| regex(path) =~ file }
+        .sort_by { |file| String::Similarity.levenshtein(path, file) }
+        .last(5)
+        .reverse
     end
 
     def default_files
