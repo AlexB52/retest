@@ -46,8 +46,6 @@ The gem works as follows:
 * Works with RSpec, MiniTest, Rake commands & bash commands (not aliases).
 * Works when installed and run in a Docker container.
 
-![demo](README/demo.gif)
-
 ### Docker
 
 Installing & launching the gem in the Docker container seems to work
