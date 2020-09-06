@@ -1,13 +1,11 @@
 module Retest
   class Command
     def self.for(test_command)
-      command_class = if test_command.include? '<test>'
+      if test_command.include? '<test>'
         VariableCommand
       else
         HardcodedCommand
-      end
-
-      command_class.new test_command
+      end.new test_command
     end
 
     class VariableCommand

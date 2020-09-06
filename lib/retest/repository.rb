@@ -16,15 +16,18 @@ module Retest
     private
 
     def select_test(path)
-      tests = files.select { |file| regex(path) =~ file }
+      select_from files.select { |file| regex(path) =~ file }
         .sort_by { |file| String::Similarity.levenshtein(path, file) }
         .reverse
+        .first(5)
+    end
 
+    def select_from(tests)
       case tests.count
       when 0, 1
         tests.first
       else
-        ask_question tests.first(5)
+        ask_question tests
         tests[get_input]
       end
     end
@@ -41,11 +44,11 @@ module Retest
 
     def ask_question(tests)
       output_stream.puts <<~QUESTION
-      We found few tests matching:
-      #{list_options(tests)}
+        We found few tests matching:
+        #{list_options(tests)}
 
-      Which file do you want to use?
-      Enter the file number now:
+        Which file do you want to use?
+        Enter the file number now:
       QUESTION
     end
 
