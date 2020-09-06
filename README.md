@@ -44,7 +44,9 @@ The gem works as follows:
 * When multiple matching test files are found, the tool asks you to confirm the file and save the answer.
 * When a test file is not found run the last command again. If no command was run before nothing gets run.
 * Works with RSpec, MiniTest, Rake commands & bash commands (not aliases).
-* Works when run in a Docker container
+* Works when installed and run in a Docker container.
+
+![demo](README/demo.gif)
 
 ### Docker
 
