@@ -16,8 +16,8 @@ module Retest
     def test_find_test_user_input_question
       expected = <<~EXPECTED
         We found few tests matching:
-        [0] - core/spec/models/billing_agent_customer_spec.rb
-        [1] - spec/models/billing_agent_customer_spec.rb
+        [0] - spec/models/billing_agent_customer_spec.rb
+        [1] - core/spec/models/billing_agent_customer_spec.rb
 
         Which file do you want to use?
         Enter the file number now:
@@ -32,14 +32,14 @@ module Retest
 
     def test_find_test_user_select_0
       @subject.input_stream = StringIO.new("0\n")
-      expected = 'core/spec/models/billing_agent_customer_spec.rb'
+      expected = 'spec/models/billing_agent_customer_spec.rb'
 
       assert_equal expected , @subject.find_test('app/models/billing_agent_customer.rb')
     end
 
     def test_find_test_user_select_1
       @subject.input_stream = StringIO.new("1\n")
-      expected = 'spec/models/billing_agent_customer_spec.rb'
+      expected = 'core/spec/models/billing_agent_customer_spec.rb'
 
       assert_equal expected , @subject.find_test('app/models/billing_agent_customer.rb')
     end
@@ -52,7 +52,7 @@ module Retest
 
     def test_find_test_user_select_cache_answer
       @subject.input_stream = StringIO.new("0\n")
-      expected = 'core/spec/models/billing_agent_customer_spec.rb'
+      expected = 'spec/models/billing_agent_customer_spec.rb'
 
       assert_equal expected , @subject.find_test('app/models/billing_agent_customer.rb')
 

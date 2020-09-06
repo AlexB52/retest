@@ -17,13 +17,14 @@ module Retest
 
     def select_test(path)
       tests = files.select { |file| regex(path) =~ file }
-        .sort_by { |file| String::Similarity.cosine(path, file) }
+        .sort_by { |file| String::Similarity.levenshtein(path, file) }
+        .reverse
 
       case tests.count
       when 0, 1
         tests.first
       else
-        ask_question tests.first(3)
+        ask_question tests.first(5)
         tests[get_input]
       end
     end
