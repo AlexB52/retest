@@ -9,6 +9,8 @@ Retest gem is meant to be simple and follow testing conventions encountered in R
 
 For stable, yet more and fully fledged solutions, some cli tools already exists: [autotest](https://github.com/grosser/autotest), [guard](https://github.com/guard/guard), [zentest](https://github.com/seattlerb/zentest)
 
+![demo](https://alexbarret.com/images/external/retest-demo-26bcad04.gif)
+
 ## Installation
 
 Install it on your machine with:
