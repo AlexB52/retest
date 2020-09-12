@@ -26,6 +26,8 @@ module Retest
     end
 
     def test_options(path)
+      return [path] if is_test_file?(path)
+
       files.select { |file| regex(path) =~ file }
         .sort_by { |file| String::Similarity.levenshtein(path, file) }
         .last(5)
@@ -34,6 +36,10 @@ module Retest
 
     def default_files
       @default_files ||= Dir.glob('**/*') - Dir.glob('{tmp,node_modules}/**/*')
+    end
+
+    def is_test_file?(path)
+       Regexp.new(".*(?:spec|test)#{File.extname(path)}") =~ path
     end
 
     def regex(path)
