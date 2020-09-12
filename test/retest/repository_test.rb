@@ -64,5 +64,17 @@ module Retest
 
       assert_match expected, out
     end
+
+    class TestFileChanged < MiniTest::Test
+      def setup
+        @subject = Repository.new
+      end
+
+      def test_find_test_return_changed_file
+        file_changed = expected = 'test/models/schedule/holdings_test.rb'
+
+        assert_equal expected, @subject.find_test(file_changed)
+      end
+    end
   end
 end

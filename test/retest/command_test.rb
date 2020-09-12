@@ -42,7 +42,10 @@ module Retest
 
         out, _ = capture_subprocess_io { @subject.run('file_path.rb') }
 
-        assert_match "Could not find a file test matching", out
+        assert_equal <<~EXPECTED, out
+          404 - Test File Not Found
+          Retest could not find a matching test file to run.
+        EXPECTED
       end
 
       def test_run_with_a_file_found
