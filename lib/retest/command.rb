@@ -25,7 +25,10 @@ module Retest
           puts "Test File Selected: #{cached_test_file}"
           system command.gsub('<test>', cached_test_file)
         else
-          puts 'Could not find a file test matching'
+          puts <<~ERROR
+            404 - Test File Not Found
+            Retest could not find a matching test file to run.
+          ERROR
         end
       end
 
