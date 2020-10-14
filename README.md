@@ -5,9 +5,9 @@ Retest is a small command-line tool to help you refactor code by watching a file
 ## Why?
 It is advised to be one `cmd + z` away from green tests when refactoring. This means running tests after every line change. Let Retest rerun your tests after every file change you make.
 
-Retest gem is meant to be simple and follow testing conventions encountered in Ruby projects. It is probably unstable and inflexible. Give it a go you can uninstall it easily. If you think the matching pattern could be improved please raise an issue.
+Retest gem is meant to be simple and follow testing conventions encountered in Ruby projects. Give it a go you can uninstall it easily. If you think the matching pattern could be improved please raise an issue.
 
-For stable, yet more and fully fledged solutions, some cli tools already exists: [autotest](https://github.com/grosser/autotest), [guard](https://github.com/guard/guard), [zentest](https://github.com/seattlerb/zentest)
+For fully fledged solutions, some cli tools already exists: [autotest](https://github.com/grosser/autotest), [guard](https://github.com/guard/guard), [zentest](https://github.com/seattlerb/zentest)
 
 ![demo](https://alexbarret.com/images/external/retest-demo-26bcad04.gif)
 
