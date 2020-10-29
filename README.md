@@ -69,11 +69,14 @@ $ retest 'bundle exec rails test <test>'
 - [x] When multiple test files are found, ask which file to run and save the answer.
 - [x] When a test file is not found run the last command again.
 - [x] Run within Docker.
-- [ ] Handle other language projects and framework generated code
-  - [ ] Elixir 
-  - [ ] Node
-  - [ ] Python
-  - [ ] others to be added ...
+- [ ] Handle main Ruby setups
+  - [x] Bundler Gem
+  - [x] Rails
+  - [x] Ad-hoc scripts
+  - [ ] Hanami
+  - [ ] Sinatra
+  - [ ] Cuba? Padrino?
+- [ ] Handle other languages: Elixir, Node, Python, PHP
 - [ ] Aliases from oh-my-zsh and bash profiles?
 
 ## Development
