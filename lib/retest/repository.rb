@@ -10,7 +10,7 @@ module Retest
     end
 
     def find_test(path)
-      cache[path] ||= select_from test_options(path)
+      cache[path] ||= select_from TestOptions.for(path, files: files)
     end
 
     private
@@ -25,27 +25,8 @@ module Retest
       end
     end
 
-    def test_options(path)
-      return [path] if is_test_file?(path)
-
-      files.select { |file| regex(path) =~ file }
-        .sort_by { |file| String::Similarity.levenshtein(path, file) }
-        .last(5)
-        .reverse
-    end
-
     def default_files
       @default_files ||= Dir.glob('**/*') - Dir.glob('{tmp,node_modules}/**/*')
-    end
-
-    def is_test_file?(path)
-       Regexp.new(".*(?:spec|test)#{File.extname(path)}") =~ path
-    end
-
-    def regex(path)
-     extname  = File.extname(path)
-     basename = File.basename(path, extname)
-     Regexp.new(".*#{basename}_(?:spec|test)#{extname}")
     end
 
     def ask_question(tests)
