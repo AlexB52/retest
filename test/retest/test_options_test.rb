@@ -21,5 +21,13 @@ module Retest
 
       assert_equal [expected], TestOptions.for(expected, files: [])
     end
+
+    def test_multiple_matches
+      files = File.read('test/fixtures/setups/hanami.txt').split("\n")
+
+      assert_equal [], TestOptions.for('apps/web/templates/books/index.html.erb', files: files)
+      assert_equal ['spec/web/controllers/books/index_spec.rb'], TestOptions.for('apps/web/controllers/books/index.rb', files: files)
+      assert_equal ['spec/web/controllers/views/index_spec.rb'], TestOptions.for('apps/web/controllers/views/index.rb', files: files)
+    end
   end
 end
