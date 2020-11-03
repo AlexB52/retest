@@ -36,33 +36,30 @@ module Retest
       assert_equal expected, mock_cache
     end
 
-    def test_find_test_similar_files
+    def test_find_test_similar_files_but_no_exact_match
       @subject.files = %w(
         test/models/schedule/holdings_test.rb
         test/models/taxation/holdings_test.rb
         test/models/holdings_test.rb
         test/models/performance/holdings_test.rb
-        test/models/valuation/holdings_test.rb
         test/lib/csv_report/holdings_test.rb
       )
-
-      expected = <<~EXPECTED
-        We found few tests matching:
-        [0] - test/models/valuation/holdings_test.rb
-        [1] - test/models/taxation/holdings_test.rb
-        [2] - test/models/schedule/holdings_test.rb
-        [3] - test/models/performance/holdings_test.rb
-        [4] - test/models/holdings_test.rb
-
-        Which file do you want to use?
-        Enter the file number now:
-      EXPECTED
 
       @subject.input_stream = StringIO.new("1\n")
 
       out, _ = capture_subprocess_io { @subject.find_test('app/models/valuation/holdings.rb') }
 
-      assert_match expected, out
+      assert_match <<~EXPECTED, out
+        We found few tests matching:
+        [0] - test/models/taxation/holdings_test.rb
+        [1] - test/models/schedule/holdings_test.rb
+        [2] - test/models/performance/holdings_test.rb
+        [3] - test/models/holdings_test.rb
+        [4] - test/lib/csv_report/holdings_test.rb
+
+        Which file do you want to use?
+        Enter the file number now:
+      EXPECTED
     end
 
     class TestFileChanged < MiniTest::Test
