@@ -2,7 +2,7 @@ require 'test_helper'
 
 module Retest
   class CommandTest < MiniTest::Test
-    module CommandBehaviourTest
+    module CommandInterfaceTest
       def test_behaviour
         assert_respond_to @subject, :==
         assert_respond_to @subject, :run
@@ -14,8 +14,8 @@ module Retest
       assert_equal Command::VariableCommand.new('bundle exec rake test TEST=<test>'), Command.for('bundle exec rake test TEST=<test>')
     end
 
-    class HardcodedCommand < MiniTest::Test
-      include CommandBehaviourTest
+    class HardcodedCommandTest < MiniTest::Test
+      include CommandInterfaceTest
 
       def setup
         @subject = Command::HardcodedCommand.new("echo 'hello'")
@@ -28,8 +28,8 @@ module Retest
       end
     end
 
-    class VariableCommand < MiniTest::Test
-      include CommandBehaviourTest
+    class VariableCommandTest < MiniTest::Test
+      include CommandInterfaceTest
 
       def setup
         @repository = Repository.new
@@ -56,7 +56,7 @@ module Retest
         assert_match "touch file_path_test.rb", out
       end
 
-      def test_last_command
+      def test_returns_last_command
         @repository.files = ['file_path_test.rb']
 
         out, _ = capture_subprocess_io { @subject.run('file_path.rb') }

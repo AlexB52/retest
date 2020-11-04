@@ -22,18 +22,15 @@ module Retest
         Gemfile.lock
       )
 
-      assert_equal 'test/bottles_test.rb',
-        @subject.find_test('99bottles_ruby/lib/bottles.rb')
+      assert_equal 'test/bottles_test.rb', @subject.find_test('99bottles_ruby/lib/bottles.rb')
     end
 
     def test_cache
       mock_cache = {}
-      expected = { "file_path.rb" => "file_path_test.rb" }
 
-      Repository.new(files: ['file_path_test.rb'], cache: mock_cache)
-        .find_test('file_path.rb')
+      Repository.new(files: ['file_path_test.rb'], cache: mock_cache).find_test('file_path.rb')
 
-      assert_equal expected, mock_cache
+      assert_equal({ "file_path.rb" => "file_path_test.rb" }, mock_cache)
     end
 
     def test_find_test_similar_files_but_no_exact_match
@@ -44,7 +41,6 @@ module Retest
         test/models/performance/holdings_test.rb
         test/lib/csv_report/holdings_test.rb
       )
-
       @subject.input_stream = StringIO.new("1\n")
 
       out, _ = capture_subprocess_io { @subject.find_test('app/models/valuation/holdings.rb') }
