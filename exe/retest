@@ -5,9 +5,10 @@ require 'listen'
 
 puts "Launching Retest..."
 
+IGNORE_REGEX = /node_modules|tmp|\.sqlite|\.byebug_history/
 command = Retest::Command.for(ARGV.join)
 
-listener = Listen.to('.', ignore: /node_modules|tmp/, relative: true) do |modified, added, removed|
+listener = Listen.to('.', ignore: IGNORE_REGEX, relative: true) do |modified, added, removed|
   if modified.any?
     system("clear") || system("cls")
     command.run(modified.first.strip)
