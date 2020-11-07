@@ -73,7 +73,7 @@ $ retest 'bundle exec rails test <test>'
   - [x] Bundler Gem
   - [x] Rails
   - [x] Ad-hoc scripts
-  - [ ] Hanami
+  - [x] Hanami
   - [ ] Sinatra
   - [ ] Cuba? Padrino?
 - [ ] Handle other languages: Elixir, Node, Python, PHP
