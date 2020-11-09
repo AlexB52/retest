@@ -63,6 +63,10 @@ $ retest 'bundle exec rails test <test>'
 * If an error comes in try using `bundle exec` like so: `$ retest 'bundle exec rake test <test>'`
 * Aliases saved on ~/.bashrc or ~/.zshrc cannot be run that way with the `retest` command
 
+## Ruby Support
+
+Retest supports ruby 2.5 and above.
+
 ## Roadmap
 
 - [x] MVP
