@@ -13,12 +13,14 @@ module Retest
 
   def self.build(command:, clear_window: true)
     Listen.to('.', ListenOptions.to_h) do |modified, added, removed|
-      if modified.any?
-        system("clear") || system("cls") if clear_window
-        command.run(modified.first.strip)
+      begin
+        if modified.any?
+          system("clear") || system("cls") if clear_window
+          command.run(modified.first.strip)
+        end
+      rescue => e
+        puts "Something went wrong: #{e.message}"
       end
-    rescue => e
-      puts "Something went wrong: #{e.message}"
     end
   end
 end
