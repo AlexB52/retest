@@ -1,11 +1,12 @@
 require 'listen'
+require 'string/similarity'
+
 require "retest/version"
 require "retest/command"
 require "retest/repository"
 require "retest/test_options"
 require "retest/listen_options"
 require "retest/concerns/configurable"
-require 'string/similarity'
 
 module Retest
   include Configurable
