@@ -22,8 +22,7 @@ module Retest
       end
 
       def teardown
-        Retest.logger.truncate(0)
-        Retest.logger.rewind
+        Retest.logger.clear
       end
 
       def test_run
@@ -43,8 +42,7 @@ module Retest
       end
 
       def teardown
-        Retest.logger.truncate(0)
-        Retest.logger.rewind
+        Retest.logger.clear
       end
 
       def test_run_with_no_file_found

@@ -8,8 +8,7 @@ module Retest
     end
 
     def teardown
-      Retest.logger.truncate(0)
-      Retest.logger.rewind
+      Retest.logger.clear
     end
 
     def test_default_files
