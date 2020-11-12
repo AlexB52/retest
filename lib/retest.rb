@@ -2,10 +2,12 @@ require "retest/version"
 require "retest/command"
 require "retest/repository"
 require "retest/test_options"
+require "retest/configurable"
 require "retest/listen_options"
 require 'string/similarity'
 
 module Retest
+  include Configurable
   class Error < StandardError; end
 
   def self.build(command:)
@@ -17,25 +19,5 @@ module Retest
     rescue => e
       puts "Something went wrong: #{e.message}"
     end
-  end
-
-  class << self
-    attr_accessor :configuration
-
-    def configuration
-      @configuration ||= Configuration.new
-    end
-
-    def configure
-      yield configuration
-    end
-
-    def logger
-      configuration.logger
-    end
-  end
-
-  class Configuration
-    attr_accessor :logger
   end
 end
