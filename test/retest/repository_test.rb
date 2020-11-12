@@ -4,10 +4,12 @@ require_relative 'repository/multiple_test_files_with_user_input.rb'
 module Retest
   class RepositoryTest < MiniTest::Test
     def setup
-      Retest.logger = TestLogger.new
       @subject = Repository.new
     end
 
+    def teardown
+      Retest.logger.clear
+    end
 
     def test_default_files
       assert_equal Dir.glob('**/*') - Dir.glob('{tmp,node_modules}/**/*'), @subject.files

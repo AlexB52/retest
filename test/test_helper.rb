@@ -13,3 +13,5 @@ class TestLogger < SimpleDelegator
     rewind
   end
 end
+
+Retest.logger = TestLogger.new

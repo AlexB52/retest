@@ -18,8 +18,11 @@ module Retest
       include CommandInterfaceTest
 
       def setup
-        Retest.logger = TestLogger.new
         @subject = Command::HardcodedCommand.new("echo 'hello'")
+      end
+
+      def teardown
+        Retest.logger.clear
       end
 
       def test_run
@@ -33,10 +36,13 @@ module Retest
       include CommandInterfaceTest
 
       def setup
-        Retest.logger = TestLogger.new
         @repository = Repository.new
 
         @subject = Command::VariableCommand.new("echo 'touch <test>'", repository: @repository)
+      end
+
+      def teardown
+        Retest.logger.clear
       end
 
       def test_run_with_no_file_found
