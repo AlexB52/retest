@@ -10,16 +10,15 @@ module Retest
         core/spec/controllers/admin/billing_agent_customers_controller_spec.rb
       )
 
-      @subject = Repository.new files: files, output_stream: StringIO.new
+      @subject = Repository.new files: files
     end
 
     def test_find_test_user_input_question
       @subject.input_stream = StringIO.new("1\n")
-      @subject.output_stream = STDOUT
 
-      out, _ = capture_subprocess_io { @subject.find_test('app/models/billing_agent_customer.rb') }
+      @subject.find_test('app/models/billing_agent_customer.rb')
 
-      assert_match <<~EXPECTED, out
+      assert_match <<~EXPECTED, Retest.logger.string
         We found few tests matching:
         [0] - spec/models/billing_agent_customer_spec.rb
         [1] - core/spec/models/billing_agent_customer_spec.rb

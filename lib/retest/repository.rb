@@ -2,11 +2,11 @@ module Retest
   class Repository
     attr_accessor :files, :cache, :input_stream, :output_stream
 
-    def initialize(files: nil, cache: {}, input_stream: nil, output_stream: nil)
+    def initialize(files: nil, cache: {}, input_stream: nil)
       @cache         = cache
       @files         = files || default_files
       @input_stream  = input_stream || STDIN
-      @output_stream = output_stream|| STDOUT
+      @output_stream = Retest.logger
     end
 
     def find_test(path)

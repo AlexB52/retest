@@ -9,7 +9,7 @@ module Retest
   class Error < StandardError; end
 
   def self.build(command:)
-    Listen.to('.', Retest::ListenOptions.to_h) do |modified, added, removed|
+    Listen.to('.', ListenOptions.to_h) do |modified, added, removed|
       if modified.any?
         system("clear") || system("cls")
         command.run(modified.first.strip)
@@ -17,5 +17,25 @@ module Retest
     rescue => e
       puts "Something went wrong: #{e.message}"
     end
+  end
+
+  class << self
+    attr_accessor :configuration
+
+    def configuration
+      @configuration ||= Configuration.new
+    end
+
+    def configure
+      yield configuration
+    end
+
+    def logger
+      configuration.logger
+    end
+  end
+
+  class Configuration
+    attr_accessor :logger
   end
 end

@@ -21,10 +21,15 @@ module Retest
         @subject = Command::HardcodedCommand.new("echo 'hello'")
       end
 
-      def test_run
-        out, _ = capture_subprocess_io { @subject.run('file_path.rb') }
+      def teardown
+        Retest.logger.truncate(0)
+        Retest.logger.rewind
+      end
 
-        assert_match "hello", out
+      def test_run
+        @subject.run('file_path.rb')
+
+        assert_equal "hello\n", Retest.logger.string
       end
     end
 
@@ -37,12 +42,17 @@ module Retest
         @subject = Command::VariableCommand.new("echo 'touch <test>'", repository: @repository)
       end
 
+      def teardown
+        Retest.logger.truncate(0)
+        Retest.logger.rewind
+      end
+
       def test_run_with_no_file_found
         @repository.files = []
 
-        out, _ = capture_subprocess_io { @subject.run('file_path.rb') }
+        @subject.run('file_path.rb')
 
-        assert_equal <<~EXPECTED, out
+        assert_equal <<~EXPECTED, Retest.logger.string
           404 - Test File Not Found
           Retest could not find a matching test file to run.
         EXPECTED
@@ -51,21 +61,32 @@ module Retest
       def test_run_with_a_file_found
         @repository.files = ['file_path_test.rb']
 
-        out, _ = capture_subprocess_io { @subject.run('file_path.rb') }
+        @subject.run('file_path.rb')
 
-        assert_match "touch file_path_test.rb", out
+        assert_equal <<~EXPECTED, Retest.logger.string
+          Test File Selected: file_path_test.rb
+          touch file_path_test.rb
+        EXPECTED
       end
 
       def test_returns_last_command
         @repository.files = ['file_path_test.rb']
 
-        out, _ = capture_subprocess_io { @subject.run('file_path.rb') }
+        @subject.run('file_path.rb')
 
-        assert_match "touch file_path_test.rb", out
+        assert_equal <<~EXPECTED, Retest.logger.string
+          Test File Selected: file_path_test.rb
+          touch file_path_test.rb
+        EXPECTED
 
-        out, _ = capture_subprocess_io { @subject.run('unknown_path.rb') }
+        @subject.run('unknown_path.rb')
 
-        assert_match "touch file_path_test.rb", out
+        assert_equal <<~EXPECTED, Retest.logger.string
+          Test File Selected: file_path_test.rb
+          touch file_path_test.rb
+          Test File Selected: file_path_test.rb
+          touch file_path_test.rb
+        EXPECTED
       end
     end
   end
