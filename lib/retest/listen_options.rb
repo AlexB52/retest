@@ -26,7 +26,7 @@ module Retest
     end
 
     def installed?
-      !`command -v #{self}`.empty?
+      !`command -v #{self}`&.empty?
     end
 
     def files

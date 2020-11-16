@@ -1,3 +1,4 @@
+require 'listen'
 require "retest/version"
 require "retest/command"
 require "retest/repository"
@@ -10,10 +11,10 @@ module Retest
   include Configurable
   class Error < StandardError; end
 
-  def self.build(command:)
+  def self.build(command:, clear_window: true)
     Listen.to('.', ListenOptions.to_h) do |modified, added, removed|
       if modified.any?
-        system("clear") || system("cls")
+        system("clear") || system("cls") if clear_window
         command.run(modified.first.strip)
       end
     rescue => e
