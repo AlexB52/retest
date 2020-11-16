@@ -4,7 +4,7 @@ def modify_file(path)
   old_content = File.read(path)
   File.open(path, 'w') { |file| file.write old_content }
 
-  sleep 1
+  sleep 0.5
 end
 
 class TestLogger < SimpleDelegator
