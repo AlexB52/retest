@@ -1,21 +1,15 @@
 #!/usr/bin/env ruby
 
 require 'retest'
-require 'listen'
 
-puts "Launching Retest..."
+Retest.logger = STDOUT
+
+Retest.log "Launching Retest..."
 
 command = Retest::Command.for(ARGV.join)
-
-listener = Listen.to('.', Retest::ListenOptions.to_h) do |modified, added, removed|
-  if modified.any?
-    system("clear") || system("cls")
-    command.run(modified.first.strip)
-  end
-rescue => e
-  puts "Something went wrong: #{e.message}"
-end
+listener = Retest.build(command: command)
 
 listener.start # not blocking
-puts "Ready to refactor! You can make file changes now"
+
+Retest.log "Ready to refactor! You can make file changes now"
 sleep
