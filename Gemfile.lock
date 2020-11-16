@@ -61,7 +61,7 @@ GEM
     ffi (1.13.1)
     i18n (1.8.5)
       concurrent-ruby (~> 1.0)
-    listen (3.2.1)
+    listen (3.3.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     middleware (0.1.0)
@@ -93,9 +93,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  aruba
+  aruba (~> 1.0)
   byebug
-  cucumber
+  cucumber (~> 5.1)
   minitest (~> 5.0)
   rake (~> 12.0)
   retest!

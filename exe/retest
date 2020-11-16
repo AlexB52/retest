@@ -6,10 +6,10 @@ Retest.logger = STDOUT
 
 Retest.log "Launching Retest..."
 
-command = Retest::Command.for(ARGV.join)
-listener = Retest.build(command: command)
-
-listener.start # not blocking
+Retest
+  .build(command: Retest::Command.for(ARGV.join))
+  .start # not blocking
 
 Retest.log "Ready to refactor! You can make file changes now"
+
 sleep
