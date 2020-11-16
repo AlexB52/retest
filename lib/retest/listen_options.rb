@@ -26,7 +26,7 @@ module Retest
     end
 
     def installed?
-      !`command -v #{self}`&.empty?
+      system "git -C . rev-parse 2>&1"
     end
 
     def files
