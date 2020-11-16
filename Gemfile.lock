@@ -93,9 +93,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  aruba
+  aruba (~> 1.0)
   byebug
-  cucumber
+  cucumber (~> 5.1)
   minitest (~> 5.0)
   rake (~> 12.0)
   retest!
