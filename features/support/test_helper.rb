@@ -1,11 +1,10 @@
 def modify_file(path)
   return unless File.exists? path
-  content = File.read(path)
 
-  File.open path, 'w' do |f|
-    f.write content
-    sleep 0.4
-  end
+  old_content = File.read(path)
+  File.open(path, 'w') { |file| file.write old_content }
+
+  sleep 1
 end
 
 class TestLogger < SimpleDelegator
