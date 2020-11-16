@@ -4,11 +4,20 @@ module Configurable
   end
 
   class Configuration
+    extend Forwardable
+
     attr_accessor :logger
+
+    def_delegator :logger, :puts
+    alias :log :puts
   end
 
   module ClassMethods
-    attr_accessor :configuration
+    extend Forwardable
+
+    attr_writer :configuration
+
+    def_delegators :configuration, :log, :logger, :logger=
 
     def configuration
       @configuration ||= Configuration.new
@@ -16,14 +25,6 @@ module Configurable
 
     def configure
       yield configuration
-    end
-
-    def logger
-      configuration.logger
-    end
-
-    def logger=(logger)
-      configuration.logger = logger
     end
   end
 end

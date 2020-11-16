@@ -25,10 +25,10 @@ module Retest
       def run(file_changed)
         if @cached_test_file = test_file(file_changed)
           stdout_and_stderr_str, _ = Open3.capture2e command.gsub('<test>', cached_test_file)
-          Retest.logger.puts "Test File Selected: #{cached_test_file}"
-          Retest.logger.puts stdout_and_stderr_str
+          Retest.log "Test File Selected: #{cached_test_file}"
+          Retest.log stdout_and_stderr_str
         else
-          Retest.logger.puts <<~ERROR
+          Retest.log <<~ERROR
             404 - Test File Not Found
             Retest could not find a matching test file to run.
           ERROR
@@ -43,7 +43,7 @@ module Retest
     HardcodedCommand = Struct.new(:command) do
       def run(_)
         stdout_and_stderr_str, _ = Open3.capture2e(command)
-        Retest.logger.puts stdout_and_stderr_str
+        Retest.log stdout_and_stderr_str
       end
     end
   end

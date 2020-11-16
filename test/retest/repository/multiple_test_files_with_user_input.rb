@@ -13,6 +13,10 @@ module Retest
       @subject = Repository.new files: files
     end
 
+    def teardown
+      Retest.logger.clear
+    end
+
     def test_find_test_user_input_question
       @subject.input_stream = StringIO.new("1\n")
 
