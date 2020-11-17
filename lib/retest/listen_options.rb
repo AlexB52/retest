@@ -26,7 +26,7 @@ module Retest
     end
 
     def installed?
-      system "git -C . rev-parse 2>&1"
+      system "git -C . rev-parse 2>/dev/null"
     end
 
     def files
