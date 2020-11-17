@@ -32,3 +32,4 @@ jobs:
         bundler-cache: true
     - run: bundle install
     - run: bundle exec rake
+    - run: CUCUMBER_PUBLISH_QUIET=true bundle exec cucumber

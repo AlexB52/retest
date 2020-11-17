@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
 
 require 'retest'
-require 'listen'
+
+$stdout.sync = true
 
 puts "Launching Retest..."
 
