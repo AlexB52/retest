@@ -1,10 +1,4 @@
-def clear_output
-  File.open("tmp/output.log", 'w') { |f| f.write ""}
-end
-
-def read_output
-  File.read("tmp/output.log")
-end
+require 'securerandom'
 
 def modify_file(path)
   return unless File.exists? path
@@ -13,4 +7,38 @@ def modify_file(path)
   File.open(path, 'w') { |file| file.write old_content }
 
   sleep 0.75
+end
+
+class OutputFile
+  attr_reader :id
+
+  def initialize
+    @id = SecureRandom.hex(10)
+    create_file
+  end
+
+  def path
+    "tmp/output-#{id}.log"
+  end
+  alias :to_s :path
+
+  def read
+    return unless File.exists?(path)
+
+    File.read(path)
+  end
+
+  def delete
+    return unless File.exists?(path)
+
+    File.delete(path)
+  end
+  alias :clear :delete
+
+  private
+
+  def create_file
+    Dir.mkdir('tmp') unless Dir.exists?('tmp')
+    File.open(path, "w")
+  end
 end

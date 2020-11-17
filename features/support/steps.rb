@@ -4,7 +4,8 @@ Given('I cd in a ruby project with tests') do
 end
 
 Given('I run retest with {string}') do |command|
-  @pid = Process.spawn command, out: "tmp/output.log"
+  @file = OutputFile.new
+  @pid = Process.spawn command, out: @file.path
   sleep 0.75
 end
 
@@ -13,5 +14,5 @@ Given('I modify file {string}') do |pathname|
 end
 
 Then('the logger should output:') do |doc_string|
-  assert_match doc_string, read_output
+  assert_equal doc_string, @file.read
 end
