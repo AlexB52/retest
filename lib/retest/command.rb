@@ -1,5 +1,3 @@
-require 'open3'
-
 module Retest
   class Command
     def self.for(test_command)
@@ -24,11 +22,10 @@ module Retest
 
       def run(file_changed)
         if @cached_test_file = test_file(file_changed)
-          stdout_and_stderr_str, _ = Open3.capture2e command.gsub('<test>', cached_test_file)
-          Retest.log "Test File Selected: #{cached_test_file}"
-          Retest.log stdout_and_stderr_str
+          puts "Test File Selected: #{cached_test_file}"
+          system command.gsub('<test>', cached_test_file)
         else
-          Retest.log <<~ERROR
+          puts <<~ERROR
             404 - Test File Not Found
             Retest could not find a matching test file to run.
           ERROR
@@ -42,8 +39,7 @@ module Retest
 
     HardcodedCommand = Struct.new(:command) do
       def run(_)
-        stdout_and_stderr_str, _ = Open3.capture2e(command)
-        Retest.log stdout_and_stderr_str
+        system command
       end
     end
   end

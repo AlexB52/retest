@@ -10,13 +10,19 @@ module MinitestAssertionsBridge
   attr_accessor :assertions
 end
 
-Retest.logger = TestLogger.new
-
 World(MinitestAssertionsBridge)
 
-Before { self.assertions = 0 }
+Dir.mkdir('tmp') unless Dir.exists?('tmp')
+File.open 'tmp/output.log', 'w+'
+
+Before do
+  self.assertions = 0
+end
 
 After do
-  @listener&.stop
-  Retest.logger&.clear
+  clear_output
+  if @pid
+    Process.kill('SIGHUP', @pid)
+    Process.detach(@pid)
+  end
 end

@@ -7,10 +7,6 @@ module Retest
       @subject = Repository.new
     end
 
-    def teardown
-      Retest.logger.clear
-    end
-
     def test_default_files
       assert_equal Dir.glob('**/*') - Dir.glob('{tmp,node_modules}/**/*'), @subject.files
     end
@@ -47,9 +43,9 @@ module Retest
       )
       @subject.input_stream = StringIO.new("1\n")
 
-      @subject.find_test('app/models/valuation/holdings.rb')
+      out, _ = capture_subprocess_io { @subject.find_test('app/models/valuation/holdings.rb') }
 
-      assert_match <<~EXPECTED, Retest.logger.string
+      assert_match <<~EXPECTED, out
         We found few tests matching:
         [0] - test/models/taxation/holdings_test.rb
         [1] - test/models/schedule/holdings_test.rb

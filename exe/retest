@@ -2,14 +2,14 @@
 
 require 'retest'
 
-Retest.logger = STDOUT
+$stdout.sync = true
 
-Retest.log "Launching Retest..."
+puts "Launching Retest..."
 
 Retest
   .build(command: Retest::Command.for(ARGV.join))
   .start # not blocking
 
-Retest.log "Ready to refactor! You can make file changes now"
+puts "Ready to refactor! You can make file changes now"
 
 sleep

@@ -3,11 +3,9 @@ Given('I cd in a ruby project with tests') do
    steps %Q{And I cd to "fixture_project"}
 end
 
-When('I run retest with {string}') do |command|
-  command  = Retest::Command.for(command)
-  @listener = Retest.build(command: command, clear_window: false)
-  @listener.start
-  sleep 0.4
+Given('I run retest with {string}') do |command|
+  @pid = Process.spawn command, out: "tmp/output.log"
+  sleep 0.75
 end
 
 Given('I modify file {string}') do |pathname|
@@ -15,5 +13,5 @@ Given('I modify file {string}') do |pathname|
 end
 
 Then('the logger should output:') do |doc_string|
-  assert_equal doc_string, Retest.logger.string
+  assert_match doc_string, read_output
 end
