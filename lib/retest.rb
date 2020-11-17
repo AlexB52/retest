@@ -6,10 +6,8 @@ require "retest/command"
 require "retest/repository"
 require "retest/test_options"
 require "retest/listen_options"
-require "retest/concerns/configurable"
 
 module Retest
-  include Configurable
   class Error < StandardError; end
 
   def self.build(command:, clear_window: true)
