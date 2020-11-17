@@ -14,7 +14,7 @@ module Retest
     Listen.to('.', ListenOptions.to_h) do |modified, added, removed|
       begin
         if modified.any?
-          `clear 2>&1` || `cls 2>&1`
+          system('clear 2>/dev/null') || system('cls 2>/dev/null')
           command.run(modified.first.strip)
         end
       rescue => e
