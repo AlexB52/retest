@@ -15,14 +15,18 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os: [ubuntu-latest]
         ruby:
           - 2.5
           - 2.6
           - 2.7
-    name: Ruby ${{ matrix.ruby }} test
+        include:
+          - os: macos-latest
+            ruby: 2.5
+    name: Ruby ${{ matrix.ruby }} test (${{ matrix.os }})
     steps:
     - uses: actions/checkout@v2
     - name: Set up Ruby

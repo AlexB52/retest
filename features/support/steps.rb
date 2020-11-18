@@ -14,5 +14,5 @@ Given('I modify file {string}') do |pathname|
 end
 
 Then('the logger should output:') do |doc_string|
-  assert_equal doc_string, @file.read
+  assert_match doc_string, @file.read
 end
