@@ -4,6 +4,7 @@ PATH
     retest (0.6.0)
       listen (~> 3.2)
       string-similarity (~> 2.1)
+      tty-option (~> 0.1)
 
 GEM
   remote: https://rubygems.org/
@@ -85,6 +86,7 @@ GEM
       ffi (>= 1.0.0)
     thor (1.0.1)
     thread_safe (0.3.6)
+    tty-option (0.1.0)
     tzinfo (1.2.7)
       thread_safe (~> 0.1)
     zeitwerk (2.4.0)

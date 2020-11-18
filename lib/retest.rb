@@ -6,6 +6,7 @@ require "retest/command"
 require "retest/repository"
 require "retest/test_options"
 require "retest/listen_options"
+require "retest/options"
 
 module Retest
   class Error < StandardError; end

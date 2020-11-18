@@ -1,0 +1,70 @@
+require 'tty-option'
+
+module Retest
+  class Options
+    include TTY::Option
+
+    RSPEC_COMMAND = "bundle exec rspec <test>"
+    RAILS_COMMAND = "bundle exec rails test <test>"
+    RAKE_COMMAND = "bundle exec rake test TEST=<test>"
+
+    usage do
+      program "retest"
+
+      # command ""
+
+      desc "Watch a file change and run it matching spec"
+
+      example <<~EOS
+      Runs a matching rails test after a file change
+        $ retest 'bundle exec rails test <test>'
+        $ retest --rails
+      EOS
+
+      example <<~EOS
+      Runs all rails tests after a file change
+        $ retest 'bundle exec rails test'
+      EOS
+
+      example <<~EOS
+      Runs a hardcoded command after a file change
+        $ retest 'ruby lib/bottles_test.rb'
+      EOS
+    end
+
+    flag :rspec do
+      long "--rspec"
+      desc "Shortcut for '#{RSPEC_COMMAND}'"
+    end
+
+    flag :rake do
+      long "--rake"
+      desc "Shortcut for '#{RAKE_COMMAND}'"
+    end
+
+    flag :rails do
+      long "--rails"
+      desc "Shortcut for '#{RAILS_COMMAND}'"
+    end
+
+    attr_reader :args
+
+    def initialize(*args)
+      self.args = *args
+    end
+
+    def command
+      if params[:rspec]
+        RSPEC_COMMAND
+      elsif params[:rails]
+        RAILS_COMMAND
+      else
+        RAKE_COMMAND
+      end
+    end
+
+    def args=(*args)
+      parse *args
+    end
+  end
+end
