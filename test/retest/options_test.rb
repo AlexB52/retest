@@ -30,6 +30,16 @@ module Retest
       assert_equal 'echo hello world', @subject.command
     end
 
+    def test_mixed_options
+      @subject.args = ["echo hello world", "--rails"]
+
+      assert_equal 'bundle exec rails test <test>', @subject.command
+
+      @subject.args = ["--rspec", "--rails"]
+
+      assert_equal 'bundle exec rspec <test>', @subject.command
+    end
+
     def test_help
       assert_equal <<~HELP, @subject.help
         Usage: retest options [OPTIONS] [COMMAND]
