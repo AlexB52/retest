@@ -6,7 +6,7 @@ module Retest
 
     RSPEC_COMMAND = "bundle exec rspec <test>"
     RAILS_COMMAND = "bundle exec rails test <test>"
-    RAKE_COMMAND = "bundle exec rake test TEST=<test>"
+    RAKE_COMMAND  = "bundle exec rake test TEST=<test>"
 
     usage do
       program "retest"
@@ -30,6 +30,11 @@ module Retest
       Runs a hardcoded command after a file change
         $ retest 'ruby lib/bottles_test.rb'
       EOS
+    end
+
+    argument :command do
+      optional
+      desc "The test command to rerun when a file changes"
     end
 
     flag :rspec do
@@ -56,10 +61,12 @@ module Retest
     def command
       if params[:rspec]
         RSPEC_COMMAND
+      elsif params[:rake]
+        RAKE_COMMAND
       elsif params[:rails]
         RAILS_COMMAND
       else
-        RAKE_COMMAND
+        params[:command]
       end
     end
 

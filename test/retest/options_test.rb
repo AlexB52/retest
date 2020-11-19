@@ -7,28 +7,37 @@ module Retest
     end
 
     def test_rake_flag
-      @subject.args = %w(--rake)
+      @subject.args = ['--rake']
 
       assert_equal 'bundle exec rake test TEST=<test>', @subject.command
     end
 
     def test_rspec_flag
-      @subject.args = %w(--rspec)
+      @subject.args = ['--rspec']
 
       assert_equal 'bundle exec rspec <test>', @subject.command
     end
 
     def test_rails_flag
-      @subject.args = %w(--rails)
+      @subject.args = ['--rails']
 
       assert_equal 'bundle exec rails test <test>', @subject.command
     end
 
+    def test_default_options
+      @subject.args = ["echo hello world"]
+
+      assert_equal 'echo hello world', @subject.command
+    end
+
     def test_help
       assert_equal <<~HELP, @subject.help
-        Usage: retest options [OPTIONS]
+        Usage: retest options [OPTIONS] [COMMAND]
 
         Watch a file change and run it matching spec
+
+        Arguments:
+          COMMAND  The test command to rerun when a file changes
 
         Options:
           --rails  Shortcut for 'bundle exec rails test <test>'
