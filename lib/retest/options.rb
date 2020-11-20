@@ -75,8 +75,9 @@ module Retest
       end
     end
 
-    def args=(*args)
-      parse *args
+    def args=(args)
+      @args = args
+      parse args
     end
   end
 end
