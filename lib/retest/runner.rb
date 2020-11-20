@@ -1,14 +1,14 @@
 module Retest
-  class Command
+  class Runner
     def self.for(test_command)
       if test_command.include? '<test>'
-        VariableCommand
+        VariableRunner
       else
-        HardcodedCommand
+        HardcodedRunner
       end.new test_command
     end
 
-    class VariableCommand
+    class VariableRunner
       attr_reader :command, :repository, :cached_test_file
 
       def initialize(command, repository: nil)
@@ -37,7 +37,7 @@ module Retest
       end
     end
 
-    HardcodedCommand = Struct.new(:command) do
+    HardcodedRunner = Struct.new(:command) do
       def run(_)
         system command
       end
