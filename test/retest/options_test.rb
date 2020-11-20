@@ -30,6 +30,12 @@ module Retest
       assert_equal 'echo hello world', @subject.command
     end
 
+    def test_empty_options
+      @subject.args = []
+
+      assert_equal 'echo You have no command assigned', @subject.command
+    end
+
     def test_mixed_options
       @subject.args = ["echo hello world", "--rails"]
 

@@ -7,6 +7,7 @@ module Retest
     RSPEC_COMMAND = "bundle exec rspec <test>"
     RAILS_COMMAND = "bundle exec rails test <test>"
     RAKE_COMMAND  = "bundle exec rake test TEST=<test>"
+    NO_COMMAND    = "echo You have no command assigned"
 
     usage do
       program "retest"
@@ -54,8 +55,12 @@ module Retest
 
     attr_reader :args
 
-    def initialize(*args)
-      self.args = *args
+    def self.command(args)
+      new(args).command
+    end
+
+    def initialize(args = [])
+      self.args = args
     end
 
     def command
@@ -66,7 +71,7 @@ module Retest
       elsif params[:rails]
         RAILS_COMMAND
       else
-        params[:command]
+        params[:command] || NO_COMMAND
       end
     end
 
