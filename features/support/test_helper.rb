@@ -6,7 +6,7 @@ def modify_file(path)
   old_content = File.read(path)
   File.open(path, 'w') { |file| file.write old_content }
 
-  sleep 0.75
+  sleep 1.5
 end
 
 class OutputFile
