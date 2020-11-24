@@ -1,0 +1,2 @@
+class DummyFile
+end

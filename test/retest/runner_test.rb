@@ -1,8 +1,8 @@
 require 'test_helper'
 
 module Retest
-  class CommandTest < MiniTest::Test
-    module CommandInterfaceTest
+  class RunnerTest < MiniTest::Test
+    module RunnerInterfaceTest
       def test_behaviour
         assert_respond_to @subject, :==
         assert_respond_to @subject, :run
@@ -10,15 +10,15 @@ module Retest
     end
 
     def test_self_for
-      assert_equal Command::HardcodedCommand.new('bundle exec rake test'), Command.for('bundle exec rake test')
-      assert_equal Command::VariableCommand.new('bundle exec rake test TEST=<test>'), Command.for('bundle exec rake test TEST=<test>')
+      assert_equal Runner::HardcodedRunner.new('bundle exec rake test'), Runner.for('bundle exec rake test')
+      assert_equal Runner::VariableRunner.new('bundle exec rake test TEST=<test>'), Runner.for('bundle exec rake test TEST=<test>')
     end
 
-    class HardcodedCommandTest < MiniTest::Test
-      include CommandInterfaceTest
+    class HardcodedRunner < MiniTest::Test
+      include RunnerInterfaceTest
 
       def setup
-        @subject = Command::HardcodedCommand.new("echo 'hello'")
+        @subject = Runner::HardcodedRunner.new("echo 'hello'")
       end
 
       def test_run
@@ -28,13 +28,13 @@ module Retest
       end
     end
 
-    class VariableCommandTest < MiniTest::Test
-      include CommandInterfaceTest
+    class VariableRunnerTest < MiniTest::Test
+      include RunnerInterfaceTest
 
       def setup
         @repository = Repository.new
 
-        @subject = Command::VariableCommand.new("echo 'touch <test>'", repository: @repository)
+        @subject = Runner::VariableRunner.new("echo 'touch <test>'", repository: @repository)
       end
 
       def test_run_with_no_file_found

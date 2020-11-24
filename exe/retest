@@ -6,8 +6,10 @@ $stdout.sync = true
 
 puts "Launching Retest..."
 
+command = Retest::Options.command(ARGV)
+
 Retest
-  .build(command: Retest::Command.for(ARGV.join))
+  .build(runner: Retest::Runner.for(command))
   .start # not blocking
 
 puts "Ready to refactor! You can make file changes now"
