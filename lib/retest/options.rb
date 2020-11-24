@@ -7,6 +7,7 @@ module Retest
     RSPEC_COMMAND = "bundle exec rspec <test>"
     RAILS_COMMAND = "bundle exec rails test <test>"
     RAKE_COMMAND  = "bundle exec rake test TEST=<test>"
+    RUBY_COMMAND  = "bundle exec ruby <test>"
     NO_COMMAND    = "echo You have no command assigned"
 
     usage do
@@ -53,6 +54,11 @@ module Retest
       desc "Shortcut for '#{RAILS_COMMAND}'"
     end
 
+    flag :ruby do
+      long "--ruby"
+      desc "Shortcut for '#{RUBY_COMMAND}'"
+    end
+
     attr_reader :args
 
     def self.command(args)
@@ -70,6 +76,8 @@ module Retest
         RAKE_COMMAND
       elsif params[:rails]
         RAILS_COMMAND
+      elsif params[:ruby]
+        RUBY_COMMAND
       else
         params[:command] || NO_COMMAND
       end

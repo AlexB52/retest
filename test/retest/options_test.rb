@@ -24,6 +24,12 @@ module Retest
       assert_equal 'bundle exec rails test <test>', @subject.command
     end
 
+    def test_ruby_flag
+      @subject.args = ['--ruby']
+
+      assert_equal 'bundle exec ruby <test>', @subject.command
+    end
+
     def test_default_options
       @subject.args = ["echo hello world"]
 
@@ -59,6 +65,7 @@ module Retest
           --rails  Shortcut for 'bundle exec rails test <test>'
           --rake   Shortcut for 'bundle exec rake test TEST=<test>'
           --rspec  Shortcut for 'bundle exec rspec <test>'
+          --ruby   Shortcut for 'bundle exec ruby <test>'
 
         Examples:
           Runs a matching rails test after a file change
