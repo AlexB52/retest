@@ -10,6 +10,10 @@ module Retest
     RUBY_COMMAND  = "bundle exec ruby <test>"
     NO_COMMAND    = "echo You have no command assigned"
 
+    ALL_RAKE_COMMAND  = "bundle exec rake test"
+    ALL_RAILS_COMMAND = "bundle exec rails test"
+    ALL_RSPEC_COMMAND = "bundle exec rspec"
+
     usage do
       program "retest"
 
@@ -26,6 +30,7 @@ module Retest
       example <<~EOS
       Runs all rails tests after a file change
         $ retest 'bundle exec rails test'
+        $ retest --rails --all
       EOS
 
       example <<~EOS
@@ -37,6 +42,17 @@ module Retest
     argument :command do
       optional
       desc "The test command to rerun when a file changes"
+    end
+
+    flag :all do
+      long "--all"
+      desc "Run all the specs of a specificied ruby setup"
+    end
+
+    flag :help do
+      short "-h"
+      long "--help"
+      desc "Print usage"
     end
 
     flag :rspec do
@@ -59,12 +75,6 @@ module Retest
       desc "Shortcut for '#{RUBY_COMMAND}'"
     end
 
-    flag :help do
-      short "-h"
-      long "--help"
-      desc "Print usage"
-    end
-
     attr_reader :args
 
     def self.command(args)
@@ -77,13 +87,13 @@ module Retest
 
     def command
       if params[:rspec]
-        RSPEC_COMMAND
+        params[:all] ? ALL_RSPEC_COMMAND : RSPEC_COMMAND
       elsif params[:rake]
-        RAKE_COMMAND
+        params[:all] ? ALL_RAKE_COMMAND : RAKE_COMMAND
       elsif params[:rails]
-        RAILS_COMMAND
+        params[:all] ? ALL_RAILS_COMMAND : RAILS_COMMAND
       elsif params[:ruby]
-        RUBY_COMMAND
+        params[:all] ? NO_COMMAND : RUBY_COMMAND
       else
         params[:command] || NO_COMMAND
       end

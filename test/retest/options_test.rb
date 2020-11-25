@@ -6,6 +6,18 @@ module Retest
       @subject = Options.new
     end
 
+    def test_default_options
+      @subject.args = ["echo hello world"]
+
+      assert_equal 'echo hello world', @subject.command
+    end
+
+    def test_empty_options
+      @subject.args = []
+
+      assert_equal 'echo You have no command assigned', @subject.command
+    end
+
     def test_rake_flag
       @subject.args = ['--rake']
 
@@ -30,14 +42,20 @@ module Retest
       assert_equal 'bundle exec ruby <test>', @subject.command
     end
 
-    def test_default_options
-      @subject.args = ["echo hello world"]
+    def test_all_flag
+      @subject.args = ['--rake', '--all']
 
-      assert_equal 'echo hello world', @subject.command
-    end
+      assert_equal 'bundle exec rake test', @subject.command
 
-    def test_empty_options
-      @subject.args = []
+      @subject.args = ['--rails', '--all']
+
+      assert_equal 'bundle exec rails test', @subject.command
+
+      @subject.args = ['--rspec', '--all']
+
+      assert_equal 'bundle exec rspec', @subject.command
+
+      @subject.args = ['--ruby', '--all']
 
       assert_equal 'echo You have no command assigned', @subject.command
     end

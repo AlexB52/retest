@@ -6,6 +6,7 @@ Arguments:
   COMMAND  The test command to rerun when a file changes
 
 Options:
+      --all    Run all the specs of a specificied ruby setup
   -h, --help   Print usage
       --rails  Shortcut for 'bundle exec rails test <test>'
       --rake   Shortcut for 'bundle exec rake test TEST=<test>'
@@ -19,6 +20,7 @@ Examples:
 
   Runs all rails tests after a file change
     $ retest 'bundle exec rails test'
+    $ retest --rails --all
 
   Runs a hardcoded command after a file change
     $ retest 'ruby lib/bottles_test.rb'
