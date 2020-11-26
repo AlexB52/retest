@@ -16,3 +16,11 @@ end
 Then('the logger should output:') do |doc_string|
   assert_match doc_string, @file.read
 end
+
+Then('the logger should not output:') do |doc_string|
+  refute_match doc_string, @file.read
+end
+
+Then('the logger should output the help') do
+  assert_match File.read('test/retest/options/help.txt'), @file.read
+end

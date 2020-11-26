@@ -13,7 +13,7 @@ module Retest
     usage do
       program "retest"
 
-      # command ""
+      command nil
 
       desc "Watch a file change and run it matching spec"
 
@@ -59,6 +59,12 @@ module Retest
       desc "Shortcut for '#{RUBY_COMMAND}'"
     end
 
+    flag :help do
+      short "-h"
+      long "--help"
+      desc "Print usage"
+    end
+
     attr_reader :args
 
     def self.command(args)
@@ -86,6 +92,10 @@ module Retest
     def args=(args)
       @args = args
       parse args
+    end
+
+    def help?
+      params[:help]
     end
   end
 end
