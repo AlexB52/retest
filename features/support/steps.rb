@@ -6,7 +6,7 @@ end
 Given('I run retest with {string}') do |command|
   @file = OutputFile.new
   @pid = Process.spawn command, out: @file.path
-  sleep 0.75
+  sleep 1
 end
 
 Given('I modify file {string}') do |pathname|

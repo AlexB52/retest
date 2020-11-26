@@ -8,12 +8,6 @@ options = Retest::Options.new(ARGV)
 
 return puts options.help if options.help?
 
-puts "Launching Retest..."
-
-Retest
-  .build(runner: Retest::Runner.for(options.command))
-  .start # not blocking
-
-puts "Ready to refactor! You can make file changes now"
+Retest.start(options.command) # not blocking
 
 sleep
