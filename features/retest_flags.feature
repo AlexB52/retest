@@ -20,6 +20,11 @@ Feature: FixtureProject
 
     """
 
+  Scenario: I can run retest with a --rake --all flag
+    Given I run retest with "exe/retest --rake --all"
+    And I modify file "test/fixtures/files/ruby/file.rb"
+    Then the logger should output a successful run
+
   Scenario: I can run retest with a --ruby flag
     Given I run retest with "exe/retest --ruby"
     And I modify file "test/fixtures/files/ruby/file.rb"
