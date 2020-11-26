@@ -4,12 +4,14 @@ require 'retest'
 
 $stdout.sync = true
 
+options = Retest::Options.new(ARGV)
+
+return puts options.help if options.help?
+
 puts "Launching Retest..."
 
-command = Retest::Options.command(ARGV)
-
 Retest
-  .build(runner: Retest::Runner.for(command))
+  .build(runner: Retest::Runner.for(options.command))
   .start # not blocking
 
 puts "Ready to refactor! You can make file changes now"

@@ -1,4 +1,4 @@
-Feature: FixtureProject
+Feature: Retest CLI
   In order to refactor a Ruby project
   I want to run a command when a file is modified
 

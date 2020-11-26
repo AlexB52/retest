@@ -52,32 +52,30 @@ module Retest
       assert_equal 'bundle exec rspec <test>', @subject.command
     end
 
-    def test_help
-      assert_equal <<~HELP, @subject.help
-        Usage: retest options [OPTIONS] [COMMAND]
+    def test_help_flag
+      @subject.args = ["--help"]
 
-        Watch a file change and run it matching spec
+      assert @subject.params[:help]
 
-        Arguments:
-          COMMAND  The test command to rerun when a file changes
+      @subject.args = ["-h"]
 
-        Options:
-          --rails  Shortcut for 'bundle exec rails test <test>'
-          --rake   Shortcut for 'bundle exec rake test TEST=<test>'
-          --rspec  Shortcut for 'bundle exec rspec <test>'
-          --ruby   Shortcut for 'bundle exec ruby <test>'
+      assert @subject.params[:help]
+    end
 
-        Examples:
-          Runs a matching rails test after a file change
-            $ retest 'bundle exec rails test <test>'
-            $ retest --rails
+    def test_help_text
+      assert_equal File.read('test/retest/options/help.txt'), @subject.help
+    end
 
-          Runs all rails tests after a file change
-            $ retest 'bundle exec rails test'
+    def test_help?
+      refute @subject.help?
 
-          Runs a hardcoded command after a file change
-            $ retest 'ruby lib/bottles_test.rb'
-      HELP
+      @subject.args = ["--help"]
+
+      assert @subject.help?
+
+      @subject.args = ["--rake", "-h"]
+
+      assert @subject.help?
     end
   end
 end

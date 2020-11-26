@@ -1,0 +1,24 @@
+Usage: retest  [OPTIONS] [COMMAND]
+
+Watch a file change and run it matching spec
+
+Arguments:
+  COMMAND  The test command to rerun when a file changes
+
+Options:
+  -h, --help   Print usage
+      --rails  Shortcut for 'bundle exec rails test <test>'
+      --rake   Shortcut for 'bundle exec rake test TEST=<test>'
+      --rspec  Shortcut for 'bundle exec rspec <test>'
+      --ruby   Shortcut for 'bundle exec ruby <test>'
+
+Examples:
+  Runs a matching rails test after a file change
+    $ retest 'bundle exec rails test <test>'
+    $ retest --rails
+
+  Runs all rails tests after a file change
+    $ retest 'bundle exec rails test'
+
+  Runs a hardcoded command after a file change
+    $ retest 'ruby lib/bottles_test.rb'
