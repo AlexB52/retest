@@ -26,7 +26,7 @@ Pass the test command surrounded by quotes. Use the placeholder `<test>` in your
 
 Learn more by running `retest -h`
 
-```bash
+```
 Usage: retest  [OPTIONS] [COMMAND]
 
 Watch a file change and run it matching spec.
