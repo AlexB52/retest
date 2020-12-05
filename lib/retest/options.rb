@@ -19,7 +19,7 @@ module Retest
 
       command nil
 
-      desc "Watch a file change and run it matching spec"
+      desc "Watch a file change and run it matching spec."
 
       example <<~EOS
       Runs a matching rails test after a file change
@@ -41,7 +41,10 @@ module Retest
 
     argument :command do
       optional
-      desc "The test command to rerun when a file changes"
+      desc <<~EOS
+      The test command to rerun when a file changes.
+      Use <test> placeholder to tell retest where to put the matching spec.
+      EOS
     end
 
     flag :all do

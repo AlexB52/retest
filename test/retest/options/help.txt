@@ -1,9 +1,12 @@
 Usage: retest  [OPTIONS] [COMMAND]
 
-Watch a file change and run it matching spec
+Watch a file change and run it matching spec.
 
 Arguments:
-  COMMAND  The test command to rerun when a file changes
+  COMMAND  The test command to rerun when a file changes.
+           Use <test> placeholder to tell retest where to put the matching
+           spec.
+           
 
 Options:
       --all    Run all the specs of a specificied ruby setup
