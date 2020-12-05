@@ -16,6 +16,7 @@ For fully fledged solutions, some cli tools already exists: [autotest](https://g
 Install it on your machine with:
 
     $ gem install retest
+    $ retest 'bundle exec rspec <test>'
 
 ## Usage
 
@@ -23,22 +24,38 @@ Launch `retest` in your terminal after accessing your ruby project folder.
 
 Pass the test command surrounded by quotes. Use the placeholder `<test>` in your command to let `retest` find the matching test and replace the placeholder with the path of the test file.
 
+Learn more by running `retest -h`
+
 ```bash
-# Let retest find the test file and replace the placeholder with the path of the test file
-$ retest 'bundle exec rake test TEST=<test>'
-$ retest 'rails test <test>'
-$ retest 'rspec <test>'
-$ retest 'ruby <test>'
-$ retest 'docker-compose exec web bundle exec rails test <test>'
+Usage: retest  [OPTIONS] [COMMAND]
 
-# Run the same command after a file change like all the spec files
-$ retest 'bundle exec rake test'
-$ retest 'rails test'
-$ retest 'rspec'
-$ retest 'docker-compose exec web bundle exec rails test'
+Watch a file change and run it matching spec.
 
-# Hardcode a test file to run independently from the file you change
-$ retest 'ruby all_tests.rb'
+Arguments:
+  COMMAND  The test command to rerun when a file changes.
+           Use <test> placeholder to tell retest where to put the matching
+           spec.
+
+
+Options:
+      --all    Run all the specs of a specificied ruby setup
+  -h, --help   Print usage
+      --rails  Shortcut for 'bundle exec rails test <test>'
+      --rake   Shortcut for 'bundle exec rake test TEST=<test>'
+      --rspec  Shortcut for 'bundle exec rspec <test>'
+      --ruby   Shortcut for 'bundle exec ruby <test>'
+
+Examples:
+  Runs a matching rails test after a file change
+    $ retest 'bundle exec rails test <test>'
+    $ retest --rails
+
+  Runs all rails tests after a file change
+    $ retest 'bundle exec rails test'
+    $ retest --rails --all
+
+  Runs a hardcoded command after a file change
+    $ retest 'ruby lib/bottles_test.rb'
 ```
 
 The gem works as follows:
@@ -47,25 +64,23 @@ The gem works as follows:
 * When a test file is changed, retest will run the file test.
 * When multiple matching test files are found, retest asks you to confirm the file and save the answer.
 * When a test file is not found, retest runs the last run command or throw a 404.
-* Works with RSpec, MiniTest, Rake commands & bash commands (not aliases).
-* Works when installed and run in a Docker container.
 
 ### Docker
 
-Installing & launching the gem in a Docker container seems to work
+Retest works in Docker too. You can install the gem and launch retest in your container while refactoring.
 ```bash
-$ docker-compose run web bash
+$ docker-compose run web bash # enter your container
 $ gem install retest
 $ retest 'bundle exec rails test <test>'
 ```
 
-**Disclaimer:**
+### Disclaimer
 * If an error comes in try using `bundle exec` like so: `$ retest 'bundle exec rake test <test>'`
 * Aliases saved on ~/.bashrc or ~/.zshrc cannot be run that way with the `retest` command
 
 ## Ruby Support
 
-Retest supports ruby 2.5 and above.
+Retest supports ruby 2.4 and above.
 
 ## Roadmap
 
