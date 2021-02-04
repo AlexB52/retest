@@ -22,7 +22,7 @@ Install it on your machine with:
 
 Launch `retest` in your terminal after accessing your ruby project folder.
 
-Pass the test command surrounded by quotes. Use the placeholder `<test>` in your command to let `retest` find the matching test and replace the placeholder with the path of the test file.
+Pass the test command surrounded by quotes. Use the placeholder `<test>` in your command to tell `retest` where to put the path of the test file in your command. Example: `retest 'bundle exec rspec <test>'`. When a file is changed `retest` will find its matching test and run it.
 
 Learn more by running `retest -h`
 
