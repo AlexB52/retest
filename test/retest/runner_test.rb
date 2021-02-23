@@ -25,6 +25,10 @@ module Retest
         out, _ = capture_subprocess_io { @subject.run('file_path.rb') }
 
         assert_match "hello", out
+
+        out, _ = capture_subprocess_io { @subject.run }
+
+        assert_match "hello", out
       end
     end
 
@@ -34,13 +38,11 @@ module Retest
       def setup
         @repository = Repository.new
 
-        @subject = Runner::VariableRunner.new("echo 'touch <test>'", repository: @repository)
+        @subject = Runner::VariableRunner.new("echo 'touch <test>'")
       end
 
       def test_run_with_no_file_found
-        @repository.files = []
-
-        out, _ = capture_subprocess_io { @subject.run('file_path.rb') }
+        out, _ = capture_subprocess_io { @subject.run }
 
         assert_equal <<~EXPECTED, out
           404 - Test File Not Found
@@ -49,21 +51,17 @@ module Retest
       end
 
       def test_run_with_a_file_found
-        @repository.files = ['file_path_test.rb']
-
-        out, _ = capture_subprocess_io { @subject.run('file_path.rb') }
+        out, _ = capture_subprocess_io { @subject.run('file_path_test.rb') }
 
         assert_match "touch file_path_test.rb", out
       end
 
       def test_returns_last_command
-        @repository.files = ['file_path_test.rb']
-
-        out, _ = capture_subprocess_io { @subject.run('file_path.rb') }
+        out, _ = capture_subprocess_io { @subject.run('file_path_test.rb') }
 
         assert_match "touch file_path_test.rb", out
 
-        out, _ = capture_subprocess_io { @subject.run('unknown_path.rb') }
+        out, _ = capture_subprocess_io { @subject.run }
 
         assert_match "touch file_path_test.rb", out
       end

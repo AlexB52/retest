@@ -9,21 +9,21 @@ module Retest
     end
 
     class VariableRunner
-      attr_reader :command, :repository, :cached_test_file
+      attr_reader :command
 
-      def initialize(command, repository: nil)
-        @repository = repository || Repository.new
+      def initialize(command)
         @command = command
+        @cached_test_file = nil
       end
 
       def ==(obj)
         command == obj.command
       end
 
-      def run(file_changed)
-        if @cached_test_file = test_file(file_changed)
-          puts "Test File Selected: #{cached_test_file}"
-          system command.gsub('<test>', cached_test_file)
+      def run(test_file = nil)
+        if @cached_test_file = test_file || @cached_test_file
+          puts "Test File Selected: #{@cached_test_file}"
+          system command.gsub('<test>', @cached_test_file)
         else
           puts <<~ERROR
             404 - Test File Not Found
@@ -31,14 +31,10 @@ module Retest
           ERROR
         end
       end
-
-      def test_file(file_changed)
-        repository.find_test(file_changed) || cached_test_file
-      end
     end
 
     HardcodedRunner = Struct.new(:command) do
-      def run(_)
+      def run(_ = nil)
         system command
       end
     end
