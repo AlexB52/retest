@@ -4,7 +4,7 @@ Feature: FixtureProject
 
   Scenario: I can run retest with no command
     Given I run retest with "exe/retest"
-    And I modify file "test/fixtures/files/unmatched_file.txt"
+    And I modify file "test/fixtures/files/unmatched_file.rb"
     Then the logger should output:
     """
     You have no command assigned
