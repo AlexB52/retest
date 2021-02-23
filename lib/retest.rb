@@ -30,8 +30,8 @@ module Retest
             system('clear 2>/dev/null') || system('cls 2>/dev/null')
             runner.run repository.find_test(modified.first.strip)
           elsif added.any?
-            # add added to files then run
-            runner.run(added.first.strip)
+            repository.add(added)
+            runner.run repository.find_test(added.first.strip)
           end
         rescue => e
           puts "Something went wrong: #{e.message}"

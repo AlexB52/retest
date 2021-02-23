@@ -11,6 +11,24 @@ module Retest
       assert_equal Dir.glob('**/*') - Dir.glob('{tmp,node_modules}/**/*'), @subject.files
     end
 
+    def test_add_file
+      @subject.files = ['c.txt']
+      assert_equal ['c.txt'], @subject.files
+
+      @subject.add('a.txt')
+
+      assert_equal ['a.txt', 'c.txt'], @subject.files
+    end
+
+    def test_add_multiple_files
+      @subject.files = []
+      assert_equal [], @subject.files
+
+      @subject.add(['c.txt', 'a.txt', 'b.txt'])
+
+      assert_equal ['a.txt', 'b.txt', 'c.txt'], @subject.files
+    end
+
     def test_find_test
       @subject.files = %w(
         test/songs/99bottles.txt
