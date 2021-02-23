@@ -7,6 +7,7 @@ require "retest/repository"
 require "retest/test_options"
 require "retest/listen_options"
 require "retest/options"
+require "retest/version_control"
 
 module Retest
   class Error < StandardError; end
@@ -17,14 +18,14 @@ module Retest
 
       build(
         runner: Runner.for(command),
-        repository: Repository.new
+        repository: Repository.new(files: VersionControl.files)
       ).start
 
       puts "Ready to refactor! You can make file changes now"
     end
 
     def build(runner:, repository:)
-      Listen.to('.', ListenOptions.to_h) do |modified, added, removed|
+      Listen.to('.', only: /\.rb$/) do |modified, added, removed|
         begin
           if modified.any?
             system('clear 2>/dev/null') || system('cls 2>/dev/null')

@@ -7,10 +7,6 @@ module Retest
       @subject = Repository.new
     end
 
-    def test_default_files
-      assert_equal Dir.glob('**/*') - Dir.glob('{tmp,node_modules}/**/*'), @subject.files
-    end
-
     def test_add_file
       @subject.files = ['c.txt']
       assert_equal ['c.txt'], @subject.files
