@@ -5,7 +5,6 @@ require "retest/version"
 require "retest/runner"
 require "retest/repository"
 require "retest/test_options"
-require "retest/listen_options"
 require "retest/options"
 require "retest/version_control"
 
@@ -25,7 +24,7 @@ module Retest
     end
 
     def build(runner:, repository:)
-      Listen.to('.', only: /\.rb$/) do |modified, added, removed|
+      Listen.to('.', only: /\.rb$/, relative: true) do |modified, added, removed|
         begin
           if modified.any?
             system('clear 2>/dev/null') || system('cls 2>/dev/null')
