@@ -1,13 +1,13 @@
 module Retest
   class VersionControl
     def self.files
-      [GitTool, NoneTool].select(&:installed?).first.new.files
+      [Git, NoVersionControl].select(&:installed?).first.new.files
     end
 
     def name; end
     alias :to_s :name
 
-    class NoneTool
+    class NoVersionControl
       def self.installed?
         true
       end
@@ -21,7 +21,7 @@ module Retest
       end
     end
 
-    class GitTool
+    class Git
       def self.installed?
         system "git -C . rev-parse 2>/dev/null"
       end
