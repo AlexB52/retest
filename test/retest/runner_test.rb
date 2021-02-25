@@ -6,6 +6,7 @@ module Retest
       def test_behaviour
         assert_respond_to @subject, :==
         assert_respond_to @subject, :run
+        assert_respond_to @subject, :remove
       end
     end
 
@@ -48,6 +49,24 @@ module Retest
           404 - Test File Not Found
           Retest could not find a matching test file to run.
         EXPECTED
+      end
+
+      def test_purge_files
+        @subject.cached_test_file = 'file_path_test.rb'
+
+        @subject.remove(['something.rb'])
+        assert_equal 'file_path_test.rb', @subject.cached_test_file
+
+        @subject.remove('something.rb')
+        assert_equal 'file_path_test.rb', @subject.cached_test_file
+
+        @subject.remove(['file_path_test.rb'])
+        assert_nil @subject.cached_test_file
+
+        @subject.cached_test_file = 'file_path_test.rb'
+        @subject.remove('file_path_test.rb')
+        assert_nil @subject.cached_test_file
+
       end
 
       def test_run_with_a_file_found

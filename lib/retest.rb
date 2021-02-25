@@ -27,6 +27,7 @@ module Retest
       Listen.to('.', only: /\.rb$/, relative: true) do |modified, added, removed|
         begin
           repository.remove(removed)
+          # runner.purge(removed)
           repository.add(added)
           system('clear 2>/dev/null') || system('cls 2>/dev/null')
 
