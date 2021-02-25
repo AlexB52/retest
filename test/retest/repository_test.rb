@@ -65,6 +65,16 @@ module Retest
       assert_equal 'test/bottles_test.rb', @subject.find_test('99bottles_ruby/lib/bottles.rb')
     end
 
+    def test_find_test_edge_cases
+      @subject.files = []
+
+      assert_nil @subject.find_test nil
+
+      @subject.files = []
+
+      assert_nil @subject.find_test ''
+    end
+
     def test_cache
       mock_cache = {}
 

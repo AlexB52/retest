@@ -10,6 +10,9 @@ module Retest
     end
 
     def find_test(path)
+      return unless path
+      return if path.empty?
+
       cache[path] ||= select_from TestOptions.for(path, files: files)
     end
 
