@@ -25,18 +25,12 @@ module Retest
 
     def build(runner:, repository:)
       Listen.to('.', only: /\.rb$/, relative: true) do |modified, added, removed|
-        STDOUT.puts modified
-        STDOUT.puts added
-        STDOUT.puts removed
         begin
-          if modified.any?
-            system('clear 2>/dev/null') || system('cls 2>/dev/null')
-            runner.run repository.find_test(modified.first.strip)
-          elsif added.any?
-            repository.add(added)
-            system('clear 2>/dev/null') || system('cls 2>/dev/null')
-            runner.run repository.find_test(added.first.strip)
-          end
+          repository.remove(removed)
+          repository.add(added)
+          system('clear 2>/dev/null') || system('cls 2>/dev/null')
+
+          runner.run repository.find_test (modified + added).first.strip
         rescue => e
           puts "Something went wrong: #{e.message}"
         end

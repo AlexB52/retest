@@ -13,9 +13,21 @@ module Retest
       cache[path] ||= select_from TestOptions.for(path, files: files)
     end
 
-    def add(new_files)
-      files.push(*new_files)
+    def add(added)
+      return if added && added.empty?
+
+      files.push(*added)
       files.sort!
+    end
+
+    def remove(removed)
+      return if removed && removed.empty?
+
+      if removed.is_a?(Array)
+        removed.each { |file| files.delete(file) }
+      else
+        files.delete(removed)
+      end
     end
 
     private

@@ -1,1 +1,1 @@
-'foo'
+class UnmatchedFile; end
