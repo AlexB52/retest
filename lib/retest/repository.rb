@@ -18,6 +18,14 @@ module Retest
       files.sort!
     end
 
+    def remove(removed_files)
+      if removed_files.is_a?(Array)
+        removed_files.each { |file| files.delete(file) }
+      else
+        files.delete(removed_files)
+      end
+    end
+
     private
 
     def select_from(tests)

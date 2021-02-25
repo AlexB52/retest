@@ -25,6 +25,29 @@ module Retest
       assert_equal ['a.txt', 'b.txt', 'c.txt'], @subject.files
     end
 
+    def test_remove_file
+      @subject.files = ['c.txt']
+      assert_equal ['c.txt'], @subject.files
+
+      @subject.remove('c.txt')
+
+      assert_equal [], @subject.files
+
+      @subject.remove('c.txt')
+      assert_equal [], @subject.files
+
+      @subject.remove nil
+      assert_equal [], @subject.files
+    end
+
+    def test_remove_multiple_files
+      @subject.files = ['c.txt', 'a.txt', 'b.txt']
+
+      @subject.remove(['a.txt', 'b.txt'])
+
+      assert_equal ['c.txt'], @subject.files
+    end
+
     def test_find_test
       @subject.files = %w(
         test/songs/99bottles.txt
