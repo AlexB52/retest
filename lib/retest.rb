@@ -30,7 +30,7 @@ module Retest
           repository.add(added)
           system('clear 2>/dev/null') || system('cls 2>/dev/null')
 
-          runner.run repository.find_test (modified + added).first.strip
+          runner.run repository.find_test (modified + added).first
         rescue => e
           puts "Something went wrong: #{e.message}"
         end
