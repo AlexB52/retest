@@ -13,7 +13,7 @@ Feature: Retest CLI
 
   Scenario: I can run retest with a hardcoded command
     Given I run retest with "exe/retest 'echo hello world'"
-    And I modify file "test/fixtures/files/unmatched_file.txt"
+    And I modify file "test/fixtures/files/unmatched_file.rb"
     Then the logger should output:
     """
     hello world
@@ -22,7 +22,7 @@ Feature: Retest CLI
 
   Scenario: I can run retest a variable command without a matching test file
     Given I run retest with "exe/retest 'echo <test>'"
-    And I modify file "test/fixtures/files/unmatched_file.txt"
+    And I modify file "test/fixtures/files/unmatched_file.rb"
     Then the logger should output:
     """
     404 - Test File Not Found
@@ -32,10 +32,10 @@ Feature: Retest CLI
 
   Scenario: I can run retest a variable command without a matching test file
     Given I run retest with "exe/retest 'echo <test>'"
-    And I modify file "test/fixtures/files/matched_file.txt"
+    And I modify file "test/fixtures/files/matched_file.rb"
     Then the logger should output:
     """
-    Test File Selected: test/fixtures/files/matched_file_test.txt
-    test/fixtures/files/matched_file_test.txt
+    Test File Selected: test/fixtures/files/matched_file_test.rb
+    test/fixtures/files/matched_file_test.rb
 
     """

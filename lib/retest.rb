@@ -5,30 +5,41 @@ require "retest/version"
 require "retest/runner"
 require "retest/repository"
 require "retest/test_options"
-require "retest/listen_options"
 require "retest/options"
+require "retest/version_control"
 
 module Retest
   class Error < StandardError; end
 
-  def self.start(command)
-    puts "Launching Retest..."
+  class << self
+    def start(command)
+      puts "Launching Retest..."
 
-    build(runner: Retest::Runner.for(command))
-      .start
+      build(
+        runner: Runner.for(command),
+        repository: Repository.new(files: VersionControl.files)
+      ).start
 
-    puts "Ready to refactor! You can make file changes now"
-  end
+      puts "Ready to refactor! You can make file changes now"
+    end
 
-  def self.build(runner:)
-    Listen.to('.', ListenOptions.to_h) do |modified, added, removed|
-      begin
-        if modified.any?
-          system('clear 2>/dev/null') || system('cls 2>/dev/null')
-          runner.run(modified.first.strip)
+    def build(runner:, repository:)
+      Listen.to('.', only: /\.rb$/, relative: true) do |modified, added, removed|
+        STDOUT.puts modified
+        STDOUT.puts added
+        STDOUT.puts removed
+        begin
+          if modified.any?
+            system('clear 2>/dev/null') || system('cls 2>/dev/null')
+            runner.run repository.find_test(modified.first.strip)
+          elsif added.any?
+            repository.add(added)
+            system('clear 2>/dev/null') || system('cls 2>/dev/null')
+            runner.run repository.find_test(added.first.strip)
+          end
+        rescue => e
+          puts "Something went wrong: #{e.message}"
         end
-      rescue => e
-        puts "Something went wrong: #{e.message}"
       end
     end
   end

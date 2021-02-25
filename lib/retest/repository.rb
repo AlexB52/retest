@@ -2,15 +2,20 @@ module Retest
   class Repository
     attr_accessor :files, :cache, :input_stream, :output_stream
 
-    def initialize(files: nil, cache: {}, input_stream: nil, output_stream: nil)
+    def initialize(files: [], cache: {}, input_stream: nil, output_stream: nil)
       @cache         = cache
-      @files         = files || default_files
+      @files         = files
       @input_stream  = input_stream || STDIN
       @output_stream = output_stream|| STDOUT
     end
 
     def find_test(path)
       cache[path] ||= select_from TestOptions.for(path, files: files)
+    end
+
+    def add(new_files)
+      files.push(*new_files)
+      files.sort!
     end
 
     private
@@ -23,10 +28,6 @@ module Retest
         ask_question tests
         tests[get_input]
       end
-    end
-
-    def default_files
-      @default_files ||= Dir.glob('**/*') - Dir.glob('{tmp,node_modules}/**/*')
     end
 
     def ask_question(tests)
