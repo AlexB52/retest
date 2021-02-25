@@ -1,1 +1,1 @@
-'foo'
+class MatchedFile; end
