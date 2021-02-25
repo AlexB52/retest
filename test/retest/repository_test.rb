@@ -36,6 +36,9 @@ module Retest
       @subject.remove('c.txt')
       assert_equal [], @subject.files
 
+      @subject.remove []
+      assert_equal [], @subject.files
+
       @subject.remove nil
       assert_equal [], @subject.files
     end

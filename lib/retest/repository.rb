@@ -14,11 +14,15 @@ module Retest
     end
 
     def add(added)
+      return if added && added.empty?
+
       files.push(*added)
       files.sort!
     end
 
     def remove(removed)
+      return if removed && removed.empty?
+
       if removed.is_a?(Array)
         removed.each { |file| files.delete(file) }
       else
