@@ -31,7 +31,17 @@ module Retest
       end
 
       def files
-        `git ls-files`.split("\n")
+        (untracked_files + tracked_files).sort
+      end
+
+      private
+
+      def untracked_files
+        `git ls-files --other --exclude-standard -z`.split("\x0")
+      end
+
+      def tracked_files
+        `git ls-files -z`.split("\x0")
       end
     end
   end
