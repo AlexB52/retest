@@ -14,28 +14,28 @@ on:
     branches: [ main ]
 
 jobs:
-  # unit-tests:
-  #   runs-on: ${{ matrix.os }}
-  #   strategy:
-  #     matrix:
-  #       os: [ubuntu-latest]
-  #       ruby:
-  #         - 2.5
-  #         - 2.6
-  #         - 2.7
-  #       include:
-  #         - os: macos-latest
-  #           ruby: 2.5
-  #   name: Ruby ${{ matrix.ruby }} test (${{ matrix.os }})
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #   - name: Set up Ruby
-  #     uses: ruby/setup-ruby@v1
-  #     with:
-  #       ruby-version: ${{ matrix.ruby }}
-  #       bundler-cache: true
-  #   - run: bundle install
-  #   - run: bundle exec rake
+  unit-tests:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        ruby:
+          - 2.5
+          - 2.6
+          - 2.7
+        include:
+          - os: macos-latest
+            ruby: 2.5
+    name: Ruby ${{ matrix.ruby }} test (${{ matrix.os }})
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
+    - run: bundle install
+    - run: bundle exec rake
 
   ruby-tests:
     name: Run retest on a ruby project
