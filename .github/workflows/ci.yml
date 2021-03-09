@@ -14,30 +14,31 @@ on:
     branches: [ main ]
 
 jobs:
-  unit-tests:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        ruby:
-          - 2.5
-          - 2.6
-          - 2.7
-        include:
-          - os: macos-latest
-            ruby: 2.5
-    name: Ruby ${{ matrix.ruby }} test (${{ matrix.os }})
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby }}
-        bundler-cache: true
-    - run: bundle install
-    - run: bundle exec rake
+  # unit-tests:
+  #   runs-on: ${{ matrix.os }}
+  #   strategy:
+  #     matrix:
+  #       os: [ubuntu-latest]
+  #       ruby:
+  #         - 2.5
+  #         - 2.6
+  #         - 2.7
+  #       include:
+  #         - os: macos-latest
+  #           ruby: 2.5
+  #   name: Ruby ${{ matrix.ruby }} test (${{ matrix.os }})
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Set up Ruby
+  #     uses: ruby/setup-ruby@v1
+  #     with:
+  #       ruby-version: ${{ matrix.ruby }}
+  #       bundler-cache: true
+  #   - run: bundle install
+  #   - run: bundle exec rake
 
   build-retest:
+    runs-on: ubuntu-latest
     name: Builds latest version of retest
     steps:
       - uses: actions/checkout@v2
@@ -49,34 +50,32 @@ jobs:
       - run: bundle install
       - run: bundle exec rake build
 
-  ruby-tests:
-    name: Run retest on a ruby project
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+  # ruby-tests:
+  #   name: Run retest on a ruby project
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
 
-      - name: Setup CI container
-        run: docker-compose -f features/repositories/ruby-app/docker-compose.yml up --abort-on-container-exit
+  #     - name: Setup CI container
+  #       run: docker-compose -f features/repositories/ruby-app/docker-compose.yml up --abort-on-container-exit
 
-  hanami-tests:
-    name: Run retest on an hanami project
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+  # hanami-tests:
+  #   name: Run retest on an hanami project
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
 
-      - name: Setup CI container
-        run: docker-compose -f features/repositories/hanami-app/docker-compose.yml up --abort-on-container-exit
+  #     - name: Setup CI container
+  #       run: docker-compose -f features/repositories/hanami-app/docker-compose.yml up --abort-on-container-exit
 
-  rails-tests:
-    name: Run retest on a rails project
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+  # rails-tests:
+  #   name: Run retest on a rails project
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
 
-      - name: Setup CI container
-        run: docker-compose -f features/repositories/rails-app/docker-compose.yml up
-
-
+  #     - name: Setup CI container
+  #       run: docker-compose -f features/repositories/rails-app/docker-compose.yml up
