@@ -38,7 +38,7 @@ jobs:
     - run: bundle exec rake
 
   app-tests:
-    name: ${{ matrix.repo }} & retest
+    name: ${{ matrix.repo }} feature specs
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -59,54 +59,3 @@ jobs:
         run: ls -t pkg | head -n1 | xargs -I {} mv pkg/{} features/repositories/${{ matrix.repo }}/retest.gem
       - name: Setup CI container
         run: docker-compose -f features/repositories/${{ matrix.repo }}/docker-compose.yml up --abort-on-container-exit
-
-  ruby-tests:
-    name: Run retest on a ruby project
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 2.5
-          bundler-cache: true
-      - run: bundle install
-      - run: bundle exec rake build
-      - name: Move gem file to repository
-        run: ls -t pkg | head -n1 | xargs -I {} mv pkg/{} features/repositories/ruby-app/retest.gem
-      - name: Setup CI container
-        run: docker-compose -f features/repositories/ruby-app/docker-compose.yml up --abort-on-container-exit
-
-  rails-tests:
-    name: Run retest on a rails project
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 2.5
-          bundler-cache: true
-      - run: bundle install
-      - run: bundle exec rake build
-      - name: Move gem file to repository
-        run: ls -t pkg | head -n1 | xargs -I {} mv pkg/{} features/repositories/rails-app/retest.gem
-      - name: Setup CI container
-        run: docker-compose -f features/repositories/rails-app/docker-compose.yml up --abort-on-container-exit
-
-  hanami-tests:
-    name: Run retest on an hanami project
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 2.5
-          bundler-cache: true
-      - run: bundle install
-      - run: bundle exec rake build
-      - name: Move gem file to repository
-        run: ls -t pkg | head -n1 | xargs -I {} mv pkg/{} features/repositories/hanami-app/retest.gem
-      - name: Setup CI container
-        run: docker-compose -f features/repositories/hanami-app/docker-compose.yml up --abort-on-container-exit
