@@ -14,7 +14,7 @@ on:
     branches: [ main ]
 
 jobs:
-  test:
+  unit-tests:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -36,7 +36,18 @@ jobs:
         bundler-cache: true
     - run: bundle install
     - run: bundle exec rake
-    - run: CUCUMBER_PUBLISH_QUIET=true bundle exec cucumber
+
+  build-retest:
+    name: Builds latest version of retest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.5
+          bundler-cache: true
+      - run: bundle install
+      - run: bundle exec rake build
 
   ruby-tests:
     name: Run retest on a ruby project
