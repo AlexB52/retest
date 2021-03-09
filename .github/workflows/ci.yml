@@ -37,3 +37,14 @@ jobs:
     - run: bundle install
     - run: bundle exec rake
     - run: CUCUMBER_PUBLISH_QUIET=true bundle exec cucumber
+
+  ruby-tests:
+    name: Run retest on a ruby project
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup CI container
+        run: docker-compose -f features/repositories/ruby-app/docker-compose.yml up --abort-on-container-exit
+
