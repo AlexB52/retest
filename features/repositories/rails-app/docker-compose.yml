@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  user:
+    build: .
+    volumes:
+      - .:/usr/src/app
+    command: ruby retest/retest_test.rb
