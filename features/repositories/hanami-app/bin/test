@@ -1,0 +1,6 @@
+#!/usr/bin/ruby
+
+system "HANAMI_ENV=test bundle exec hanami db drop"
+system "HANAMI_ENV=test bundle exec hanami db create"
+system "HANAMI_ENV=test bundle exec hanami db migrate"
+system "bundle exec rake"
