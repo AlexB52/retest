@@ -49,6 +49,7 @@ jobs:
           bundler-cache: true
       - run: bundle install
       - run: bundle exec rake build
+      - run: ls -t pkg | head -n1 | xargs -I {} mv pkg/{} pkg/retest.gem
 
   # ruby-tests:
   #   name: Run retest on a ruby project
