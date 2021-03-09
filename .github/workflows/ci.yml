@@ -37,9 +37,9 @@ jobs:
   #   - run: bundle install
   #   - run: bundle exec rake
 
-  build-retest:
+  ruby-tests:
+    name: Run retest on a ruby project
     runs-on: ubuntu-latest
-    name: Builds latest version of retest
     steps:
       - uses: actions/checkout@v2
       - name: Set up Ruby
@@ -49,16 +49,8 @@ jobs:
           bundler-cache: true
       - run: bundle install
       - run: bundle exec rake build
-      - run: ls -t pkg | head -n1 | xargs -I {} mv pkg/{} pkg/retest.gem
-
-  ruby-tests:
-    name: Run retest on a ruby project
-    runs-on: ubuntu-latest
-    needs: build-retest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - run: cp pkg/retest.gem features/repositories/ruby-app
+      - name: Move gem file to repository
+        run: ls -t pkg | head -n1 | xargs -I {} mv pkg/{} features/repositories/ruby-app/retest.gem
       - name: Setup CI container
         run: docker-compose -f features/repositories/ruby-app/docker-compose.yml up --abort-on-container-exit
 
