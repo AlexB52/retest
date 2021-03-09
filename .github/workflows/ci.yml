@@ -71,12 +71,19 @@ jobs:
       - name: Setup CI container
         run: docker-compose -f features/repositories/rails-app/docker-compose.yml up --abort-on-container-exit
 
-  # hanami-tests:
-  #   name: Run retest on an hanami project
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v2
-
-  #     - name: Setup CI container
-  #       run: docker-compose -f features/repositories/hanami-app/docker-compose.yml up --abort-on-container-exit
+  hanami-tests:
+    name: Run retest on an hanami project
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.5
+          bundler-cache: true
+      - run: bundle install
+      - run: bundle exec rake build
+      - name: Move gem file to repository
+        run: ls -t pkg | head -n1 | xargs -I {} mv pkg/{} features/repositories/hanami-app/retest.gem
+      - name: Setup CI container
+        run: docker-compose -f features/repositories/hanami-app/docker-compose.yml up --abort-on-container-exit
