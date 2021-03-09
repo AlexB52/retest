@@ -48,3 +48,24 @@ jobs:
       - name: Setup CI container
         run: docker-compose -f features/repositories/ruby-app/docker-compose.yml up --abort-on-container-exit
 
+  hanami-tests:
+    name: Run retest on an hanami project
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup CI container
+        run: docker-compose -f features/repositories/hanami-app/docker-compose.yml up --abort-on-container-exit
+
+  rails-tests:
+    name: Run retest on a rails project
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup CI container
+        run: docker-compose -f features/repositories/rails-app/docker-compose.yml up
+
+
