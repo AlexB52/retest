@@ -1,11 +1,4 @@
-require_relative 'test_helper'
-require 'minitest/autorun'
-
-$stdout.sync = true
-
-include FileHelper
-
-class RailsTest < Minitest::Test
+class FileChangesTest < Minitest::Test
   def setup
     @command = 'retest --ruby'
   end

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+bundle install
+bundle exec rake build
+ls -t pkg | head -n1 | xargs -I {} mv pkg/{} features/ruby-app/retest.gem
+docker-compose -f features/ruby-app/docker-compose.yml up
