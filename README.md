@@ -106,7 +106,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 To run integration tests on one setup (ex: hanami-app): `bin/test/hanami-app`
 
-To access an app container (ex: ruby-app): `docker-compose -f features/repositories/ruby-app/docker-compose.yml run retest sh`
+To access an app container (ex: ruby-app): `docker-compose -f features/ruby-app/docker-compose.yml run retest sh`
 
 
 ## Contributing
