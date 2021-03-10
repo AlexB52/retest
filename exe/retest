@@ -6,7 +6,10 @@ $stdout.sync = true
 
 options = Retest::Options.new(ARGV)
 
-return $stdout.puts options.help if options.help?
+if options.help?
+  $stdout.puts options.help
+  return
+end
 
 Retest.start(options.command) # not blocking
 

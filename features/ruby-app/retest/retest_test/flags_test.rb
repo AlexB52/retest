@@ -13,4 +13,14 @@ class FlagTest < Minitest::Test
 
     assert_match "You have no command assigned", @output.read
   end
+
+  def test_help
+    @output, @pid = launch_retest 'retest --help'
+
+    assert_match <<~EXPECTED, @output.read
+      Usage: retest  [OPTIONS] [COMMAND]
+
+      Watch a file change and run it matching spec.
+    EXPECTED
+  end
 end
