@@ -3,4 +3,4 @@
 bundle install
 bundle exec rake build
 ls -t pkg | head -n1 | xargs -I {} mv pkg/{} features/rails-app/retest.gem
-docker-compose -f features/rails-app/docker-compose.yml up
+docker-compose -f features/rails-app/docker-compose.yml up --build
