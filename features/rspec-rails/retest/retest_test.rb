@@ -28,7 +28,7 @@ class MatchingTestsCommandTest < Minitest::Test
 
     modify_file 'app/models/post.rb'
 
-    assert_match "Test File Selected: spec/models/post_spect.rb", @output.read
+    assert_match "Test File Selected: spec/models/post_spec.rb", @output.read
     assert_match "1 runs, 1 assertions, 0 failures, 0 errors, 0 skips", @output.read
   end
 end
@@ -56,6 +56,6 @@ class AllTestsCommandTest < Minitest::Test
 
     modify_file 'app/models/post.rb'
 
-    assert_match "8 runs, 10 assertions, 0 failures, 0 errors, 0 skips", @output.read
+    assert_match "29 examples, 0 failures, 3 pending", @output.read
   end
 end
