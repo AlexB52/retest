@@ -19,4 +19,4 @@ RUN gem install retest.gem
 
 COPY . /usr/src/app
 
-CMD ["bin/setup"]
+CMD ["bin/test_setup"]
