@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  retest:
+    build: .
+    volumes:
+      - .:/usr/src/app
+    command: bundle exec rspec
