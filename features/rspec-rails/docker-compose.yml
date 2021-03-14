@@ -5,4 +5,4 @@ services:
     build: .
     volumes:
       - .:/usr/src/app
-    command: bundle exec rspec
+    command: ruby retest/retest_test.rb
