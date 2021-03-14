@@ -26,7 +26,7 @@ end
 def launch_retest(command)
   file = OutputFile.new
   pid  = Process.spawn command, out: file.path
-  sleep 3
+  sleep 1.5
   [file, pid]
 end
 

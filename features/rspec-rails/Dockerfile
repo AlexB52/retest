@@ -1,6 +1,6 @@
-FROM ruby:2.6.6-alpine
+FROM ruby:2.4.1-alpine
 
-ARG BUILD_PACKAGES="build-base git nodejs yarn tzdata sqlite-dev"
+ARG BUILD_PACKAGES="build-base git nodejs tzdata sqlite-dev"
 
 RUN apk update && \
     apk upgrade && \
@@ -15,7 +15,6 @@ ENV BUNDLER_VERSION 2.1
 COPY Gemfile Gemfile.lock retest.gem ./
 RUN gem install bundler -v 2.1.4
 RUN bundle install
-RUN yarn install
 RUN gem install retest.gem
 
 COPY . /usr/src/app
