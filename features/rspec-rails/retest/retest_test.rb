@@ -7,7 +7,7 @@ include FileHelper
 
 class MatchingTestsCommandTest < Minitest::Test
   def setup
-    @command = 'retest --rails'
+    @command = 'retest --rspec'
   end
 
   def teardown
@@ -28,14 +28,14 @@ class MatchingTestsCommandTest < Minitest::Test
 
     modify_file 'app/models/post.rb'
 
-    assert_match "Test File Selected: test/models/post_test.rb", @output.read
-    assert_match "1 runs, 1 assertions, 0 failures, 0 errors, 0 skips", @output.read
+    assert_match "Test File Selected: spec/models/post_spec.rb", @output.read
+    assert_match "2 examples, 0 failures", @output.read
   end
 end
 
 class AllTestsCommandTest < Minitest::Test
   def setup
-    @command = 'retest --rails --all'
+    @command = 'retest --rspec --all'
   end
 
   def teardown
@@ -56,6 +56,6 @@ class AllTestsCommandTest < Minitest::Test
 
     modify_file 'app/models/post.rb'
 
-    assert_match "8 runs, 10 assertions, 0 failures, 0 errors, 0 skips", @output.read
+    assert_match "9 examples, 0 failures", @output.read
   end
 end
