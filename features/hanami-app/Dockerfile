@@ -19,4 +19,4 @@ RUN gem install retest.gem
 
 COPY . /usr/src/app
 
-CMD ["bundle", "exe", "rake"]
+CMD ["bin/setup"]
