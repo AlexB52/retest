@@ -45,8 +45,9 @@ jobs:
         repo:
           - ruby-app
           - rails-app
-          - rspec-rails
           - hanami-app
+          - rspec-rails
+          - rspec-ruby
     steps:
       - uses: actions/checkout@v2
       - name: Set up Ruby
