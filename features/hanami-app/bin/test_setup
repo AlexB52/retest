@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+HANAMI_ENV=test bundle exec hanami db create
+HANAMI_ENV=test bundle exec hanami db migrate
