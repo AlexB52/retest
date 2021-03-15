@@ -59,3 +59,9 @@ class AllTestsCommandTest < Minitest::Test
     assert_match "9 examples, 0 failures", @output.read
   end
 end
+
+class SetupTest < Minitest::Test
+  def test_repository_setup
+    assert_equal :rspec, Retest::Setup.new.type
+  end
+end

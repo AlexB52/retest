@@ -59,3 +59,9 @@ class AllTestsCommandTest < Minitest::Test
     assert_match "8 runs, 10 assertions, 0 failures, 0 errors, 0 skips", @output.read
   end
 end
+
+class SetupTest < Minitest::Test
+  def test_repository_setup
+    assert_equal :rails, Retest::Setup.new.type
+  end
+end

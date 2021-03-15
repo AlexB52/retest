@@ -1,3 +1,4 @@
+require 'retest'
 require_relative 'support/output_file'
 
 module FileHelper
