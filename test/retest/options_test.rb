@@ -1,9 +1,10 @@
 require 'test_helper'
+require_relative 'options/auto_flag'
 
 module Retest
   class OptionsTest < MiniTest::Test
     def setup
-      @subject = Options.new
+      @subject = Options.new(output_stream: StringIO.new)
     end
 
     def test_default_options
@@ -14,8 +15,16 @@ module Retest
 
     def test_empty_options
       @subject.args = []
+      expected_command = Options.new(['--auto'], output_stream: StringIO.new).command
 
-      assert_equal 'echo You have no command assigned', @subject.command
+      assert_equal expected_command, @subject.command
+    end
+
+    def test_auto_options
+      # returning the gem setup in this test
+      @subject.args = ['--auto']
+
+      assert_equal 'bundle exec rake test TEST=<test>', @subject.command
     end
 
     def test_rake_flag
@@ -57,13 +66,13 @@ module Retest
 
       @subject.args = ['--ruby', '--all']
 
-      assert_equal 'echo You have no command assigned', @subject.command
+      assert_equal 'bundle exec ruby <test>', @subject.command
     end
 
     def test_mixed_options
       @subject.args = ["echo hello world", "--rails"]
 
-      assert_equal 'bundle exec rails test <test>', @subject.command
+      assert_equal 'echo hello world', @subject.command
 
       @subject.args = ["--rspec", "--rails"]
 

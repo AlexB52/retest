@@ -1,16 +1,22 @@
 module Retest
   class Setup
-    def type
-      return :ruby unless has_gemfile?
+    def self.type
+      new.type
+    end
 
-      if rspec?
-        :rspec
-      elsif rails?
-        :rails
-      elsif rake?
-        :rake
-      else
-        :ruby
+    def type
+      @type ||= begin
+        return :ruby unless has_gemfile?
+
+        if rspec?
+          :rspec
+        elsif rails?
+          :rails
+        elsif rake?
+          :rake
+        else
+          :ruby
+        end
       end
     end
 
