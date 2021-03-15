@@ -7,6 +7,14 @@ module Retest
       @subject = Repository.new
     end
 
+    def test_has_file
+      @subject.files = ['bin/rails', 'Gemfile']
+
+      assert @subject.has_file? 'bin/rails'
+      assert @subject.has_file? 'Gemfile'
+      refute @subject.has_file? 'bin/test'
+    end
+
     def test_add_file
       @subject.files = ['c.txt']
       assert_equal ['c.txt'], @subject.files
