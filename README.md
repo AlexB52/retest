@@ -2,13 +2,6 @@
 
 Retest is a small command-line tool to help you refactor code by watching a file change and running its matching spec. Designed to be dev-centric and project independent, it can be used on the fly. No Gemfile updates, no commits to a repo or configuration files required to start refactoring. Works with every Ruby projects (at least that is the end goal)
 
-## Why?
-It is advised to be one `cmd + z` away from green tests when refactoring. This means running tests after every line change. Let Retest rerun your tests after every file change you make.
-
-Retest gem is meant to be simple and follow testing conventions encountered in Ruby projects. Give it a go you can uninstall it easily. If you think the matching pattern could be improved please raise an issue.
-
-For fully fledged solutions, some cli tools already exists: [autotest](https://github.com/grosser/autotest), [guard](https://github.com/guard/guard), [zentest](https://github.com/seattlerb/zentest)
-
 ![demo](https://alexbarret.com/images/external/retest-demo-26bcad04.gif)
 
 ## Installation
@@ -39,7 +32,14 @@ Finally let retest automatically find your ruby setup and run the appropriate co
     $ retest --auto
     $ retest --auto --all
 
-Learn more by running `retest -h`
+The gem works as follows:
+
+* When a file is changed, retest will run its matching file test.
+* When a test file is changed, retest will run the file test.
+* When multiple matching test files are found, retest asks you to confirm the file and save the answer.
+* When a test file is not found, retest runs the last run command or throw a 404.
+
+See more example with `retest -h`
 
 ```
 Usage: retest  [OPTIONS] [COMMAND]
@@ -82,14 +82,14 @@ Examples:
     $ retest --auto --all
 ```
 
-The gem works as follows:
+## Why?
+It is advised to be one `cmd + z` away from green tests when refactoring. This means running tests after every line change. Let Retest rerun your tests after every file change you make.
 
-* When a file is changed, retest will run its matching file test.
-* When a test file is changed, retest will run the file test.
-* When multiple matching test files are found, retest asks you to confirm the file and save the answer.
-* When a test file is not found, retest runs the last run command or throw a 404.
+Retest gem is meant to be simple and follow testing conventions encountered in Ruby projects. Give it a go you can uninstall it easily. If you think the matching pattern could be improved please raise an issue.
 
-### Docker
+For fully fledged solutions, some cli tools already exists: [autotest](https://github.com/grosser/autotest), [guard](https://github.com/guard/guard), [zentest](https://github.com/seattlerb/zentest)
+
+## Docker
 
 Retest works in Docker too. You can install the gem and launch retest in your container while refactoring.
 ```bash
@@ -98,7 +98,7 @@ $ gem install retest
 $ retest 'bundle exec rails test <test>'
 ```
 
-### Disclaimer
+## Disclaimer
 * If an error comes in try using `bundle exec` like so: `$ retest 'bundle exec rake test <test>'`
 * Aliases saved on ~/.bashrc or ~/.zshrc cannot be run that way with the `retest` command
 
