@@ -33,10 +33,6 @@ module Retest
       end
     end
 
-    def has_file?(filename)
-      files.find { |file| file == filename }
-    end
-
     private
 
     def select_from(tests)
