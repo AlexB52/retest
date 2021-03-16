@@ -28,3 +28,11 @@ Examples:
 
   Runs a hardcoded command after a file change
     $ retest 'ruby lib/bottles_test.rb'
+
+  Let retest identify which command to run
+    $ retest
+    $ retest --auto
+
+  Let retest identify which command to run for all tests
+    $ retest --all
+    $ retest --auto --all
