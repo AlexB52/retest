@@ -2,6 +2,8 @@
 
 Retest is a small command-line tool to help you refactor code by watching a file change and running its matching spec. Designed to be dev-centric and project independent, it can be used on the fly. No Gemfile updates, no commits to a repo or configuration files required to start refactoring. Works with every Ruby projects (at least that is the end goal)
 
+## Demo
+
 ![demo](https://alexbarret.com/images/external/retest-demo-26bcad04.gif)
 
 ## Installation
