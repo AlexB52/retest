@@ -59,3 +59,55 @@ class AllTestsCommandTest < Minitest::Test
     assert_match "9 examples, 0 failures", @output.read
   end
 end
+
+class AutoFlagTest < Minitest::Test
+  def teardown
+    end_retest @output, @pid
+  end
+
+  def test_with_no_command
+    @output, @pid = launch_retest 'retest'
+
+    assert_match <<~OUTPUT, @output.read
+      Setup identified: [RSPEC]. Using command: 'bundle exec rspec <test>'
+      Launching Retest...
+      Ready to refactor! You can make file changes now
+    OUTPUT
+  end
+
+  def test_with_no_command_all
+    @output, @pid = launch_retest 'retest --all'
+
+    assert_match <<~OUTPUT, @output.read
+      Setup identified: [RSPEC]. Using command: 'bundle exec rspec'
+      Launching Retest...
+      Ready to refactor! You can make file changes now
+    OUTPUT
+  end
+
+  def test_with_auto_flag
+    @output, @pid = launch_retest 'retest --auto'
+
+    assert_match <<~OUTPUT, @output.read
+      Setup identified: [RSPEC]. Using command: 'bundle exec rspec <test>'
+      Launching Retest...
+      Ready to refactor! You can make file changes now
+    OUTPUT
+  end
+
+  def test_with_auto_flag_all
+    @output, @pid = launch_retest 'retest --auto --all'
+
+    assert_match <<~OUTPUT, @output.read
+      Setup identified: [RSPEC]. Using command: 'bundle exec rspec'
+      Launching Retest...
+      Ready to refactor! You can make file changes now
+    OUTPUT
+  end
+end
+
+class SetupTest < Minitest::Test
+  def test_repository_setup
+    assert_equal :rspec, Retest::Setup.new.type
+  end
+end

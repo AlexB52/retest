@@ -7,6 +7,7 @@ require "retest/repository"
 require "retest/test_options"
 require "retest/options"
 require "retest/version_control"
+require "retest/setup"
 
 module Retest
   class Error < StandardError; end

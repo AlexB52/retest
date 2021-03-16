@@ -59,3 +59,55 @@ class AllTestsCommandTest < Minitest::Test
     assert_match "8 runs, 10 assertions, 0 failures, 0 errors, 0 skips", @output.read
   end
 end
+
+class AutoFlagTest < Minitest::Test
+  def teardown
+    end_retest @output, @pid
+  end
+
+  def test_with_no_command
+    @output, @pid = launch_retest 'retest'
+
+    assert_match <<~OUTPUT, @output.read
+      Setup identified: [RAILS]. Using command: 'bundle exec rails test <test>'
+      Launching Retest...
+      Ready to refactor! You can make file changes now
+    OUTPUT
+  end
+
+  def test_with_no_command_all
+    @output, @pid = launch_retest 'retest --all'
+
+    assert_match <<~OUTPUT, @output.read
+      Setup identified: [RAILS]. Using command: 'bundle exec rails test'
+      Launching Retest...
+      Ready to refactor! You can make file changes now
+    OUTPUT
+  end
+
+  def test_with_auto_flag
+    @output, @pid = launch_retest 'retest --auto'
+
+    assert_match <<~OUTPUT, @output.read
+      Setup identified: [RAILS]. Using command: 'bundle exec rails test <test>'
+      Launching Retest...
+      Ready to refactor! You can make file changes now
+    OUTPUT
+  end
+
+  def test_with_auto_flag_all
+    @output, @pid = launch_retest 'retest --auto --all'
+
+    assert_match <<~OUTPUT, @output.read
+      Setup identified: [RAILS]. Using command: 'bundle exec rails test'
+      Launching Retest...
+      Ready to refactor! You can make file changes now
+    OUTPUT
+  end
+end
+
+class SetupTest < Minitest::Test
+  def test_repository_setup
+    assert_equal :rails, Retest::Setup.new.type
+  end
+end

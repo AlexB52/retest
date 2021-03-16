@@ -1,0 +1,18 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "retest"
+require "byebug"
+
+$stdout.sync = true
+
+options = Retest::Options.new(ARGV)
+
+if options.help?
+  $stdout.puts options.help
+  return
+end
+
+Retest.start(options.command) # not blocking
+
+sleep
