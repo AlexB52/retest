@@ -13,16 +13,31 @@ For fully fledged solutions, some cli tools already exists: [autotest](https://g
 
 ## Installation
 
-Install it on your machine with:
+Install it on your machine without adding it on a Gemfile:
 
     $ gem install retest
-    $ retest 'bundle exec rspec <test>'
 
 ## Usage
 
-Launch `retest` in your terminal after accessing your ruby project folder.
+Launch `retest` in your terminal after accessing your ruby repository.
 
-Pass the test command surrounded by quotes. Use the placeholder `<test>` in your command to tell `retest` where to put the path of the test file in your command. Example: `retest 'bundle exec rspec <test>'`. When a file is changed `retest` will find its matching test and run it.
+You can pass the test command surrounded by quotes and use the placeholder `<test>` to tell `retest` where to put test file in your command. Example:
+
+    $ retest 'bundle exec rspec <test>'
+
+When a file is changed, the gem will find its matching test and run the test command with it. 
+
+Few shortcut flags exist to avoid writing the full test command.
+
+    $ retest --rspec
+    $ retest --rails
+    $ retest --rake --all
+
+Finally let retest automatically find your ruby setup and run the appropriate command using:
+
+    $ retest
+    $ retest --auto
+    $ retest --auto --all
 
 Learn more by running `retest -h`
 
@@ -35,10 +50,11 @@ Arguments:
   COMMAND  The test command to rerun when a file changes.
            Use <test> placeholder to tell retest where to put the matching
            spec.
-
+           
 
 Options:
       --all    Run all the specs of a specificied ruby setup
+      --auto   Indentify repository setup and runs appropriate command
   -h, --help   Print usage
       --rails  Shortcut for 'bundle exec rails test <test>'
       --rake   Shortcut for 'bundle exec rake test TEST=<test>'
@@ -56,6 +72,14 @@ Examples:
 
   Runs a hardcoded command after a file change
     $ retest 'ruby lib/bottles_test.rb'
+
+  Let retest identify which command to run
+    $ retest
+    $ retest --auto
+
+  Let retest identify which command to run for all tests
+    $ retest --all
+    $ retest --auto --all
 ```
 
 The gem works as follows:
@@ -93,8 +117,6 @@ Retest supports ruby 2.4 and above.
   - [x] Rails
   - [x] Ad-hoc scripts
   - [x] Hanami
-  - [ ] Sinatra
-  - [ ] Cuba? Padrino?
 - [ ] Handle other languages: Elixir, Node, Python, PHP
 - [ ] Aliases from oh-my-zsh and bash profiles?
 

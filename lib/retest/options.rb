@@ -36,6 +36,18 @@ module Retest
       Runs a hardcoded command after a file change
         $ retest 'ruby lib/bottles_test.rb'
       EOS
+
+      example <<~EOS
+      Let retest identify which command to run
+        $ retest
+        $ retest --auto
+      EOS
+
+      example <<~EOS
+      Let retest identify which command to run for all tests
+        $ retest --all
+        $ retest --auto --all
+      EOS
     end
 
     argument :command do
