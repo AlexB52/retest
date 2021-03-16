@@ -34,8 +34,8 @@ Finally let retest automatically find your ruby setup and run the appropriate co
 
 The gem works as follows:
 
-* When a file is changed, retest will run its matching file test.
-* When a test file is changed, retest will run the file test.
+* When a file is changed, retest will run its matching test.
+* When a test files is changed, retest will run the test file.
 * When multiple matching test files are found, retest asks you to confirm the file and save the answer.
 * When a test file is not found, retest runs the last run command or throw a 404.
 
