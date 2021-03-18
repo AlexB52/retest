@@ -59,7 +59,7 @@ module Retest
     end
 
     option :diff do
-      desc "Pipes all relevant test from diffed branch to test command"
+      desc "Pipes all matching tests from diffed branch to test command"
       long "--diff=git-branch"
     end
 
