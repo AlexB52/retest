@@ -10,6 +10,7 @@ module Retest
     end
 
     def test_diff_names
+      assert_respond_to @subject.class, :diff_files
       assert_respond_to @subject, :diff_files
     end
   end

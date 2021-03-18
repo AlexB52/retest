@@ -15,9 +15,7 @@ module Retest
   class << self
     def diff(branch:, repository:, runner:)
       raise "Git not installed" unless VersionControl::Git.installed?
-      git = VersionControl::Git.new
-
-      test_files = repository.find_tests git.diff_files(branch)
+      test_files = repository.find_tests VersionControl::Git.diff_files(branch)
 
       puts "Tests found:"
       test_files.each { |test_file| puts "  - #{test_file}" }
@@ -28,7 +26,9 @@ module Retest
 
     def start(runner:, repository:)
       puts "Launching Retest..."
+
       build(runner: runner, repository: repository).start
+
       puts "Ready to refactor! You can make file changes now"
     end
 

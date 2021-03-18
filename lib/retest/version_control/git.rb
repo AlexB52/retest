@@ -4,6 +4,10 @@ class Retest::VersionControl
       system "git -C . rev-parse 2>/dev/null"
     end
 
+    def self.diff_files(branch)
+      new.diff_files(branch)
+    end
+
     def name
       'git'
     end
