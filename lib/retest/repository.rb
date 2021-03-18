@@ -18,7 +18,9 @@ module Retest
     end
 
     def find_tests(paths)
-      paths.map { |path| find_test(path) }
+      paths
+        .select { |path| Regexp.new("\.rb$") =~ path }
+        .map    { |path| find_test(path) }
         .compact
         .uniq
         .sort

@@ -13,7 +13,7 @@ module Retest
   class Error < StandardError; end
 
   class Program
-    attr_reader :runner, :repository
+    attr_accessor :runner, :repository
     def initialize(runner: nil, repository: nil)
       @runner = runner
       @repository = repository

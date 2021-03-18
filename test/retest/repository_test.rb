@@ -53,6 +53,8 @@ module Retest
 
     def test_find_tests
       @subject.files = %w(
+        exe/retest
+        lib/retest.rb
         lib/bottles.rb
         lib/glasses.rb
         lib/pints.rb
@@ -68,7 +70,7 @@ module Retest
       assert_equal [
         'test/bottles_test.rb',
         'test/glasses_test.rb',
-      ], @subject.find_tests(['lib/glasses.rb', '99bottles_ruby/lib/bottles.rb',])
+      ], @subject.find_tests(['exe/retest', 'lib/glasses.rb', '99bottles_ruby/lib/bottles.rb',])
     end
 
     def test_find_test
