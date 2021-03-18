@@ -17,6 +17,13 @@ module Retest
       cache[@path] ||= select_from TestOptions.for(@path, files: files)
     end
 
+    def find_tests(paths)
+      paths.map { |path| find_test(path) }
+        .compact
+        .uniq
+        .sort
+    end
+
     def add(added)
       return if added&.empty?
 

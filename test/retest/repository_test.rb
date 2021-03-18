@@ -51,6 +51,26 @@ module Retest
       assert_equal ['c.txt'], @subject.files
     end
 
+    def test_find_tests
+      @subject.files = %w(
+        lib/bottles.rb
+        lib/glasses.rb
+        lib/pints.rb
+        test/bottles_test.rb
+        test/glasses_test.rb
+        test/plates_test.rb
+        program.rb
+        README.md
+        Gemfile
+        Gemfile.lock
+      )
+
+      assert_equal [
+        'test/bottles_test.rb',
+        'test/glasses_test.rb',
+      ], @subject.find_tests(['lib/glasses.rb', '99bottles_ruby/lib/bottles.rb',])
+    end
+
     def test_find_test
       @subject.files = %w(
         test/songs/99bottles.txt

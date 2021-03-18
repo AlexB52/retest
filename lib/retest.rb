@@ -17,11 +17,7 @@ module Retest
       raise "Git not installed" unless VersionControl::Git.installed?
       git = VersionControl::Git.new
 
-      test_files = git.diff_files(branch)
-        .map { |diff| repository.find_test(diff) }
-        .compact
-        .uniq
-        .sort
+      test_files = repository.find_tests git.diff_files(branch)
 
       puts "Tests found:"
       test_files.each { |test_file| puts "  - #{test_file}" }
