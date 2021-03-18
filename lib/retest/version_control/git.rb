@@ -13,7 +13,7 @@ class Retest::VersionControl
     end
 
     def diff_files(branch)
-      `git diff #{branch} --name-only`.split("\x0")
+      `git diff #{branch} --name-only`.split("\n")
     end
 
     private

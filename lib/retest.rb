@@ -13,14 +13,26 @@ module Retest
   class Error < StandardError; end
 
   class << self
-    def start(command)
+    def diff(branch:, repository:, runner:)
+      raise "Git not installed" unless VersionControl::Git.installed?
+      git = VersionControl::Git.new
+
+      test_files = git.diff_files(branch)
+        .map { |diff| repository.find_test(diff) }
+        .compact
+        .uniq
+        .sort
+
+      puts "Tests found:"
+      test_files.each { |test_file| puts "  - #{test_file}" }
+
+      puts "Running tests..."
+      test_files.each { |test_file| runner.run test_file }
+    end
+
+    def start(runner:, repository:)
       puts "Launching Retest..."
-
-      build(
-        runner: Runner.for(command),
-        repository: Repository.new(files: VersionControl.files)
-      ).start
-
+      build(runner: runner, repository: repository).start
       puts "Ready to refactor! You can make file changes now"
     end
 

@@ -96,7 +96,7 @@ module Retest
       out, _ = capture_subprocess_io { @subject.find_test('app/models/valuation/holdings.rb') }
 
       assert_match <<~EXPECTED, out
-        We found few tests matching:
+        We found few tests matching: app/models/valuation/holdings.rb
         [0] - test/models/taxation/holdings_test.rb
         [1] - test/models/schedule/holdings_test.rb
         [2] - test/models/performance/holdings_test.rb

@@ -58,6 +58,11 @@ module Retest
       EOS
     end
 
+    option :diff do
+      desc "Pipes all relevant test from diffed branch to test command"
+      long "--diff=git-branch"
+    end
+
     flag :all do
       long "--all"
       desc "Run all the specs of a specificied ruby setup"
