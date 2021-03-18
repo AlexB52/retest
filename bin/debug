@@ -13,12 +13,14 @@ if options.help?
   return
 end
 
-runner     = Retest::Runner.for(options.command)
-repository = Retest::Repository.new(files: Retest::VersionControl.files)
+program = Retest::Program.new(
+  repository: Retest::Repository.new(files: Retest::VersionControl.files),
+  runner: Retest::Runner.for(options.command)
+)
 
 if options.params[:diff]
-  Retest.diff(runner: runner, repository: repository, branch: options.params[:diff])
+  program.diff(options.params[:diff])
 else
-  Retest.start(runner: runner, repository: repository) # not blocking
+  program.start # not blocking
   sleep
 end
