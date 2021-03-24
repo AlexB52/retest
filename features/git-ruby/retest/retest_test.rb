@@ -1,4 +1,5 @@
 require_relative 'test_helper'
+require 'retest'
 require 'minitest/autorun'
 
 $stdout.sync = true
@@ -25,10 +26,13 @@ class FileChangesTest < Minitest::Test
 end
 
 class GitChangesTest < Minitest::Test
-  def setup
-  end
-
   def teardown
+    `git checkout -`
+    `git checkout -- lib/`
+    `git checkout -- test/`
+    `git clean -fd`
+    `git branch -D feature-branch`
+    `rm -rf .git`
   end
 
   def test_diffs_from_other_branch
@@ -45,13 +49,19 @@ class GitChangesTest < Minitest::Test
     rename_file('test/to_be_renamed_with_test_file_test.rb', 'test/renamed_with_test_file_test.rb')
     create_file('lib/created.rb', should_sleep: false)
     create_file('lib/created_with_test_file.rb', should_sleep: false)
-    create_file('lib/created_with_test_file_test.rb', should_sleep: false)
+    create_file('test/created_with_test_file_test.rb', should_sleep: false)
 
     `git add .`
     `git commit -m "Rename, Add and Remove files"`
 
-    out, _ = capture_subprocess_io { `retest --diff=master --ruby` }
+    @output, @pid = launch_retest 'retest --diff=master --ruby'
+    sleep 2
 
-    
+    assert_match <<~EXPECTED, @output.read
+    Tests found:
+      - test/created_with_test_file_test.rb
+      - test/renamed_with_test_file_test.rb
+      - test/to_be_renamed_test.rb
+    EXPECTED
   end
 end
