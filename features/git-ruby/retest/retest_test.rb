@@ -1,5 +1,4 @@
 require_relative 'test_helper'
-require 'retest'
 require 'minitest/autorun'
 
 $stdout.sync = true
