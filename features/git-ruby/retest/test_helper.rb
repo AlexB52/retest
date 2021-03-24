@@ -22,6 +22,12 @@ module FileHelper
 
     File.delete path
   end
+
+  def rename_file(path, new_path)
+    return unless File.exists? path
+
+    File.rename path, new_path
+  end
 end
 
 def launch_retest(command)

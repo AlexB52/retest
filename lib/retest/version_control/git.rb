@@ -17,7 +17,7 @@ class Retest::VersionControl
     end
 
     def diff_files(branch)
-      `git diff #{branch} --name-only`.split("\n")
+      `git diff #{branch} --name-only --diff-filter=ACMRT -z`.split("\x0")
     end
 
     private
