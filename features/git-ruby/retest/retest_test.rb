@@ -37,8 +37,8 @@ class GitChangesTest < Minitest::Test
 
   def test_diffs_from_other_branch
     `git init`
-    `git config --global user.email "you@example.com"`
-    `git config --global user.name "Your Name"`
+    `git config --local user.email "you@example.com"`
+    `git config --local user.name "Your Name"`
     `git add .`
     `git commit -m "First commit"`
     `git checkout -b feature-branch`
