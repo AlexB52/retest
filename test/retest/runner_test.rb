@@ -7,6 +7,8 @@ module Retest
         assert_respond_to @subject, :==
         assert_respond_to @subject, :run
         assert_respond_to @subject, :remove
+        assert_respond_to @subject, :matching?
+        assert_respond_to @subject, :unmatching?
       end
     end
 
@@ -30,6 +32,11 @@ module Retest
         out, _ = capture_subprocess_io { @subject.run }
 
         assert_match "hello", out
+      end
+
+      def test_matching_unmatching?
+        refute @subject.matching?
+        assert @subject.unmatching?
       end
     end
 
@@ -83,6 +90,11 @@ module Retest
         out, _ = capture_subprocess_io { @subject.run }
 
         assert_match "touch file_path_test.rb", out
+      end
+
+      def test_matching_unmatching?
+        assert @subject.matching?
+        refute @subject.unmatching?
       end
     end
   end
