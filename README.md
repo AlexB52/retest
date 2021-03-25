@@ -82,6 +82,10 @@ Examples:
   Let retest identify which command to run for all tests
     $ retest --all
     $ retest --auto --all
+
+  Run a sanity check on changed files from a branch
+    $ retest --diff origin/main --rails
+    $ retest --diff main --auto
 ```
 
 ## Why?

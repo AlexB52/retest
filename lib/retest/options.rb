@@ -48,6 +48,12 @@ module Retest
         $ retest --all
         $ retest --auto --all
       EOS
+
+      example <<~EOS
+      Run a sanity check on changed files from a branch
+        $ retest --diff origin/main --rails
+        $ retest --diff main --auto
+      EOS
     end
 
     argument :command do
