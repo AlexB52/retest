@@ -52,6 +52,14 @@ module Retest
         end
       end
 
+      def unmatching?
+        !matching?
+      end
+
+      def matching?
+        true
+      end
+
       private
 
       def purge_cache
@@ -65,6 +73,14 @@ module Retest
       end
 
       def remove(_ = nil); end
+
+      def unmatching?
+        !matching?
+      end
+
+      def matching?
+        false
+      end
     end
   end
 end
