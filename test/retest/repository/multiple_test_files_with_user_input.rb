@@ -20,7 +20,7 @@ module Retest
       out, _ = capture_subprocess_io { @subject.find_test('app/models/billing_agent_customer.rb') }
 
       assert_match <<~EXPECTED, out
-        We found few tests matching:
+        We found few tests matching: app/models/billing_agent_customer.rb
         [0] - spec/models/billing_agent_customer_spec.rb
         [1] - core/spec/models/billing_agent_customer_spec.rb
 

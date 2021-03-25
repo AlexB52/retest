@@ -51,6 +51,28 @@ module Retest
       assert_equal ['c.txt'], @subject.files
     end
 
+    def test_find_tests
+      @subject.files = %w(
+        exe/retest
+        lib/retest.rb
+        lib/bottles.rb
+        lib/glasses.rb
+        lib/pints.rb
+        test/bottles_test.rb
+        test/glasses_test.rb
+        test/plates_test.rb
+        program.rb
+        README.md
+        Gemfile
+        Gemfile.lock
+      )
+
+      assert_equal [
+        'test/bottles_test.rb',
+        'test/glasses_test.rb',
+      ], @subject.find_tests(['exe/retest', 'lib/glasses.rb', '99bottles_ruby/lib/bottles.rb',])
+    end
+
     def test_find_test
       @subject.files = %w(
         test/songs/99bottles.txt
@@ -96,7 +118,7 @@ module Retest
       out, _ = capture_subprocess_io { @subject.find_test('app/models/valuation/holdings.rb') }
 
       assert_match <<~EXPECTED, out
-        We found few tests matching:
+        We found few tests matching: app/models/valuation/holdings.rb
         [0] - test/models/taxation/holdings_test.rb
         [1] - test/models/schedule/holdings_test.rb
         [2] - test/models/performance/holdings_test.rb

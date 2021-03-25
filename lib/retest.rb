@@ -12,19 +12,33 @@ require "retest/setup"
 module Retest
   class Error < StandardError; end
 
-  class << self
-    def start(command)
+  class Program
+    attr_accessor :runner, :repository
+    def initialize(runner: nil, repository: nil)
+      @runner = runner
+      @repository = repository
+    end
+
+    def start
       puts "Launching Retest..."
-
-      build(
-        runner: Runner.for(command),
-        repository: Repository.new(files: VersionControl.files)
-      ).start
-
+      build.start
       puts "Ready to refactor! You can make file changes now"
     end
 
-    def build(runner:, repository:)
+    def diff(branch)
+      raise "Git not installed" unless VersionControl::Git.installed?
+      test_files = repository.find_tests VersionControl::Git.diff_files(branch)
+
+      puts "Tests found:"
+      test_files.each { |test_file| puts "  - #{test_file}" }
+
+      puts "Running tests..."
+      test_files.each { |test_file| runner.run test_file }
+    end
+
+    private
+
+    def build
       Listen.to('.', only: /\.rb$/, relative: true) do |modified, added, removed|
         begin
           repository.add(added)

@@ -48,6 +48,12 @@ module Retest
         $ retest --all
         $ retest --auto --all
       EOS
+
+      example <<~EOS
+      Run a sanity check on changed files from a branch
+        $ retest --diff origin/main --rails
+        $ retest --diff main --auto
+      EOS
     end
 
     argument :command do
@@ -56,6 +62,11 @@ module Retest
       The test command to rerun when a file changes.
       Use <test> placeholder to tell retest where to put the matching spec.
       EOS
+    end
+
+    option :diff do
+      desc "Pipes all matching tests from diffed branch to test command"
+      long "--diff=git-branch"
     end
 
     flag :all do

@@ -11,6 +11,14 @@ if options.help?
   return
 end
 
-Retest.start(options.command) # not blocking
+program = Retest::Program.new(
+  repository: Retest::Repository.new(files: Retest::VersionControl.files),
+  runner: Retest::Runner.for(options.command)
+)
 
-sleep
+if options.params[:diff]
+  program.diff(options.params[:diff])
+else
+  program.start # not blocking
+  sleep
+end

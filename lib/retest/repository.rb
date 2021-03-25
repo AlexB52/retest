@@ -13,7 +13,17 @@ module Retest
       return unless path
       return if path.empty?
 
-      cache[path] ||= select_from TestOptions.for(path, files: files)
+      @path = path
+      cache[@path] ||= select_from TestOptions.for(@path, files: files)
+    end
+
+    def find_tests(paths)
+      paths
+        .select { |path| Regexp.new("\.rb$") =~ path }
+        .map    { |path| find_test(path) }
+        .compact
+        .uniq
+        .sort
     end
 
     def add(added)
@@ -47,7 +57,7 @@ module Retest
 
     def ask_question(tests)
       output_stream.puts <<~QUESTION
-        We found few tests matching:
+        We found few tests matching: #{@path}
         #{list_options(tests)}
 
         Which file do you want to use?
