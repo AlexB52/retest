@@ -14,13 +14,13 @@ class OutputFile
   alias :to_s :path
 
   def read
-    return unless File.exists?(path)
+    return unless File.exist?(path)
 
     File.read(path).split('[H[J').last
   end
 
   def delete
-    return unless File.exists?(path)
+    return unless File.exist?(path)
 
     File.delete(path)
   end
