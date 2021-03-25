@@ -1,6 +1,6 @@
 def modify_file(path)
   puts "Modifying file..."
-  return unless File.exists? path
+  return unless File.exist? path
 
   old_content = File.read(path)
   File.open(path, 'w') { |file| file.write old_content }

@@ -3,7 +3,7 @@ require_relative 'support/output_file'
 
 module FileHelper
   def modify_file(path)
-    return unless File.exists? path
+    return unless File.exist? path
 
     old_content = File.read(path)
     File.open(path, 'w') { |file| file.write old_content }
@@ -18,7 +18,7 @@ module FileHelper
   end
 
   def delete_file(path)
-    return unless File.exists? path
+    return unless File.exist? path
 
     File.delete path
   end
