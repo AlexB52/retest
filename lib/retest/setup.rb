@@ -6,7 +6,7 @@ module Retest
 
     def type
       @type ||= begin
-        return :ruby unless has_gemfile?
+        return :ruby unless has_lock_file?
 
         if rspec?
           :rspec
@@ -22,8 +22,8 @@ module Retest
 
     private
 
-    def has_gemfile?
-      File.exist? 'Gemfile'
+    def has_lock_file?
+      File.exist? 'Gemfile.lock'
     end
 
     def rspec?
@@ -39,7 +39,7 @@ module Retest
     end
 
     def has_gem?(gem_name)
-      !`cat Gemfile | grep #{gem_name}`.empty?
+      !`cat Gemfile.lock | grep #{gem_name}`.empty?
     end
   end
 end
