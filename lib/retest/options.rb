@@ -118,15 +118,7 @@ module Retest
     end
 
     def command
-      return params[:command] if params[:command]
-
-      if    params[:rspec] then rspec_command
-      elsif params[:rake]  then rake_command
-      elsif params[:rails] then rails_command
-      elsif params[:ruby]  then ruby_command
-      elsif params[:auto]  then default_command
-      else                      default_command
-      end
+      Command.new(options: self, setup: @setup, output_stream: @output_stream).command
     end
 
     def args=(args)
@@ -138,45 +130,12 @@ module Retest
       params[:help]
     end
 
-    private
-
     def full_suite?
       params[:all]
     end
 
-    def default_command
-      choose_command @setup.type, command_for(@setup.type)
-    end
-
-    def command_for(type)
-      case type
-      when :rspec then rspec_command
-      when :rails then rails_command
-      when :rake  then rake_command
-      when :ruby  then ruby_command
-      else             ruby_command
-      end
-    end
-
-    def choose_command(type, command)
-      @output_stream.puts "Setup identified: [#{type.upcase}]. Using command: '#{command}'"
-      command
-    end
-
-    def rspec_command
-      full_suite? ? ALL_RSPEC_COMMAND : RSPEC_COMMAND
-    end
-
-    def rails_command
-      full_suite? ? ALL_RAILS_COMMAND : RAILS_COMMAND
-    end
-
-    def rake_command
-      full_suite? ? ALL_RAKE_COMMAND : RAKE_COMMAND
-    end
-
-    def ruby_command
-      RUBY_COMMAND
+    def auto?
+      params[:auto]
     end
   end
 end
