@@ -111,14 +111,8 @@ module Retest
       new(args).command
     end
 
-    def initialize(args = [], output_stream: STDOUT, setup: Setup)
+    def initialize(args = [])
       self.args = args
-      @output_stream = output_stream
-      @setup = setup
-    end
-
-    def command
-      Command.new(options: self, setup: @setup, output_stream: @output_stream).command
     end
 
     def args=(args)
