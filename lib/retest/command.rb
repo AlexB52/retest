@@ -1,5 +1,7 @@
 module Retest
   class Command
+    extend Forwardable
+
     RSPEC_COMMAND     = 'bundle exec rspec <test>'
     RAILS_COMMAND     = 'bundle exec rails test <test>'
     RAKE_COMMAND      = 'bundle exec rake test TEST=<test>'
@@ -15,6 +17,9 @@ module Retest
     def self.for_setup(setup)
       new(setup: setup).setup_command
     end
+
+    def_delegator :setup, :type
+    def_delegators :options, :params, :full_suite?, :auto?
 
     attr_accessor :options, :setup
     def initialize(options: Options.new, setup: Setup.new, output_stream: STDOUT)
@@ -55,22 +60,6 @@ module Retest
     end
 
     private
-
-    def params
-      options.params
-    end
-
-    def type
-      setup.type
-    end
-
-    def full_suite?
-      options.full_suite?
-    end
-
-    def auto?
-      options.auto?
-    end
 
     def rspec_command
       full_suite? ? ALL_RSPEC_COMMAND : RSPEC_COMMAND
