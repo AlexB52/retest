@@ -11,11 +11,11 @@ module Retest
     ALL_RSPEC_COMMAND = 'bundle exec rspec'
 
     def self.for_options(options)
-      new(options: options).options_command
+      new(options: options).command
     end
 
     def self.for_setup(setup)
-      new(setup: setup).setup_command
+      new(setup: setup).command
     end
 
     def_delegator :setup, :type

@@ -15,7 +15,7 @@ end
 
 program = Retest::Program.new(
   repository: Retest::Repository.new(files: Retest::VersionControl.files),
-  runner: Retest::Runner.for(options.command)
+  runner: Retest::Runner.for(Retest::Command.for_options(options))
 )
 
 if options.params[:diff]
