@@ -135,7 +135,14 @@ module Retest
     end
 
     def auto?
+      return true if no_options_passed?
       params[:auto]
+    end
+
+    private
+
+    def no_options_passed?
+      params.to_h.values.compact.uniq == [false]
     end
   end
 end

@@ -1,14 +1,24 @@
 require 'test_helper'
+require_relative 'command/auto_flag'
 
 module Retest
   class OptionsCommandTest < MiniTest::Test
     def setup
-      @subject = Command.new
+      @subject = Command.new output_stream: StringIO.new
     end
 
     def test_hardcoded_command
       @subject.options = Options.new(['--rspec', '--all', 'hello world'])
       assert_equal 'hello world', @subject.options_command
+    end
+
+    def test_empty_options
+      # returning the gem setup in this test
+      @subject.options = Options.new([])
+      assert_equal 'bundle exec rake test TEST=<test>', @subject.command
+
+      @subject.options = Options.new(['--auto'])
+      assert_equal 'bundle exec rake test TEST=<test>', @subject.command
     end
 
     def test_matching_test_options
@@ -34,6 +44,17 @@ module Retest
 
       @subject.options = Options.new(['--rake', '--all'])
       assert_equal 'bundle exec rake test', @subject.options_command
+
+      @subject.options = Options.new(['--ruby', '--all'])
+      assert_equal 'bundle exec ruby <test>', @subject.options_command
+    end
+
+    def test_mixed_options
+      @subject.options = Options.new(["echo hello world", "--rails"])
+      assert_equal 'echo hello world', @subject.options_command
+
+      @subject.options = Options.new(["--rspec", "--rails"])
+      assert_equal 'bundle exec rspec <test>', @subject.options_command
     end
   end
 
