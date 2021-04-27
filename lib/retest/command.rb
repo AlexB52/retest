@@ -2,14 +2,6 @@ module Retest
   class Command
     extend Forwardable
 
-    RSPEC_COMMAND     = 'bundle exec rspec <test>'
-    RAILS_COMMAND     = 'bundle exec rails test <test>'
-    RAKE_COMMAND      = 'bundle exec rake test TEST=<test>'
-    RUBY_COMMAND      = 'bundle exec ruby <test>'
-    ALL_RAKE_COMMAND  = 'bundle exec rake test'
-    ALL_RAILS_COMMAND = 'bundle exec rails test'
-    ALL_RSPEC_COMMAND = 'bundle exec rspec'
-
     def self.for_options(options)
       new(options: options).command
     end
