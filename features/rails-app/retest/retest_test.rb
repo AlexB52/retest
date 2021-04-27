@@ -69,7 +69,7 @@ class AutoFlagTest < Minitest::Test
     @output, @pid = launch_retest 'retest'
 
     assert_match <<~OUTPUT, @output.read
-      Setup identified: [RAILS]. Using command: 'bundle exec rails test <test>'
+      Setup identified: [RAILS]. Using command: 'bin/rails test <test>'
       Launching Retest...
       Ready to refactor! You can make file changes now
     OUTPUT
@@ -79,7 +79,7 @@ class AutoFlagTest < Minitest::Test
     @output, @pid = launch_retest 'retest --all'
 
     assert_match <<~OUTPUT, @output.read
-      Setup identified: [RAILS]. Using command: 'bundle exec rails test'
+      Setup identified: [RAILS]. Using command: 'bin/rails test'
       Launching Retest...
       Ready to refactor! You can make file changes now
     OUTPUT
@@ -89,7 +89,7 @@ class AutoFlagTest < Minitest::Test
     @output, @pid = launch_retest 'retest --auto'
 
     assert_match <<~OUTPUT, @output.read
-      Setup identified: [RAILS]. Using command: 'bundle exec rails test <test>'
+      Setup identified: [RAILS]. Using command: 'bin/rails test <test>'
       Launching Retest...
       Ready to refactor! You can make file changes now
     OUTPUT
@@ -99,7 +99,7 @@ class AutoFlagTest < Minitest::Test
     @output, @pid = launch_retest 'retest --auto --all'
 
     assert_match <<~OUTPUT, @output.read
-      Setup identified: [RAILS]. Using command: 'bundle exec rails test'
+      Setup identified: [RAILS]. Using command: 'bin/rails test'
       Launching Retest...
       Ready to refactor! You can make file changes now
     OUTPUT

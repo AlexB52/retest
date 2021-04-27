@@ -5,7 +5,11 @@ module Retest
     def setup
       @setup = SetupFake.new
       @output_stream = StringIO.new
-      @subject = Options.new(['--auto'], output_stream: @output_stream, setup: @setup)
+
+      @subject = Command.new(
+        options: Options.new(['--auto']),
+        setup: @setup,
+        output_stream: @output_stream)
     end
 
     def read_ouput
@@ -64,7 +68,11 @@ module Retest
     def setup
       @setup = SetupFake.new
       @output_stream = StringIO.new
-      @subject = Options.new(['--auto', '--all'], output_stream: @output_stream, setup: @setup)
+
+      @subject = Command.new(
+        options: Options.new(['--auto', '--all']),
+        setup: @setup,
+        output_stream: @output_stream)
     end
 
     def read_ouput

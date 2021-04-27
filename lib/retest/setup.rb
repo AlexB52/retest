@@ -31,7 +31,7 @@ module Retest
     end
 
     def rails?
-      File.exist? 'bin/rails'
+      has_gem? 'rails'
     end
 
     def rake?
