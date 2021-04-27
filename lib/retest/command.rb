@@ -62,11 +62,31 @@ module Retest
     end
 
     def rake_command
-      full_suite? ? ALL_RAKE_COMMAND : RAKE_COMMAND
+      Rake.command(all: full_suite?)
     end
 
     def ruby_command
       RUBY_COMMAND
+    end
+
+
+    Rake = Struct.new(:all, :bin_file) do
+      def self.command(all:, bin_file: File.exist?('bin/rake'))
+        new(all, bin_file).command
+      end
+
+      def command
+        return "#{root_command} TEST=<test>" unless all
+        root_command
+      end
+
+      private
+
+      def root_command
+        return 'bin/rake test' if bin_file
+
+        'bundle exec rake test'
+      end
     end
 
     Rspec = Struct.new(:all, :bin_file) do
