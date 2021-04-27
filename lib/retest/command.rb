@@ -1,3 +1,8 @@
+require_relative 'command/rails'
+require_relative 'command/rake'
+require_relative 'command/rspec'
+require_relative 'command/ruby'
+
 module Retest
   class Command
     extend Forwardable
@@ -67,74 +72,6 @@ module Retest
 
     def ruby_command
       Ruby.command(all: full_suite?)
-    end
-
-
-    Ruby = Struct.new(:all, :bin_file) do
-      def self.command(all: false, bin_file: false)
-        new(false, false).command
-      end
-
-      def command
-        'bundle exec ruby <test>'
-      end
-    end
-
-    Rake = Struct.new(:all, :bin_file) do
-      def self.command(all:, bin_file: File.exist?('bin/rake'))
-        new(all, bin_file).command
-      end
-
-      def command
-        return "#{root_command} TEST=<test>" unless all
-        root_command
-      end
-
-      private
-
-      def root_command
-        return 'bin/rake test' if bin_file
-
-        'bundle exec rake test'
-      end
-    end
-
-    Rspec = Struct.new(:all, :bin_file) do
-      def self.command(all:, bin_file: File.exist?('bin/rspec'))
-        new(all, bin_file).command
-      end
-
-      def command
-        return "#{root_command} <test>" unless all
-        root_command
-      end
-
-      private
-
-      def root_command
-        return 'bin/rspec' if bin_file
-
-        'bundle exec rspec'
-      end
-    end
-
-    Rails = Struct.new(:all, :bin_file) do
-      def self.command(all:, bin_file: File.exist?('bin/rails'))
-        new(all, bin_file).command
-      end
-
-      def command
-        return "#{root_command} <test>" unless all
-        root_command
-      end
-
-      private
-
-      def root_command
-        return 'bin/rails test' if bin_file
-
-        'bundle exec rails test'
-      end
     end
   end
 end
