@@ -62,7 +62,7 @@ module Retest
     private
 
     def rspec_command
-      full_suite? ? ALL_RSPEC_COMMAND : RSPEC_COMMAND
+      Rspec.command(all: full_suite?)
     end
 
     def rails_command
@@ -75,6 +75,25 @@ module Retest
 
     def ruby_command
       RUBY_COMMAND
+    end
+
+    Rspec = Struct.new(:all, :bin_file, keyword_init: true) do
+      def self.command(all:, bin_file: File.exist?('bin/rspec'))
+        new(all: all, bin_file: bin_file).command
+      end
+
+      def command
+        return "#{root_command} <test>" unless all
+        root_command
+      end
+
+      private
+
+      def root_command
+        return 'bin/rspec' if bin_file
+
+        'bundle exec rspec'
+      end
     end
   end
 end
