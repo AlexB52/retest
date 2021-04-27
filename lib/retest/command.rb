@@ -66,9 +66,19 @@ module Retest
     end
 
     def ruby_command
-      RUBY_COMMAND
+      Ruby.command(all: full_suite?)
     end
 
+
+    Ruby = Struct.new(:all, :bin_file) do
+      def self.command(all: false, bin_file: false)
+        new(false, false).command
+      end
+
+      def command
+        'bundle exec ruby <test>'
+      end
+    end
 
     Rake = Struct.new(:all, :bin_file) do
       def self.command(all:, bin_file: File.exist?('bin/rake'))

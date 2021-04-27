@@ -20,7 +20,7 @@ module Retest
         assert_equal 'bin/rails test <test>',         Rails.command(all: false, bin_file: true)
         assert_equal 'bundle exec rails test <test>', Rails.command(all: false, bin_file: false)
 
-        # take into account gem repository which doesn't have a bin/rspec file
+        # take into account gem repository which doesn't have a bin file
         assert_equal 'bundle exec rails test <test>', Rails.command(all: false)
         assert_equal 'bundle exec rails test', Rails.command(all: true)
       end
@@ -33,9 +33,22 @@ module Retest
         assert_equal 'bin/rake test TEST=<test>',         Rake.command(all: false, bin_file: true)
         assert_equal 'bundle exec rake test TEST=<test>', Rake.command(all: false, bin_file: false)
 
-        # take into account gem repository which doesn't have a bin/rspec file
+        # take into account gem repository which doesn't have a bin file
         assert_equal 'bundle exec rake test TEST=<test>', Rake.command(all: false)
         assert_equal 'bundle exec rake test', Rake.command(all: true)
+      end
+    end
+
+    class RubyTest < MiniTest::Test
+      def test_command
+        assert_equal 'bundle exec ruby <test>', Ruby.command(all: true, bin_file: true)
+        assert_equal 'bundle exec ruby <test>', Ruby.command(all: true, bin_file: false)
+        assert_equal 'bundle exec ruby <test>', Ruby.command(all: false, bin_file: true)
+        assert_equal 'bundle exec ruby <test>', Ruby.command(all: false, bin_file: false)
+
+        # take into account gem repository which doesn't have a bin file
+        assert_equal 'bundle exec ruby <test>', Ruby.command(all: false)
+        assert_equal 'bundle exec ruby <test>', Ruby.command(all: true)
       end
     end
   end
