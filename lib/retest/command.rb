@@ -77,9 +77,9 @@ module Retest
       RUBY_COMMAND
     end
 
-    Rspec = Struct.new(:all, :bin_file, keyword_init: true) do
+    Rspec = Struct.new(:all, :bin_file) do
       def self.command(all:, bin_file: File.exist?('bin/rspec'))
-        new(all: all, bin_file: bin_file).command
+        new(all, bin_file).command
       end
 
       def command
@@ -96,9 +96,9 @@ module Retest
       end
     end
 
-    Rails = Struct.new(:all, :bin_file, keyword_init: true) do
+    Rails = Struct.new(:all, :bin_file) do
       def self.command(all:, bin_file: File.exist?('bin/rails'))
-        new(all: all, bin_file: bin_file).command
+        new(all, bin_file).command
       end
 
       def command
