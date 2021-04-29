@@ -31,11 +31,10 @@ Few shortcut flags exist to avoid writing the full test command.
     $ retest --rails
     $ retest --rake --all
 
-Finally let retest automatically find your ruby setup and run the appropriate command using:
+Or let retest find your ruby setup and run the appropriate command using:
 
     $ retest
-    $ retest --auto
-    $ retest --auto --all
+    $ retest --all
 
 The gem works as follows:
 
