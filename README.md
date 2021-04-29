@@ -15,6 +15,7 @@ Install it on your machine without adding it on a Gemfile:
     $ gem install retest
 
 ## Usage
+### Refactoring
 
 Launch `retest` in your terminal after accessing your ruby repository.
 
@@ -43,7 +44,15 @@ The gem works as follows:
 * When multiple matching test files are found, retest asks you to confirm the file and save the answer.
 * When a test file is not found, retest runs the last run command or throw a 404.
 
-See more example with `retest -h`
+### Diff Check
+
+You can diff a branch and test all the relevant test files before pushing your branch and trigger the full CI suite. 
+
+    $ retest --diff origin/main
+
+### Help
+
+See more examples with `retest -h`
 
 ```
 Usage: retest  [OPTIONS] [COMMAND]
