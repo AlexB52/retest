@@ -1,8 +1,8 @@
 module Retest
   class Command
-    Rspec = Struct.new(:all, :bin_file) do
-      def self.command(all:, bin_file: File.exist?('bin/rspec'))
-        new(all, bin_file).command
+    Rspec = Struct.new(:all, :file_system) do
+      def self.command(all:, file_system: FileSystem)
+        new(all, file_system).command
       end
 
       def command
@@ -13,7 +13,7 @@ module Retest
       private
 
       def root_command
-        return 'bin/rspec' if bin_file
+        return 'bin/rspec' if file_system.exist? 'bin/rspec'
 
         'bundle exec rspec'
       end

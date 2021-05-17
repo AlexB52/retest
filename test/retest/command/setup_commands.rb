@@ -2,10 +2,10 @@ module Retest
   class Command
     class RspecTest < MiniTest::Test
       def test_command
-        assert_equal 'bin/rspec',                Rspec.command(all: true, bin_file: true)
-        assert_equal 'bundle exec rspec',        Rspec.command(all: true, bin_file: false)
-        assert_equal 'bin/rspec <test>',         Rspec.command(all: false, bin_file: true)
-        assert_equal 'bundle exec rspec <test>', Rspec.command(all: false, bin_file: false)
+        assert_equal 'bin/rspec',                Rspec.command(all: true, file_system: FakeFS.new(['bin/rspec']))
+        assert_equal 'bundle exec rspec',        Rspec.command(all: true, file_system: FakeFS.new([]))
+        assert_equal 'bin/rspec <test>',         Rspec.command(all: false, file_system: FakeFS.new(['bin/rspec']))
+        assert_equal 'bundle exec rspec <test>', Rspec.command(all: false, file_system: FakeFS.new([]))
 
         # take into account gem repository which doesn't have a bin/rspec file
         assert_equal 'bundle exec rspec <test>', Rspec.command(all: false)
@@ -15,10 +15,10 @@ module Retest
 
     class RailsTest < MiniTest::Test
       def test_command
-        assert_equal 'bin/rails test',                Rails.command(all: true, bin_file: true)
-        assert_equal 'bundle exec rails test',        Rails.command(all: true, bin_file: false)
-        assert_equal 'bin/rails test <test>',         Rails.command(all: false, bin_file: true)
-        assert_equal 'bundle exec rails test <test>', Rails.command(all: false, bin_file: false)
+        assert_equal 'bin/rails test',                Rails.command(all: true, file_system: FakeFS.new(['bin/rails']))
+        assert_equal 'bundle exec rails test',        Rails.command(all: true, file_system: FakeFS.new([]))
+        assert_equal 'bin/rails test <test>',         Rails.command(all: false, file_system: FakeFS.new(['bin/rails']))
+        assert_equal 'bundle exec rails test <test>', Rails.command(all: false, file_system: FakeFS.new([]))
 
         # take into account gem repository which doesn't have a bin file
         assert_equal 'bundle exec rails test <test>', Rails.command(all: false)
@@ -28,10 +28,10 @@ module Retest
 
     class RakeTest < MiniTest::Test
       def test_command
-        assert_equal 'bin/rake test',                     Rake.command(all: true, bin_file: true)
-        assert_equal 'bundle exec rake test',             Rake.command(all: true, bin_file: false)
-        assert_equal 'bin/rake test TEST=<test>',         Rake.command(all: false, bin_file: true)
-        assert_equal 'bundle exec rake test TEST=<test>', Rake.command(all: false, bin_file: false)
+        assert_equal 'bin/rake test',                     Rake.command(all: true, file_system: FakeFS.new(['bin/rake']))
+        assert_equal 'bundle exec rake test',             Rake.command(all: true, file_system: FakeFS.new([]))
+        assert_equal 'bin/rake test TEST=<test>',         Rake.command(all: false, file_system: FakeFS.new(['bin/rake']))
+        assert_equal 'bundle exec rake test TEST=<test>', Rake.command(all: false, file_system: FakeFS.new([]))
 
         # take into account gem repository which doesn't have a bin file
         assert_equal 'bundle exec rake test TEST=<test>', Rake.command(all: false)
@@ -41,10 +41,10 @@ module Retest
 
     class RubyTest < MiniTest::Test
       def test_command
-        assert_equal 'bundle exec ruby <test>', Ruby.command(all: true, bin_file: true)
-        assert_equal 'bundle exec ruby <test>', Ruby.command(all: true, bin_file: false)
-        assert_equal 'bundle exec ruby <test>', Ruby.command(all: false, bin_file: true)
-        assert_equal 'bundle exec ruby <test>', Ruby.command(all: false, bin_file: false)
+        assert_equal 'bundle exec ruby <test>', Ruby.command(all: true, file_system: FakeFS.new(['bin/ruby']))
+        assert_equal 'bundle exec ruby <test>', Ruby.command(all: true, file_system: FakeFS.new([]))
+        assert_equal 'bundle exec ruby <test>', Ruby.command(all: false, file_system: FakeFS.new(['bin/ruby']))
+        assert_equal 'bundle exec ruby <test>', Ruby.command(all: false, file_system: FakeFS.new([]))
 
         # take into account gem repository which doesn't have a bin file
         assert_equal 'bundle exec ruby <test>', Ruby.command(all: false)

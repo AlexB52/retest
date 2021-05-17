@@ -1,8 +1,8 @@
 module Retest
   class Command
-    Rake = Struct.new(:all, :bin_file) do
-      def self.command(all:, bin_file: File.exist?('bin/rake'))
-        new(all, bin_file).command
+    Rake = Struct.new(:all, :file_system) do
+      def self.command(all:, file_system: FileSystem)
+        new(all, file_system).command
       end
 
       def command
@@ -13,7 +13,7 @@ module Retest
       private
 
       def root_command
-        return 'bin/rake test' if bin_file
+        return 'bin/rake test' if file_system.exist? 'bin/rake'
 
         'bundle exec rake test'
       end
