@@ -1,11 +1,9 @@
 module Retest
   class Command
-    Ruby = Struct.new(:all, :file_system) do
-      def self.command(all: false, file_system: FileSystem)
-        new(false, file_system).command
-      end
+    module Ruby
+      module_function
 
-      def command
+      def command(all: false, file_system: FileSystem)
         if file_system.exist? 'Gemfile.lock'
           'bundle exec ruby <test>'
         else
