@@ -6,7 +6,11 @@ module Retest
       end
 
       def command
-        'bundle exec ruby <test>'
+        if file_system.exist? 'Gemfile.lock'
+          'bundle exec ruby <test>'
+        else
+          'ruby <test>'
+        end
       end
     end
   end
