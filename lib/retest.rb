@@ -9,6 +9,7 @@ require "retest/options"
 require "retest/version_control"
 require "retest/setup"
 require "retest/command"
+require "retest/file_system"
 
 module Retest
   class Error < StandardError; end

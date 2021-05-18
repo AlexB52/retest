@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+bundle install
+bundle exec rake build
+ls -t pkg | head -n1 | xargs -I {} mv pkg/{} features/ruby-bare/retest.gem
+docker-compose -f features/ruby-bare/docker-compose.yml up --build --exit-code-from retest
