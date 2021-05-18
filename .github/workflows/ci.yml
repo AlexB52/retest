@@ -44,11 +44,12 @@ jobs:
       matrix:
         repo:
           - ruby-app
-          - rails-app
+          - ruby-bare
+          - git-ruby
           - hanami-app
+          - rails-app
           - rspec-rails
           - rspec-ruby
-          - git-ruby
     steps:
       - uses: actions/checkout@v2
       - name: Set up Ruby
