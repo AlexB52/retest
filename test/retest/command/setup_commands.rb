@@ -13,19 +13,6 @@ module Retest
       end
     end
 
-    class RailsTest < MiniTest::Test
-      def test_command
-        assert_equal 'bin/rails test',                Rails.command(all: true, file_system: FakeFS.new(['bin/rails']))
-        assert_equal 'bundle exec rails test',        Rails.command(all: true, file_system: FakeFS.new([]))
-        assert_equal 'bin/rails test <test>',         Rails.command(all: false, file_system: FakeFS.new(['bin/rails']))
-        assert_equal 'bundle exec rails test <test>', Rails.command(all: false, file_system: FakeFS.new([]))
-
-        # take into account gem repository which doesn't have a bin file
-        assert_equal 'bundle exec rails test <test>', Rails.command(all: false)
-        assert_equal 'bundle exec rails test', Rails.command(all: true)
-      end
-    end
-
     class RakeTest < MiniTest::Test
       def test_command
         assert_equal 'bin/rake test',                     Rake.command(all: true, file_system: FakeFS.new(['bin/rake']))
