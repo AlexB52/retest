@@ -1,6 +1,5 @@
 require 'test_helper'
 require_relative 'command/auto_flag'
-require_relative 'command/setup_commands'
 
 module Retest
   class OptionsCommandTest < MiniTest::Test

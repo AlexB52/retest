@@ -67,7 +67,7 @@ module Retest
     end
 
     def rake_command
-      Rake.command(all: full_suite?)
+      Rake.new(all: full_suite?).command
     end
 
     def ruby_command
