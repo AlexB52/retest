@@ -17,7 +17,7 @@ module Retest
       end
 
       def ==(obj)
-        command == obj.command
+        command == obj.command && obj.class == self.class
       end
 
       def cached_test_file

@@ -1,13 +1,20 @@
 module Retest
   class Command
-    Rspec = Struct.new(:all, :file_system) do
-      def self.command(all:, file_system: FileSystem)
-        new(all, file_system).command
+    class Rspec
+      attr_reader :all, :file_system
+
+      def initialize(all:, file_system: FileSystem)
+        @file_system = file_system
+        @all = all
       end
 
-      def command
+      def to_s
         return "#{root_command} <test>" unless all
         root_command
+      end
+
+      def run_all(*files, runner:)
+        runner.run files.join(' ')
       end
 
       private
