@@ -71,7 +71,7 @@ module Retest
     end
 
     def ruby_command
-      Ruby.command(all: full_suite?)
+      Ruby.new(all: full_suite?).command
     end
   end
 end
