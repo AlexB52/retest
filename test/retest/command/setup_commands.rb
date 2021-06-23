@@ -1,18 +1,5 @@
 module Retest
   class Command
-    class RspecTest < MiniTest::Test
-      def test_command
-        assert_equal 'bin/rspec',                Rspec.command(all: true, file_system: FakeFS.new(['bin/rspec']))
-        assert_equal 'bundle exec rspec',        Rspec.command(all: true, file_system: FakeFS.new([]))
-        assert_equal 'bin/rspec <test>',         Rspec.command(all: false, file_system: FakeFS.new(['bin/rspec']))
-        assert_equal 'bundle exec rspec <test>', Rspec.command(all: false, file_system: FakeFS.new([]))
-
-        # take into account gem repository which doesn't have a bin/rspec file
-        assert_equal 'bundle exec rspec <test>', Rspec.command(all: false)
-        assert_equal 'bundle exec rspec', Rspec.command(all: true)
-      end
-    end
-
     class RakeTest < MiniTest::Test
       def test_command
         assert_equal 'bin/rake test',                     Rake.command(all: true, file_system: FakeFS.new(['bin/rake']))
