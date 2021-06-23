@@ -8,13 +8,13 @@ module Retest
         @all = all
       end
 
-      def command
+      def to_s
         return "#{root_command} TEST=<test>" unless all
         root_command
       end
 
       def run_all(*files, runner:)
-        runner.run files.size > 1 ? "{#{files.join(',')}}" : files.first
+        runner.run files.size > 1 ? "\"{#{files.join(',')}}\"" : files.first
       end
 
       private

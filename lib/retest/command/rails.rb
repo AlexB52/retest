@@ -8,7 +8,7 @@ module Retest
         @all = all
       end
 
-      def command
+      def to_s
         return "#{root_command} <test>" unless all
         root_command
       end

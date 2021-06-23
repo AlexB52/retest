@@ -59,19 +59,19 @@ module Retest
     private
 
     def rspec_command
-      Rspec.new(all: full_suite?).command
+      Rspec.new(all: full_suite?)
     end
 
     def rails_command
-      Rails.new(all: full_suite?).command
+      Rails.new(all: full_suite?)
     end
 
     def rake_command
-      Rake.new(all: full_suite?).command
+      Rake.new(all: full_suite?)
     end
 
     def ruby_command
-      Ruby.new(all: full_suite?).command
+      Ruby.new(all: full_suite?)
     end
   end
 end

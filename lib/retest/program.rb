@@ -1,9 +1,10 @@
 module Retest
   class Program
-    attr_accessor :runner, :repository
-    def initialize(runner: nil, repository: nil)
+    attr_accessor :runner, :repository, :command
+    def initialize(runner: nil, repository: nil, command: nil)
       @runner = runner
       @repository = repository
+      @command = command
     end
 
     def start
@@ -20,7 +21,7 @@ module Retest
       test_files.each { |test_file| puts "  - #{test_file}" }
 
       puts "Running tests..."
-      test_files.each { |test_file| runner.run test_file }
+      command.run_all *test_files, runner: runner
     end
 
     private

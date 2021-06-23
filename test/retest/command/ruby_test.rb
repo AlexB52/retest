@@ -9,19 +9,19 @@ module Retest
 
       def test_interface
         assert_respond_to @subject, :run_all
-        assert_respond_to @subject, :command
+        assert_respond_to @subject, :to_s
       end
 
-      def test_command
-        assert_equal 'ruby <test>', Ruby.new(all: true, file_system: FakeFS.new(['bin/ruby'])).command
-        assert_equal 'ruby <test>', Ruby.new(all: true, file_system: FakeFS.new([])).command
-        assert_equal 'ruby <test>', Ruby.new(all: false, file_system: FakeFS.new(['bin/ruby'])).command
-        assert_equal 'ruby <test>', Ruby.new(all: false, file_system: FakeFS.new([])).command
+      def test_to_s
+        assert_equal 'ruby <test>', Ruby.new(all: true, file_system: FakeFS.new(['bin/ruby'])).to_s
+        assert_equal 'ruby <test>', Ruby.new(all: true, file_system: FakeFS.new([])).to_s
+        assert_equal 'ruby <test>', Ruby.new(all: false, file_system: FakeFS.new(['bin/ruby'])).to_s
+        assert_equal 'ruby <test>', Ruby.new(all: false, file_system: FakeFS.new([])).to_s
 
-        assert_equal 'bundle exec ruby <test>', Ruby.new(all: true, file_system: FakeFS.new(['Gemfile.lock', 'bin/ruby'])).command
-        assert_equal 'bundle exec ruby <test>', Ruby.new(all: true, file_system: FakeFS.new(['Gemfile.lock'])).command
-        assert_equal 'bundle exec ruby <test>', Ruby.new(all: false, file_system: FakeFS.new(['Gemfile.lock', 'bin/ruby'])).command
-        assert_equal 'bundle exec ruby <test>', Ruby.new(all: false, file_system: FakeFS.new(['Gemfile.lock'])).command
+        assert_equal 'bundle exec ruby <test>', Ruby.new(all: true, file_system: FakeFS.new(['Gemfile.lock', 'bin/ruby'])).to_s
+        assert_equal 'bundle exec ruby <test>', Ruby.new(all: true, file_system: FakeFS.new(['Gemfile.lock'])).to_s
+        assert_equal 'bundle exec ruby <test>', Ruby.new(all: false, file_system: FakeFS.new(['Gemfile.lock', 'bin/ruby'])).to_s
+        assert_equal 'bundle exec ruby <test>', Ruby.new(all: false, file_system: FakeFS.new(['Gemfile.lock'])).to_s
       end
 
       def test_run_one_file

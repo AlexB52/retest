@@ -12,7 +12,7 @@ module Retest
         files.each { |file| runner.run file }
       end
 
-      def command
+      def to_s
         if file_system.exist? 'Gemfile.lock'
           'bundle exec ruby <test>'
         else
