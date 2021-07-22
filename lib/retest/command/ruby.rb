@@ -9,7 +9,8 @@ module Retest
       end
 
       def run_all(*files, runner:)
-        files.each { |file| runner.run file }
+        paths = files.map { |file| "require './#{file}';" }.join
+        runner.run %Q{-e "#{paths}"}
       end
 
       def to_s

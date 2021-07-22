@@ -26,8 +26,7 @@ module Retest
 
       def test_run_one_file
         mock = Minitest::Mock.new
-        mock.expect :run, true, ['a/file/path.rb']
-
+        mock.expect :run, true, [%Q{-e "require './a/file/path.rb';"}]
         @subject.run_all('a/file/path.rb', runner: mock)
 
         mock.verify
@@ -35,8 +34,7 @@ module Retest
 
       def test_run_multiple_files
         mock = Minitest::Mock.new
-        mock.expect :run, true, ['a/file/path.rb']
-        mock.expect :run, true, ['another/file/path.rb']
+        mock.expect :run, true, [%Q{-e "require './a/file/path.rb';require './another/file/path.rb';"}]
 
         @subject.run_all('a/file/path.rb', 'another/file/path.rb', runner: mock)
 
