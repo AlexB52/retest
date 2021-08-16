@@ -4,15 +4,6 @@ module Retest
   class Options
     include TTY::Option
 
-    RSPEC_COMMAND = "bundle exec rspec <test>"
-    RAILS_COMMAND = "bundle exec rails test <test>"
-    RAKE_COMMAND  = "bundle exec rake test TEST=<test>"
-    RUBY_COMMAND  = "bundle exec ruby <test>"
-
-    ALL_RAKE_COMMAND  = "bundle exec rake test"
-    ALL_RAILS_COMMAND = "bundle exec rails test"
-    ALL_RSPEC_COMMAND = "bundle exec rspec"
-
     usage do
       program "retest"
 
@@ -87,22 +78,22 @@ module Retest
 
     flag :rspec do
       long "--rspec"
-      desc "Shortcut for '#{RSPEC_COMMAND}'"
+      desc "Shortcut for a standard RSpec setup"
     end
 
     flag :rake do
       long "--rake"
-      desc "Shortcut for '#{RAKE_COMMAND}'"
+      desc "Shortcut for a standard Rake setup"
     end
 
     flag :rails do
       long "--rails"
-      desc "Shortcut for '#{RAILS_COMMAND}'"
+      desc "Shortcut for a standard Rails setup"
     end
 
     flag :ruby do
       long "--ruby"
-      desc "Shortcut for '#{RUBY_COMMAND}'"
+      desc "Shortcut for a Ruby project"
     end
 
     attr_reader :args

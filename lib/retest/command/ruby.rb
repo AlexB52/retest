@@ -1,9 +1,19 @@
 module Retest
   class Command
-    module Ruby
-      module_function
+    class Ruby
+      attr_reader :all, :file_system
 
-      def command(all: false, file_system: FileSystem)
+      def initialize(all:, file_system: FileSystem)
+        @file_system = file_system
+        @all = all
+      end
+
+      def run_all(*files, runner:)
+        paths = files.map { |file| "require './#{file}';" }.join
+        runner.run %Q{-e "#{paths}"}
+      end
+
+      def to_s
         if file_system.exist? 'Gemfile.lock'
           'bundle exec ruby <test>'
         else

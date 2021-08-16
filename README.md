@@ -65,13 +65,16 @@ Arguments:
            
 
 Options:
-      --all    Run all the specs of a specificied ruby setup
-      --auto   Indentify repository setup and runs appropriate command
-  -h, --help   Print usage
-      --rails  Shortcut for 'bundle exec rails test <test>'
-      --rake   Shortcut for 'bundle exec rake test TEST=<test>'
-      --rspec  Shortcut for 'bundle exec rspec <test>'
-      --ruby   Shortcut for 'bundle exec ruby <test>'
+      --all              Run all the specs of a specificied ruby setup
+      --auto             Indentify repository setup and runs appropriate
+                         command
+      --diff=git-branch  Pipes all matching tests from diffed branch to test
+                         command
+  -h, --help             Print usage
+      --rails            Shortcut for a standard Rails setup
+      --rake             Shortcut for a standard Rake setup
+      --rspec            Shortcut for a standard RSpec setup
+      --ruby             Shortcut for a Ruby project
 
 Examples:
   Runs a matching rails test after a file change

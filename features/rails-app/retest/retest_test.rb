@@ -111,3 +111,48 @@ class SetupTest < Minitest::Test
     assert_equal :rails, Retest::Setup.new.type
   end
 end
+
+class DiffOptionTest < Minitest::Test
+  def setup
+    `git init`
+    `git config --local user.email "you@example.com"`
+    `git config --local user.name "Your Name"`
+    `git add .`
+    `git commit -m "First commit"`
+    `git checkout -b feature-branch`
+  end
+
+  def teardown
+    @output.delete
+    `git checkout master`
+    `git clean -fd .`
+    `git checkout .`
+    `git branch -D feature-branch`
+    `rm -rf .git`
+    `bin/rails db:reset RAILS_ENV=test`
+  end
+
+  def test_diffs_from_other_branch
+    `bin/rails g scaffold books title:string`
+    `bin/rails db:migrate RAILS_ENV=test`
+    `git add .`
+    `git commit -m "Scaffold books"`
+
+    @output, @pid = launch_retest 'retest --diff=master'
+    sleep 10
+
+    assert_match <<~EXPECTED, @output.read
+      Setup identified: [RAILS]. Using command: 'bin/rails test <test>'
+      Tests found:
+        - test/controllers/books_controller_test.rb
+        - test/models/book_test.rb
+        - test/system/books_test.rb
+      Running tests...
+      Test File Selected: test/controllers/books_controller_test.rb test/models/book_test.rb test/system/books_test.rb
+    EXPECTED
+
+    assert_match <<~EXPECTED, @output.read
+      7 runs, 9 assertions, 0 failures, 0 errors, 0 skips
+    EXPECTED
+  end
+end

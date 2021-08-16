@@ -25,23 +25,23 @@ class FileChangesTest < Minitest::Test
 end
 
 class GitChangesTest < Minitest::Test
-  def teardown
-    `git checkout -`
-    `git checkout -- lib/`
-    `git checkout -- test/`
-    `git clean -fd`
-    `git branch -D feature-branch`
-    `rm -rf .git`
-  end
-
-  def test_diffs_from_other_branch
+  def setup
     `git init`
     `git config --local user.email "you@example.com"`
     `git config --local user.name "Your Name"`
     `git add .`
     `git commit -m "First commit"`
     `git checkout -b feature-branch`
+  end
 
+  def teardown
+    `git checkout -`
+    `git clean -fd`
+    `git branch -D feature-branch`
+    `rm -rf .git`
+  end
+
+  def test_diffs_from_other_branch
     delete_file('lib/to_be_deleted.rb')
     rename_file('lib/to_be_renamed.rb', 'lib/renamed.rb')
     rename_file('lib/to_be_renamed_with_test_file.rb', 'lib/renamed_with_test_file.rb')

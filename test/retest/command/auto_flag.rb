@@ -19,7 +19,7 @@ module Retest
     def test_for_rspec_setup
       @setup.type = :rspec
 
-      assert_equal 'bundle exec rspec <test>', @subject.command
+      assert_equal 'bundle exec rspec <test>', @subject.command.to_s
       assert_equal <<~OUTPUT, read_ouput
         Setup identified: [RSPEC]. Using command: 'bundle exec rspec <test>'
       OUTPUT
@@ -28,7 +28,7 @@ module Retest
     def test_for_rails_setup
       @setup.type = :rails
 
-      assert_equal 'bundle exec rails test <test>', @subject.command
+      assert_equal 'bundle exec rails test <test>', @subject.command.to_s
       assert_equal <<~OUTPUT, read_ouput
         Setup identified: [RAILS]. Using command: 'bundle exec rails test <test>'
       OUTPUT
@@ -37,7 +37,7 @@ module Retest
     def test_for_ruby_setup
       @setup.type = :ruby
 
-      assert_equal 'bundle exec ruby <test>', @subject.command
+      assert_equal 'bundle exec ruby <test>', @subject.command.to_s
       assert_equal <<~OUTPUT, read_ouput
         Setup identified: [RUBY]. Using command: 'bundle exec ruby <test>'
       OUTPUT
@@ -46,7 +46,7 @@ module Retest
     def test_for_rake_setup
       @setup.type = :rake
 
-      assert_equal 'bundle exec rake test TEST=<test>', @subject.command
+      assert_equal 'bundle exec rake test TEST=<test>', @subject.command.to_s
       assert_equal <<~OUTPUT, read_ouput
         Setup identified: [RAKE]. Using command: 'bundle exec rake test TEST=<test>'
       OUTPUT
@@ -55,7 +55,7 @@ module Retest
     def test_for_unknown_setup
       @setup.type = :unknown
 
-      assert_equal 'bundle exec ruby <test>', @subject.command
+      assert_equal 'bundle exec ruby <test>', @subject.command.to_s
       assert_equal <<~OUTPUT, read_ouput
         Setup identified: [UNKNOWN]. Using command: 'bundle exec ruby <test>'
       OUTPUT
@@ -82,7 +82,7 @@ module Retest
     def test_for_rspec_setup
       @setup.type = :rspec
 
-      assert_equal 'bundle exec rspec', @subject.command
+      assert_equal 'bundle exec rspec', @subject.command.to_s
       assert_equal <<~OUTPUT, read_ouput
         Setup identified: [RSPEC]. Using command: 'bundle exec rspec'
       OUTPUT
@@ -91,7 +91,7 @@ module Retest
     def test_for_rails_setup
       @setup.type = :rails
 
-      assert_equal 'bundle exec rails test', @subject.command
+      assert_equal 'bundle exec rails test', @subject.command.to_s
       assert_equal <<~OUTPUT, read_ouput
         Setup identified: [RAILS]. Using command: 'bundle exec rails test'
       OUTPUT
@@ -100,7 +100,7 @@ module Retest
     def test_for_ruby_setup
       @setup.type = :ruby
 
-      assert_equal 'bundle exec ruby <test>', @subject.command
+      assert_equal 'bundle exec ruby <test>', @subject.command.to_s
       assert_equal <<~OUTPUT, read_ouput
         Setup identified: [RUBY]. Using command: 'bundle exec ruby <test>'
       OUTPUT
@@ -109,7 +109,7 @@ module Retest
     def test_for_rake_setup
       @setup.type = :rake
 
-      assert_equal 'bundle exec rake test', @subject.command
+      assert_equal 'bundle exec rake test', @subject.command.to_s
       assert_equal <<~OUTPUT, read_ouput
         Setup identified: [RAKE]. Using command: 'bundle exec rake test'
       OUTPUT
@@ -118,7 +118,7 @@ module Retest
     def test_for_unknown_setup
       @setup.type = :unknown
 
-      assert_equal 'bundle exec ruby <test>', @subject.command
+      assert_equal 'bundle exec ruby <test>', @subject.command.to_s
       assert_equal <<~OUTPUT, read_ouput
         Setup identified: [UNKNOWN]. Using command: 'bundle exec ruby <test>'
       OUTPUT
