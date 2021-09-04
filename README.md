@@ -18,11 +18,19 @@ Install it on your machine without adding it on a Gemfile:
 
 Retest is used in your terminal after accessing your ruby project folder.
 
+### Help
+
+Find out what retest can do anytime with
+
+    $ retest -h
+
 ### For Refactoring
 
 #### 1. Run a hardcoded command
 
 This the most simple usage of retest: running the same command over and over after each file update.
+
+Example:
 
     $ retest 'bundle exec rspec spec/features/posts_spec.rb'
 
@@ -30,14 +38,13 @@ In this example, the feature spec `spec/features/posts_spec.rb` will be tested a
 
 #### 2. Run a dynamic command
 
-You can use the placeholder `<test>` to tell the gem where to put the test file path in your command. 
+You can use the placeholder `<test>` to tell the gem where to put the test file path in your command. When a file is changed, the gem will find its matching test and run the test command with it.
 
 Example:
 
     $ retest 'bin/rails test <test>'
-
-When a file is changed, the gem will find its matching test and run the test command with it. 
-If `app/models/post.rb` is changed then retest will run `bin/rails test test/models/post_test.rb`
+ 
+In this example, if `app/models/post.rb` is changed then retest will run `bin/rails test test/models/post_test.rb`
 
 #### 3. Run a dynamic command with shortcuts
 
@@ -70,58 +77,6 @@ You can diff a branch and test all the relevant test files before pushing your b
     $ retest --diff origin/main
 
 In this example, retest lists all the files changed between `HEAD` and `origin/main`, finds all the relevant tests and only run those.
-
-### Help
-
-See more examples with `retest -h`
-
-```
-Usage: retest  [OPTIONS] [COMMAND]
-
-Watch a file change and run it matching spec.
-
-Arguments:
-  COMMAND  The test command to rerun when a file changes.
-           Use <test> placeholder to tell retest where to put the matching
-           spec.
-           
-
-Options:
-      --all              Run all the specs of a specificied ruby setup
-      --auto             Indentify repository setup and runs appropriate
-                         command
-      --diff=git-branch  Pipes all matching tests from diffed branch to test
-                         command
-  -h, --help             Print usage
-      --rails            Shortcut for a standard Rails setup
-      --rake             Shortcut for a standard Rake setup
-      --rspec            Shortcut for a standard RSpec setup
-      --ruby             Shortcut for a Ruby project
-
-Examples:
-  Runs a matching rails test after a file change
-    $ retest 'bundle exec rails test <test>'
-    $ retest --rails
-
-  Runs all rails tests after a file change
-    $ retest 'bundle exec rails test'
-    $ retest --rails --all
-
-  Runs a hardcoded command after a file change
-    $ retest 'ruby lib/bottles_test.rb'
-
-  Let retest identify which command to run
-    $ retest
-    $ retest --auto
-
-  Let retest identify which command to run for all tests
-    $ retest --all
-    $ retest --auto --all
-
-  Run a sanity check on changed files from a branch
-    $ retest --diff origin/main --rails
-    $ retest --diff main --auto
-```
 
 ## Why?
 It is advised to be one `cmd + z` away from green tests when refactoring. This means running tests after every line change. Let Retest rerun your tests after every file change you make.
