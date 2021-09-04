@@ -15,15 +15,31 @@ Install it on your machine without adding it on a Gemfile:
     $ gem install retest
 
 ## Usage
-### Refactoring
 
-Launch `retest` in your terminal after accessing your ruby repository.
+Retest is used in your terminal after accessing your ruby project folder.
 
-You can pass the test command surrounded by quotes and use the placeholder `<test>` to tell `retest` where to put test file in your command. Example:
+### For Refactoring
 
-    $ retest 'bundle exec rspec <test>'
+#### 1. Run a hardcoded command
+
+This the most simple usage of retest: running the same command over and over after each file update.
+
+    $ retest 'bundle exec rspec spec/features/posts_spec.rb'
+
+In this example, the feature spec `spec/features/posts_spec.rb` will be tested after any ruby file is updated.
+
+#### 2. Run a dynamic command
+
+You can use the placeholder `<test>` to tell the gem where to put the test file path in your command. 
+
+Example:
+
+    $ retest 'bin/rails test <test>'
 
 When a file is changed, the gem will find its matching test and run the test command with it. 
+If `app/models/post.rb` is changed then retest will run `bin/rails test test/models/post_test.rb`
+
+#### 3. Run a dynamic command with shortcuts
 
 Few shortcut flags exist to avoid writing the full test command.
 
@@ -31,23 +47,29 @@ Few shortcut flags exist to avoid writing the full test command.
     $ retest --rails
     $ retest --rake --all
 
-Or let retest find your ruby setup and run the appropriate command using:
+#### 4. Let retest figure it all out
+
+Let retest find your ruby setup and run the appropriate command using:
 
     $ retest
     $ retest --all
 
+#### Running rules
+
 The gem works as follows:
 
-* When a file is changed, retest will run its matching test.
-* When a test files is changed, retest will run the test file.
+* When a **ruby file** is changed, retest will run its matching test.
+* When a **test file** is changed, retest will run the test file.
 * When multiple matching test files are found, retest asks you to confirm the file and save the answer.
 * When a test file is not found, retest runs the last run command or throw a 404.
 
-### Diff Check
+### Pull request scans
 
-You can diff a branch and test all the relevant test files before pushing your branch and trigger the full CI suite. 
+You can diff a branch and test all the relevant test files before pushing your branch and trigger a full CI suite. 
 
     $ retest --diff origin/main
+
+In this example, retest lists all the files changed between `HEAD` and `origin/main`, finds all the relevant tests and only run those.
 
 ### Help
 
@@ -111,8 +133,12 @@ For fully fledged solutions, some cli tools already exists: [autotest](https://g
 ## Docker
 
 Retest works in Docker too. You can install the gem and launch retest in your container while refactoring.
+
 ```bash
-$ docker-compose run web bash # enter your container
+# Enter your container. Ex:
+$ docker-compose run web bash
+
+# Install the gem and run retest in your container shell
 $ gem install retest
 $ retest 'bundle exec rails test <test>'
 ```
@@ -131,12 +157,13 @@ Retest supports ruby 2.4 and above.
 - [x] When multiple test files are found, ask which file to run and save the answer.
 - [x] When a test file is not found run the last command again.
 - [x] Run within Docker.
-- [ ] Handle main Ruby setups
+- [x] Handle main Ruby setups
   - [x] Bundler Gem
   - [x] Rails
   - [x] Ad-hoc scripts
   - [x] Hanami
-- [ ] Handle other languages: Elixir, Node, Python, PHP
+- [ ] Handle other languages: Go, Elixir, Node, Python, PHP
+  - [ ] Go (project started)
 - [ ] Aliases from oh-my-zsh and bash profiles?
 
 ## Development
@@ -148,7 +175,6 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 To run integration tests on one setup (ex: hanami-app): `bin/test/hanami-app`
 
 To access an app container (ex: ruby-app): `docker-compose -f features/ruby-app/docker-compose.yml run retest sh`
-
 
 ## Contributing
 
