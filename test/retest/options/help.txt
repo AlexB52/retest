@@ -14,6 +14,8 @@ Options:
                          command
       --diff=git-branch  Pipes all matching tests from diffed branch to test
                          command
+      --ext=regex        Regex of file extensions to listen to (default
+                         "\\.rb$")
   -h, --help             Print usage
       --rails            Shortcut for a standard Rails setup
       --rake             Shortcut for a standard Rake setup

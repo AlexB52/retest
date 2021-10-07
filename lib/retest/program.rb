@@ -1,10 +1,11 @@
 module Retest
   class Program
-    attr_accessor :runner, :repository, :command
-    def initialize(runner: nil, repository: nil, command: nil)
+    attr_accessor :runner, :repository, :command, :extension
+    def initialize(runner: nil, repository: nil, command: nil, extension: /\.rb$/)
       @runner = runner
       @repository = repository
       @command = command
+      @extension = extension
     end
 
     def start
@@ -27,7 +28,7 @@ module Retest
     private
 
     def build
-      Listen.to('.', only: /\.rb$/, relative: true) do |modified, added, removed|
+      Listen.to('.', only: extension, relative: true) do |modified, added, removed|
         begin
           repository.add(added)
           repository.remove(removed)
