@@ -60,6 +60,12 @@ module Retest
       long "--diff=git-branch"
     end
 
+    option :ext do
+      desc "Regex of file extensions to listen to"
+      long "--ext=regex"
+      default "\\.rb$"
+    end
+
     flag :all do
       long "--all"
       desc "Run all the specs of a specificied ruby setup"
@@ -124,10 +130,14 @@ module Retest
       params[:auto]
     end
 
+    def extension
+      Regexp.new(params[:ext])
+    end
+
     private
 
     def no_options_passed?
-      params.to_h.values.compact.uniq == [false]
+      params.to_h.values.compact.uniq == ["\\.rb$", false]
     end
   end
 end
