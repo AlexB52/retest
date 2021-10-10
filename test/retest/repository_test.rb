@@ -16,6 +16,19 @@ module Retest
       assert_equal ['a.txt', 'c.txt'], @subject.files
     end
 
+    def test_update
+      @subject.files = []
+      assert_equal [], @subject.files
+
+      @subject.update(added: 'b.txt', removed: 'c.txt')
+
+      assert_equal ['b.txt'], @subject.files
+
+      @subject.update(added: 'a.txt', removed: 'b.txt')
+
+      assert_equal ['a.txt'], @subject.files
+    end
+
     def test_add_multiple_files
       @subject.files = []
       assert_equal [], @subject.files
