@@ -9,6 +9,11 @@ module Retest
       end
 
       include RunnerInterfaceTest
+
+      def test_matching
+        refute @subject.matching?
+        assert @subject.unmatching?
+      end
     end
   end
 end
