@@ -11,6 +11,7 @@ module Retest
       end
 
       def run(_ = nil)
+        system command
       end
 
       def update(added:, removed:)

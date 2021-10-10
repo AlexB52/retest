@@ -1,5 +1,4 @@
 require_relative 'runners/runner'
-require_relative 'runners/hardcoded_runner'
 require_relative 'runners/variable_runner'
 
 module Retest
@@ -10,7 +9,7 @@ module Retest
       if commamd.include? '<test>'
         VariableRunner
       else
-        HardcodedRunner
+        Runner
       end.new commamd
     end
   end
