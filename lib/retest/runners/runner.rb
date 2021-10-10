@@ -10,7 +10,7 @@ module Retest
         command == obj.command && obj.class == self.class
       end
 
-      def run(file = nil)
+      def run(_ = nil)
       end
 
       def update(added:, removed:)
@@ -24,7 +24,7 @@ module Retest
       end
 
       def unmatching?
-        !unmatching
+        !matching?
       end
     end
   end
