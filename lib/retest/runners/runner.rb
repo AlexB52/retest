@@ -4,6 +4,10 @@ module Retest
       attr_accessor :command
       def initialize(command)
         @command = command
+        after_initialize
+      end
+
+      def after_initialize
       end
 
       def ==(obj)
@@ -14,9 +18,6 @@ module Retest
       end
 
       def update(added:, removed:)
-      end
-
-      def remove
       end
 
       def matching?
