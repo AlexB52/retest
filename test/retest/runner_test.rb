@@ -58,6 +58,23 @@ module Retest
         EXPECTED
       end
 
+      def test_update_files
+        @subject.cached_test_file = 'file_path_test.rb'
+
+        @subject.update(added: [], removed:['something.rb'])
+        assert_equal 'file_path_test.rb', @subject.cached_test_file
+
+        @subject.update(added: nil, removed:'something.rb')
+        assert_equal 'file_path_test.rb', @subject.cached_test_file
+
+        @subject.update(added: ['a.rb'], removed:['file_path_test.rb'])
+        assert_nil @subject.cached_test_file
+
+        @subject.cached_test_file = 'file_path_test.rb'
+        @subject.update(added: 'a.rb', removed:'file_path_test.rb')
+        assert_nil @subject.cached_test_file
+      end
+
       def test_purge_files
         @subject.cached_test_file = 'file_path_test.rb'
 
@@ -73,7 +90,6 @@ module Retest
         @subject.cached_test_file = 'file_path_test.rb'
         @subject.remove('file_path_test.rb')
         assert_nil @subject.cached_test_file
-
       end
 
       def test_run_with_a_file_found

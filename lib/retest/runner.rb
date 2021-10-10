@@ -42,6 +42,10 @@ module Retest
         end
       end
 
+      def update(added:, removed:)
+        remove(removed)
+      end
+
       def remove(purged)
         return if purged.empty?
 
@@ -72,6 +76,7 @@ module Retest
         system command
       end
 
+      def update(added: nil, removed: nil); end
       def remove(_ = nil); end
 
       def unmatching?

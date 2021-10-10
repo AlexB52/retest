@@ -31,7 +31,7 @@ module Retest
       Listen.to('.', only: extension, relative: true) do |modified, added, removed|
         begin
           repository.update(added: added, removed: removed)
-          runner.remove(removed)
+          runner.update(added: added, removed: removed)
           system('clear 2>/dev/null') || system('cls 2>/dev/null')
 
           runner.run test_file_to_run(modified + added)
