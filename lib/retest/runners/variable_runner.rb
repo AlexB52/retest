@@ -1,10 +1,6 @@
 module Retest
   module Runners
     class VariableRunner < Runner
-      def after_initialize
-        @cached_test_file = nil
-      end
-
       def cached_test_file
         @cached_test_file
       end
