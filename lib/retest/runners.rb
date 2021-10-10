@@ -7,11 +7,11 @@ module Retest
     module_function
 
     def runner_for(commamd)
-      if test_command.include? '<test>'
+      if commamd.include? '<test>'
         VariableRunner
       else
         HardcodedRunner
-      end.new test_command
+      end.new commamd
     end
   end
 end
