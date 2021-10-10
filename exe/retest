@@ -13,7 +13,7 @@ end
 
 repository = Retest::Repository.new(files: Retest::VersionControl.files)
 command    = Retest::Command.for_options(options)
-runner     = Retest::Runner.for(command.to_s)
+runner     = Retest::Runners.runner_for(command.to_s)
 
 program = Retest::Program.new(
   extension: options.extension,
