@@ -26,6 +26,11 @@ module Retest
         .sort
     end
 
+    def update(added:, removed:)
+      add(added)
+      remove(removed)
+    end
+
     def add(added)
       return if added&.empty?
 

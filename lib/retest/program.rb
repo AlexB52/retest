@@ -30,9 +30,8 @@ module Retest
     def build
       Listen.to('.', only: extension, relative: true) do |modified, added, removed|
         begin
-          repository.add(added)
-          repository.remove(removed)
-          runner.remove(removed)
+          repository.update(added: added, removed: removed)
+          runner.update(added: added, removed: removed)
           system('clear 2>/dev/null') || system('cls 2>/dev/null')
 
           runner.run test_file_to_run(modified + added)

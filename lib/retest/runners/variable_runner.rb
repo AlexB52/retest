@@ -1,25 +1,6 @@
 module Retest
-  class Runner
-    def self.for(test_command)
-      if test_command.include? '<test>'
-        VariableRunner
-      else
-        HardcodedRunner
-      end.new test_command
-    end
-
-    class VariableRunner
-      attr_reader :command
-
-      def initialize(command)
-        @command = command
-        @cached_test_file = nil
-      end
-
-      def ==(obj)
-        command == obj.command && obj.class == self.class
-      end
-
+  module Runners
+    class VariableRunner < Runner
       def cached_test_file
         @cached_test_file
       end
@@ -42,6 +23,10 @@ module Retest
         end
       end
 
+      def update(added:, removed:)
+        remove(removed)
+      end
+
       def remove(purged)
         return if purged.empty?
 
@@ -52,10 +37,6 @@ module Retest
         end
       end
 
-      def unmatching?
-        !matching?
-      end
-
       def matching?
         true
       end
@@ -64,22 +45,6 @@ module Retest
 
       def purge_cache
         @cached_test_file = nil
-      end
-    end
-
-    HardcodedRunner = Struct.new(:command) do
-      def run(_ = nil)
-        system command
-      end
-
-      def remove(_ = nil); end
-
-      def unmatching?
-        !matching?
-      end
-
-      def matching?
-        false
       end
     end
   end
