@@ -19,20 +19,20 @@ module Retest
         EXPECTED
       end
 
-      def test_update_files
+      def test_sync_files
         @subject.cached_test_file = 'file_path_test.rb'
 
-        @subject.update(added: [], removed:['something.rb'])
+        @subject.sync(added: [], removed:['something.rb'])
         assert_equal 'file_path_test.rb', @subject.cached_test_file
 
-        @subject.update(added: nil, removed:'something.rb')
+        @subject.sync(added: nil, removed:'something.rb')
         assert_equal 'file_path_test.rb', @subject.cached_test_file
 
-        @subject.update(added: ['a.rb'], removed:['file_path_test.rb'])
+        @subject.sync(added: ['a.rb'], removed:['file_path_test.rb'])
         assert_nil @subject.cached_test_file
 
         @subject.cached_test_file = 'file_path_test.rb'
-        @subject.update(added: 'a.rb', removed:'file_path_test.rb')
+        @subject.sync(added: 'a.rb', removed:'file_path_test.rb')
         assert_nil @subject.cached_test_file
       end
 

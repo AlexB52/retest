@@ -26,7 +26,7 @@ module Retest
         .sort
     end
 
-    def update(added:, removed:)
+    def sync(added:, removed:)
       add(added)
       remove(removed)
     end

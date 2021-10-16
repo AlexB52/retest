@@ -14,7 +14,7 @@ module Retest
         system command
       end
 
-      def update(added:, removed:)
+      def sync(added:, removed:)
       end
 
       def matching?

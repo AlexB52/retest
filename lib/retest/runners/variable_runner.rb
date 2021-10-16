@@ -23,9 +23,15 @@ module Retest
         end
       end
 
-      def update(added:, removed:)
+      def sync(added:, removed:)
         remove(removed)
       end
+
+      def matching?
+        true
+      end
+
+      private
 
       def remove(purged)
         return if purged.empty?
@@ -36,12 +42,6 @@ module Retest
           purge_cache if purged == cached_test_file
         end
       end
-
-      def matching?
-        true
-      end
-
-      private
 
       def purge_cache
         @cached_test_file = nil

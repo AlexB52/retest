@@ -4,7 +4,7 @@ module Retest
       def test_behaviour
         assert_respond_to @subject, :==
         assert_respond_to @subject, :run
-        assert_respond_to @subject, :update
+        assert_respond_to @subject, :sync
         assert_respond_to @subject, :matching?
         assert_respond_to @subject, :unmatching?
       end
