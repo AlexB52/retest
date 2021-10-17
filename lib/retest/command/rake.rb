@@ -17,10 +17,6 @@ module Retest
         files.size > 1 ? "\"{#{files.join(',')}}\"" : files.first
       end
 
-      def run_all(*files, runner:)
-        runner.run files.size > 1 ? "\"{#{files.join(',')}}\"" : files.first
-      end
-
       private
 
       def root_command

@@ -17,10 +17,6 @@ module Retest
         files.join(' ')
       end
 
-      def run_all(*files, runner:)
-        runner.run files.join(' ')
-      end
-
       private
 
       def root_command

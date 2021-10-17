@@ -12,11 +12,6 @@ module Retest
         %Q{-e "#{files.map { |file| "require './#{file}';" }.join}"}
       end
 
-      def run_all(*files, runner:)
-        paths = files.map { |file| "require './#{file}';" }.join
-        runner.run %Q{-e "#{paths}"}
-      end
-
       def to_s
         if file_system.exist? 'Gemfile.lock'
           'bundle exec ruby <test>'
