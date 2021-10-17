@@ -9,8 +9,8 @@ module Retest
         @cached_test_file = value || @cached_test_file
       end
 
-      def run(test_file = nil, repository: nil)
-        self.cached_test_file = test_file
+      def run(changed_file, repository:)
+        self.cached_test_file = repository.find_test(changed_file)
 
         if cached_test_file
           puts "Test File Selected: #{cached_test_file}"
