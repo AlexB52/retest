@@ -12,10 +12,6 @@ module Retest
           ERROR
         end
       end
-
-      def matching?
-        true
-      end
     end
   end
 end

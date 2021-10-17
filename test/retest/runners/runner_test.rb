@@ -19,11 +19,6 @@ module Retest
 
         assert_match "hello world", out
       end
-
-      def test_matching
-        refute @subject.matching?
-        assert @subject.unmatching?
-      end
     end
   end
 end

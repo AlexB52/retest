@@ -5,8 +5,6 @@ module Retest
         assert_respond_to @subject, :==
         assert_respond_to @subject, :run
         assert_respond_to @subject, :sync
-        assert_respond_to @subject, :matching?
-        assert_respond_to @subject, :unmatching?
       end
 
       def test_run_accepts_the_right_parameter

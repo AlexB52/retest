@@ -27,10 +27,6 @@ module Retest
         remove(removed)
       end
 
-      def matching?
-        true
-      end
-
       private
 
       def remove(purged)

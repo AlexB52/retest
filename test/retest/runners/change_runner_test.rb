@@ -24,11 +24,6 @@ module Retest
 
         assert_match "touch file_path.rb", out
       end
-
-      def test_matching_unmatching?
-        assert @subject.matching?
-        refute @subject.unmatching?
-      end
     end
   end
 end

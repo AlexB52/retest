@@ -16,14 +16,6 @@ module Retest
 
       def sync(added:, removed:)
       end
-
-      def matching?
-        false
-      end
-
-      def unmatching?
-        !matching?
-      end
     end
   end
 end

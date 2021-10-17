@@ -52,11 +52,6 @@ module Retest
         @subject.sync(added: 'a.rb', removed:'file_path_test.rb')
         assert_nil @subject.cached_test_file
       end
-
-      def test_matching_unmatching?
-        assert @subject.matching?
-        refute @subject.unmatching?
-      end
     end
   end
 end
