@@ -1,6 +1,6 @@
 module Retest
   module Runners
-    class VariableRunner < Runner
+    class TestRunner < Runner
       def cached_test_file
         @cached_test_file
       end

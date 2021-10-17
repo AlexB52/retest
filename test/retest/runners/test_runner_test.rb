@@ -3,9 +3,9 @@ require_relative 'runner_interface'
 
 module Retest
   module Runners
-    class VariableRunnerTest < MiniTest::Test
+    class TestRunnerTest < MiniTest::Test
       def setup
-        @subject = VariableRunner.new("echo 'touch <test>'")
+        @subject = TestRunner.new("echo 'touch <test>'")
       end
 
       include RunnerInterfaceTest
