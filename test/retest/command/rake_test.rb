@@ -1,4 +1,5 @@
 require 'test_helper'
+require_relative 'command_interface'
 
 module Retest
   class Command
@@ -7,10 +8,7 @@ module Retest
         @subject = Rake.new(all: true, file_system: FakeFS.new([]))
       end
 
-      def test_interface
-        assert_respond_to @subject, :run_all
-        assert_respond_to @subject, :to_s
-      end
+      include CommandInterface
 
       def test_to_s
         assert_equal 'bin/rake test',                     Rake.new(all: true, file_system: FakeFS.new(['bin/rake'])).to_s
@@ -22,23 +20,14 @@ module Retest
         assert_equal 'bundle exec rake test',             Rake.new(all: true).to_s
       end
 
-      def test_run_one_file
-        mock = Minitest::Mock.new
-        mock.expect :run, true, ['a/file/path.rb']
-
-        @subject.run_all('a/file/path.rb', runner: mock)
-
-        mock.verify
+      def test_format_with_one_file
+        assert_equal 'a/file/path.rb', @subject.format_batch('a/file/path.rb')
       end
 
-      def test_run_multiple_files
-        mock = Minitest::Mock.new
-        mock.expect :run, true, ['"{a/file/path.rb,another/file/path.rb}"']
-
-        @subject.run_all('a/file/path.rb', 'another/file/path.rb', runner: mock)
-
-        mock.verify
+      def test_format_with_multiple_files
+        assert_equal '"{a/file/path.rb,another/file/path.rb}"', @subject.format_batch('a/file/path.rb', 'another/file/path.rb')
       end
+
     end
   end
 end

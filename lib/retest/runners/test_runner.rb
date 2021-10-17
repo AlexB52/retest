@@ -1,6 +1,6 @@
 module Retest
   module Runners
-    class VariableRunner < Runner
+    class TestRunner < Runner
       def cached_test_file
         @cached_test_file
       end
@@ -12,18 +12,15 @@ module Retest
       def run(changed_file, repository:)
         self.cached_test_file = repository.find_test(changed_file)
 
-        return print_test_file_not_found unless cached_test_file
-
-        puts(<<~FILES)
-          Files Selected:
-            - file: #{changed_file}
-            - test: #{cached_test_file}
-
-        FILES
-
-        system command
-          .gsub('<test>', cached_test_file)
-          .gsub('<changed>', changed_file)
+        if cached_test_file
+          puts "Test File Selected: #{cached_test_file}"
+          system command.gsub('<test>', cached_test_file)
+        else
+          puts <<~ERROR
+            404 - Test File Not Found
+            Retest could not find a matching test file to run.
+          ERROR
+        end
       end
 
       def sync(added:, removed:)
@@ -31,13 +28,6 @@ module Retest
       end
 
       private
-
-      def print_test_file_not_found
-        puts <<~ERROR
-          404 - Test File Not Found
-          Retest could not find a matching test file to run.
-        ERROR
-      end
 
       def remove(purged)
         return if purged.empty?

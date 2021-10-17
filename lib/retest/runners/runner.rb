@@ -10,19 +10,16 @@ module Retest
         command == obj.command && obj.class == self.class
       end
 
-      def run(_ = nil)
+      def run(changed_file = nil, repository: nil)
         system command
       end
 
-      def update(added:, removed:)
+      def run_all_tests(tests_string)
+        puts "Test File Selected: #{tests_string}"
+        system command.gsub('<test>', tests_string)
       end
 
-      def matching?
-        false
-      end
-
-      def unmatching?
-        !matching?
+      def sync(added:, removed:)
       end
     end
   end

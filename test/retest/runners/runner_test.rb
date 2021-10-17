@@ -20,9 +20,12 @@ module Retest
         assert_match "hello world", out
       end
 
-      def test_matching
-        refute @subject.matching?
-        assert @subject.unmatching?
+      def test_run_all_tests
+        runner = Runner.new("echo '<test>'")
+
+        out, _ = capture_subprocess_io { @subject.run_all_tests('file_path.rb file_path_two.rb') }
+
+        assert_match "file_path.rb file_path_two.rb", out
       end
     end
   end

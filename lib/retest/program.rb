@@ -22,7 +22,7 @@ module Retest
       test_files.each { |test_file| puts "  - #{test_file}" }
 
       puts "Running tests..."
-      command.run_all *test_files, runner: runner
+      runner.run_all_tests command.format_batch(test_files)
     end
 
     private
@@ -30,19 +30,15 @@ module Retest
     def build
       Listen.to('.', only: extension, relative: true) do |modified, added, removed|
         begin
-          repository.update(added: added, removed: removed)
-          runner.update(added: added, removed: removed)
+          repository.sync(added: added, removed: removed)
+          runner.sync(added: added, removed: removed)
           system('clear 2>/dev/null') || system('cls 2>/dev/null')
 
-          runner.run test_file_to_run(modified + added)
+          runner.run (modified + added).first, repository: repository
         rescue => e
           puts "Something went wrong: #{e.message}"
         end
       end
-    end
-
-    def test_file_to_run(changed_files)
-      repository.find_test changed_files.first if runner.matching?
     end
   end
 end

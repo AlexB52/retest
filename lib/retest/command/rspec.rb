@@ -13,8 +13,8 @@ module Retest
         root_command
       end
 
-      def run_all(*files, runner:)
-        runner.run files.join(' ')
+      def format_batch(*files)
+        files.join(' ')
       end
 
       private

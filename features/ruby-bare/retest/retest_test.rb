@@ -1,6 +1,12 @@
 require_relative 'test_helper'
 require 'minitest/autorun'
 
+require_relative 'scenarios/auto_flag.rb'
+require_relative 'scenarios/custom_extensions.rb'
+require_relative 'scenarios/changed_placeholder.rb'
+require_relative 'scenarios/changed_and_test_placeholders.rb'
+require_relative 'scenarios/multiple_commands.rb'
+
 $stdout.sync = true
 
 include FileHelper
@@ -8,22 +14,6 @@ include FileHelper
 class SetupTest < Minitest::Test
   def test_repository_setup
     assert_equal :ruby, Retest::Setup.new.type
-  end
-end
-
-class AutoFlag < Minitest::Test
-  def test_start_retest
-    @output, @pid = launch_retest 'retest'
-
-    assert_match <<~OUTPUT, @output.read
-      Setup identified: [RUBY]. Using command: 'ruby <test>'
-      Launching Retest...
-      Ready to refactor! You can make file changes now
-    OUTPUT
-
-    modify_file('program.rb')
-
-    assert_match "Test File Selected: program_test.rb", @output.read
   end
 end
 
@@ -106,36 +96,5 @@ class FileChangesTest < Minitest::Test
 
     delete_file 'foo.rb'
     delete_file 'foo_test.rb'
-  end
-end
-
-class CustomExtensionTest < Minitest::Test
-  def setup
-    @command = %Q{retest "echo 'I captured a change'" --ext="\\.txt$"}
-  end
-
-  def teardown
-    end_retest @output, @pid
-  end
-
-  def test_custom_extension
-    create_file 'foo.txt',     should_sleep: false
-    create_file 'foo.rb',      should_sleep: false
-    create_file 'foo_test.rb', should_sleep: false
-
-    @output, @pid = launch_retest @command
-
-    modify_file 'foo.rb'
-    assert_match <<~EXPECTED, @output.read
-      Launching Retest...
-      Ready to refactor! You can make file changes now
-    EXPECTED
-
-    modify_file 'foo.txt'
-    assert_match "I captured a change", @output.read
-
-    delete_file 'foo.rb'
-    delete_file 'foo_test.rb'
-    delete_file 'foo.txt'
   end
 end

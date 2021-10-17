@@ -26,7 +26,7 @@ module Retest
         .sort
     end
 
-    def update(added:, removed:)
+    def sync(added:, removed:)
       add(added)
       remove(removed)
     end
@@ -61,7 +61,7 @@ module Retest
     end
 
     def ask_question(tests)
-      output_stream.puts <<~QUESTION
+      output_stream.puts(<<~QUESTION)
         We found few tests matching: #{@path}
         #{list_options(tests)}
 

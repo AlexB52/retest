@@ -3,16 +3,16 @@ require_relative 'runner_interface'
 
 module Retest
   module Runners
-    class VariableRunnerTest < MiniTest::Test
+    class TestRunnerTest < MiniTest::Test
       def setup
-        @repository = Repository.new files: ['file_path_test.rb']
-        @subject    = VariableRunner.new("echo 'touch <changed> & <test>'")
+        @repository = Repository.new(files: ['file_path_test.rb'])
+        @subject = TestRunner.new("echo 'touch <test>'")
       end
 
       include RunnerInterfaceTest
 
-      def test_run_with_no_match
-        out, _ = capture_subprocess_io { @subject.run('another_file_path.rb', repository: @repository) }
+      def test_run_with_no_file_found
+        out, _ = capture_subprocess_io { @subject.run nil, repository: @repository}
 
         assert_equal(<<~EXPECTED, out)
           404 - Test File Not Found
@@ -23,17 +23,17 @@ module Retest
       def test_run_with_a_file_found
         out, _ = capture_subprocess_io { @subject.run('file_path.rb', repository: @repository) }
 
-        assert_match "touch file_path.rb & file_path_test.rb", out
+        assert_match "touch file_path_test.rb", out
       end
 
       def test_returns_last_command
         out, _ = capture_subprocess_io { @subject.run('file_path.rb', repository: @repository) }
 
-        assert_match "touch file_path.rb & file_path_test.rb", out
+        assert_match "touch file_path_test.rb", out
 
-        out, _ = capture_subprocess_io { @subject.run('another_file_path.rb', repository: @repository) }
+        out, _ = capture_subprocess_io { @subject.run 'some-weird-path.rb', repository: @repository}
 
-        assert_match "touch another_file_path.rb & file_path_test.rb", out
+        assert_match "touch file_path_test.rb", out
       end
 
       def test_sync_files
