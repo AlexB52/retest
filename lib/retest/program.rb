@@ -34,15 +34,11 @@ module Retest
           runner.sync(added: added, removed: removed)
           system('clear 2>/dev/null') || system('cls 2>/dev/null')
 
-          runner.run test_file_to_run(modified + added)
+          runner.run (modified + added).first, repository: repository
         rescue => e
           puts "Something went wrong: #{e.message}"
         end
       end
-    end
-
-    def test_file_to_run(changed_files)
-      repository.find_test changed_files.first if runner.matching?
     end
   end
 end
