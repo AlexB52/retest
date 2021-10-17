@@ -36,7 +36,11 @@ Example:
 
 In this example, the feature spec `spec/features/posts_spec.rb` will be tested after any ruby file is updated.
 
-#### 2. Run a dynamic command
+#### 2. Run a dynamic command with placeholders
+
+Retest provides few placeholders to help you run a command after every file change. The placeholders can be used on their own or together.
+
+1. `<test>` placeholder 
 
 You can use the placeholder `<test>` to tell the gem where to put the test file path in your command. When a file is changed, the gem will find its matching test and run the test command with it.
 
@@ -45,6 +49,16 @@ Example:
     $ retest 'bin/rails test <test>'
  
 In this example, if `app/models/post.rb` is changed then retest will run `bin/rails test test/models/post_test.rb`
+    
+2. `<changed>` placeholder
+    
+You can use the placeholder `<changed>` to tell the gem where to put the changed file path in your command. When a file is changed, the gem will run the command with it.
+
+Example:
+
+    $ retest 'rubocop <changed>'
+ 
+In this example, if `app/models/post.rb` is changed then retest will run `rubocop app/models/post.rb`  
 
 #### 3. Run a dynamic command with shortcuts
 
