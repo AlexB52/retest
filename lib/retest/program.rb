@@ -22,7 +22,7 @@ module Retest
       test_files.each { |test_file| puts "  - #{test_file}" }
 
       puts "Running tests..."
-      command.run_all *test_files, runner: runner
+      runner.run_all_tests command.format_batch(test_files)
     end
 
     private

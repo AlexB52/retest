@@ -8,6 +8,10 @@ module Retest
         @all = all
       end
 
+      def format_batch(*files)
+        %Q{-e "#{files.map { |file| "require './#{file}';" }.join}"}
+      end
+
       def run_all(*files, runner:)
         paths = files.map { |file| "require './#{file}';" }.join
         runner.run %Q{-e "#{paths}"}

@@ -14,6 +14,11 @@ module Retest
         system command
       end
 
+      def run_all_tests(tests_string)
+        puts "Test File Selected: #{tests_string}"
+        system command.gsub('<test>', tests_string)
+      end
+
       def sync(added:, removed:)
       end
     end
