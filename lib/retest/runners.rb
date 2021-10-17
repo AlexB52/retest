@@ -7,16 +7,16 @@ module Retest
   module Runners
     module_function
 
-    def runner_for(commamd)
-      if commamd.include?('<test>') && commamd.include?('<changed>')
+    def runner_for(command)
+      if command.include?('<test>') && command.include?('<changed>')
         VariableRunner
-      elsif commamd.include?('<test>')
+      elsif command.include?('<test>')
         TestRunner
-      elsif commamd.include?('<changed>')
+      elsif command.include?('<changed>')
         ChangeRunner
       else
         Runner
-      end.new commamd
+      end.new command
     end
   end
 end
