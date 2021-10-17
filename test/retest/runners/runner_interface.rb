@@ -9,6 +9,10 @@ module Retest
         assert_respond_to @subject, :unmatching?
       end
 
+      def test_run_accepts_the_right_parameter
+        out, _ = capture_subprocess_io { @subject.run 'some-path.rb', repository: Repository.new }
+      end
+
       def test_equal
         runner1 = @subject.class.new('hello')
         runner2 = @subject.class.new('hello')

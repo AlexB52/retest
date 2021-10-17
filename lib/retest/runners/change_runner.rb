@@ -1,7 +1,7 @@
 module Retest
   module Runners
     class ChangeRunner < Runner
-      def run(changed_file = nil)
+      def run(changed_file = nil, repository: nil)
         if changed_file
           puts "Test File Selected: #{changed_file}"
           system command.gsub('<changed>', changed_file)

@@ -10,7 +10,7 @@ module Retest
         command == obj.command && obj.class == self.class
       end
 
-      def run(modified = [], repository: nil)
+      def run(changed_file = nil, repository: nil)
         system command
       end
 

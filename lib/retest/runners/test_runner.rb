@@ -9,7 +9,7 @@ module Retest
         @cached_test_file = value || @cached_test_file
       end
 
-      def run(test_file = nil)
+      def run(test_file = nil, repository: nil)
         self.cached_test_file = test_file
 
         if cached_test_file
