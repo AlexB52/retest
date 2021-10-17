@@ -61,7 +61,7 @@ module Retest
     end
 
     def ask_question(tests)
-      output_stream.puts <<~QUESTION
+      output_stream.puts(<<~QUESTION)
         We found few tests matching: #{@path}
         #{list_options(tests)}
 
