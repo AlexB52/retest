@@ -1,5 +1,6 @@
 require_relative 'runners/runner'
 require_relative 'runners/test_runner'
+require_relative 'runners/change_runner'
 
 module Retest
   module Runners
