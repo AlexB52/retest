@@ -4,6 +4,8 @@ require 'minitest/autorun'
 require_relative 'scenarios/auto_flag.rb'
 require_relative 'scenarios/custom_extensions.rb'
 require_relative 'scenarios/changed_placeholder.rb'
+require_relative 'scenarios/changed_and_test_placeholders.rb'
+require_relative 'scenarios/multiple_commands.rb'
 
 $stdout.sync = true
 

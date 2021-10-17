@@ -18,6 +18,7 @@ module Retest
           Files Selected:
             - file: #{changed_file}
             - test: #{cached_test_file}
+
         FILES
 
         system command
