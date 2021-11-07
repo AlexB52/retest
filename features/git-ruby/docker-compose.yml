@@ -4,5 +4,7 @@ services:
   retest:
     build: .
     volumes:
-      - .:/usr/src/app
+      - git-ruby:/usr/src/app
     command: ruby retest/retest_test.rb
+volumes:
+  git-ruby:

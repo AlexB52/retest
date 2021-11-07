@@ -4,5 +4,7 @@ services:
   retest:
     build: .
     volumes:
-      - .:/usr/src/app
+      - rspec-rails:/usr/src/app
     command: ruby retest/retest_test.rb
+volumes:
+  rspec-rails:

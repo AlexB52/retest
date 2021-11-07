@@ -4,5 +4,7 @@ services:
   retest:
     build: .
     volumes:
-      - .:/usr/src/app
+      - ruby-bare:/usr/src/app
     command: ruby retest/retest_test.rb
+volumes:
+  ruby-bare:
