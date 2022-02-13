@@ -6,7 +6,8 @@ Retest is a small command-line tool to help you refactor code by watching a file
 
 ## Demo
 
-![demo](https://alexbarret.com/images/external/retest-demo-26bcad04.gif)
+
+https://user-images.githubusercontent.com/7149034/153734043-1d136f27-5c24-4676-868b-0fde76016b13.mp4
 
 ## Installation
 
