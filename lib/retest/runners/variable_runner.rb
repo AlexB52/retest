@@ -21,7 +21,7 @@ module Retest
 
         FILES
 
-        system command
+        system_run command
           .gsub('<test>', cached_test_file)
           .gsub('<changed>', changed_file)
       end

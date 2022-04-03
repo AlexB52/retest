@@ -4,7 +4,7 @@ module Retest
       def run(changed_file = nil, repository: nil)
         if changed_file
           puts "Changed File Selected: #{changed_file}"
-          system command.gsub('<changed>', changed_file)
+          system_run command.gsub('<changed>', changed_file)
         else
           puts <<~ERROR
             404 - Test File Not Found
