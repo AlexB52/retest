@@ -78,7 +78,7 @@ module Retest
 
     flag :notify do
       long "--notify"
-      desc "Play a sound when specs pass or fail"
+      desc "Play a sound when specs pass or fail (macOS only)"
     end
 
     flag :help do
