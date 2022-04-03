@@ -1,6 +1,8 @@
 module Retest
   module Runners
     class Runner
+      include Observable
+
       attr_accessor :command
       def initialize(command)
         @command = command
@@ -25,7 +27,9 @@ module Retest
       private
 
       def system_run(command)
-        system command
+        result = system(command) ? :tests_pass : :tests_fail
+        changed
+        notify_observers(result)
       end
     end
   end

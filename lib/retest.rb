@@ -1,5 +1,6 @@
 require 'listen'
 require 'string/similarity'
+require 'observer'
 
 require "retest/version"
 require "retest/runners"

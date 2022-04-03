@@ -1,5 +1,6 @@
 require 'test_helper'
 require_relative 'runner_interface'
+require_relative 'observable_runner'
 
 module Retest
   module Runners
@@ -9,6 +10,7 @@ module Retest
       end
 
       include RunnerInterfaceTest
+      include OversableRunnerTests
 
       def test_run_with_no_file_found
         out, _ = capture_subprocess_io { @subject.run }
@@ -23,6 +25,12 @@ module Retest
         out, _ = capture_subprocess_io { @subject.run('file_path.rb') }
 
         assert_match "touch file_path.rb", out
+      end
+
+      private
+
+      def observable_act(subject)
+        subject.run('file_path.rb')
       end
     end
   end

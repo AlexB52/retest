@@ -1,5 +1,6 @@
 require 'test_helper'
 require_relative 'runner_interface'
+require_relative 'observable_runner'
 
 module Retest
   module Runners
@@ -10,6 +11,7 @@ module Retest
       end
 
       include RunnerInterfaceTest
+      include OversableRunnerTests
 
       def test_run_with_no_match
         out, _ = capture_subprocess_io { @subject.run('another_file_path.rb', repository: @repository) }
@@ -51,6 +53,15 @@ module Retest
         @subject.cached_test_file = 'file_path_test.rb'
         @subject.sync(added: 'a.rb', removed:'file_path_test.rb')
         assert_nil @subject.cached_test_file
+      end
+
+      private
+
+      def observable_act(subject)
+        subject.run(
+          'file_path.rb',
+          repository: Repository.new(files: ['file_path_test.rb'])
+        )
       end
     end
   end
