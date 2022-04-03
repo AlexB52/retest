@@ -14,6 +14,10 @@ end
 repository = Retest::Repository.new(files: Retest::VersionControl.files)
 command    = Retest::Command.for_options(options)
 runner     = Retest::Runners.runner_for(command.to_s)
+sounds     = Retest::Sounds.for(options)
+
+sounds.play(:tests_pass)
+runner.add_observer(sounds)
 
 program = Retest::Program.new(
   extension: options.extension,
