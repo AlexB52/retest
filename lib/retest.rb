@@ -11,6 +11,7 @@ require "retest/setup"
 require "retest/command"
 require "retest/file_system"
 require "retest/program"
+require "retest/sounds"
 
 module Retest
   class Error < StandardError; end
