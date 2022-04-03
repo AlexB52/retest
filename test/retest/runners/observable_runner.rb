@@ -17,5 +17,11 @@ module Retest
         raise NotImplementedError.new("#observable_act is not implemented")
       end
     end
+
+    module ObserverInterfaceTests
+      def test_observer_interface
+        assert_respond_to @subject, :update
+      end
+    end
   end
 end

@@ -17,5 +17,6 @@ module Retest
 
       @thread.new { @kernel.system(*args) }
     end
+    alias update play
   end
 end

@@ -1,7 +1,14 @@
 require 'test_helper'
+require_relative 'runners/observable_runner'
 
 module Retest
   class SoundsTest < MiniTest::Test
+    include Runners::ObserverInterfaceTests
+
+    def setup
+      @subject = Sounds.new
+    end
+
     class FakeThread
       def initialize(&block)
         block.call
