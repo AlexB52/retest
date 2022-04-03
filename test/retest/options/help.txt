@@ -17,6 +17,7 @@ Options:
       --ext=regex        Regex of file extensions to listen to (default
                          "\\.rb$")
   -h, --help             Print usage
+      --notify           Play a sound when specs pass or fail
       --rails            Shortcut for a standard Rails setup
       --rake             Shortcut for a standard Rake setup
       --rspec            Shortcut for a standard RSpec setup
