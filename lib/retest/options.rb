@@ -76,6 +76,11 @@ module Retest
       desc "Indentify repository setup and runs appropriate command"
     end
 
+    flag :notify do
+      long "--notify"
+      desc "Play a sound when specs pass or fail (macOS only)"
+    end
+
     flag :help do
       short "-h"
       long "--help"
@@ -128,6 +133,10 @@ module Retest
     def auto?
       return true if no_options_passed?
       params[:auto]
+    end
+
+    def notify?
+      params[:notify]
     end
 
     def extension

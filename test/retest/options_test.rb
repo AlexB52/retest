@@ -34,5 +34,11 @@ module Retest
     def test_help_text
       assert_equal File.read('test/retest/options/help.txt'), @subject.help
     end
+
+    def test_notify?
+      refute @subject.notify?
+      @subject.args = ["--notify"]
+      assert @subject.notify?
+    end
   end
 end

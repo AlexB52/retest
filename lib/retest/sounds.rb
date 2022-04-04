@@ -1,0 +1,36 @@
+module Retest
+  module Sounds
+    module_function
+
+    def for(options)
+      options.notify? ? MacOS.new : Mute.new
+    end
+
+    class Mute
+      def play(_)
+      end
+      alias update play
+    end
+
+    class MacOS
+      def initialize(kernel: Kernel, thread: Thread)
+        @kernel = kernel
+        @thread = thread
+      end
+
+      def play(sound)
+        args = case sound
+        when :tests_fail
+          ['afplay', '/System/Library/Sounds/Sosumi.aiff']
+        when :tests_pass
+          ['afplay', '/System/Library/Sounds/Funk.aiff']
+        else
+          raise ArgumentError.new("No sounds were found for type: #{sound}.")
+        end
+
+        @thread.new { @kernel.system(*args) }
+      end
+      alias update play
+    end
+  end
+end

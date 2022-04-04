@@ -14,7 +14,7 @@ module Retest
 
         if cached_test_file
           puts "Test File Selected: #{cached_test_file}"
-          system command.gsub('<test>', cached_test_file)
+          system_run command.gsub('<test>', cached_test_file)
         else
           puts <<~ERROR
             404 - Test File Not Found
