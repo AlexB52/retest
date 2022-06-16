@@ -25,16 +25,22 @@ module Retest
       runner.run_all_tests command.format_batch(test_files)
     end
 
+    def run(*args)
+      modified, added, removed = *args
+
+      repository.sync(added: added, removed: removed)
+      runner.sync(added: added, removed: removed)
+      system('clear 2>/dev/null') || system('cls 2>/dev/null')
+
+      runner.run (modified + added).first, repository: repository
+    end
+
     private
 
     def build
       Listen.to('.', only: extension, relative: true) do |modified, added, removed|
         begin
-          repository.sync(added: added, removed: removed)
-          runner.sync(added: added, removed: removed)
-          system('clear 2>/dev/null') || system('cls 2>/dev/null')
-
-          runner.run (modified + added).first, repository: repository
+          run(modified, added, removed)
         rescue => e
           puts "Something went wrong: #{e.message}"
         end
