@@ -13,7 +13,7 @@ ENV LANG C.UTF-8
 
 COPY retest.gem ./
 RUN gem install retest.gem
-RUN gem install minitest
+RUN gem install minitest -v 5.15.0 # minitest doens't support some ruby versions
 
 COPY . /usr/src/app
 
