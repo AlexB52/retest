@@ -1,17 +1,18 @@
 module Retest
   class Program
-    attr_accessor :runner, :repository, :command, :extension
-    def initialize(runner: nil, repository: nil, command: nil, extension: /\.rb$/)
+    attr_accessor :runner, :repository, :command
+    def initialize(runner: nil, repository: nil, command: nil)
       @runner = runner
       @repository = repository
       @command = command
-      @extension = extension
     end
 
-    def start
-      puts "Launching Retest..."
-      build.start
-      puts "Ready to refactor! You can make file changes now"
+    def run(modified, added, removed)
+      repository.sync(added: added, removed: removed)
+      runner.sync(added: added, removed: removed)
+      system('clear 2>/dev/null') || system('cls 2>/dev/null')
+
+      runner.run (modified + added).first, repository: repository
     end
 
     def diff(branch)
@@ -23,28 +24,6 @@ module Retest
 
       puts "Running tests..."
       runner.run_all_tests command.format_batch(test_files)
-    end
-
-    def run(*args)
-      modified, added, removed = *args
-
-      repository.sync(added: added, removed: removed)
-      runner.sync(added: added, removed: removed)
-      system('clear 2>/dev/null') || system('cls 2>/dev/null')
-
-      runner.run (modified + added).first, repository: repository
-    end
-
-    private
-
-    def build
-      Listen.to('.', only: extension, relative: true) do |modified, added, removed|
-        begin
-          run(modified, added, removed)
-        rescue => e
-          puts "Something went wrong: #{e.message}"
-        end
-      end
     end
   end
 end
