@@ -22,7 +22,6 @@ sounds.play(:tests_pass)
 runner.add_observer(sounds)
 
 program = Retest::Program.new(
-  extension: options.extension,
   repository: repository,
   command: command,
   runner: runner
@@ -30,7 +29,21 @@ program = Retest::Program.new(
 
 if options.params[:diff]
   program.diff(options.params[:diff])
-else
-  program.start # not blocking
-  sleep
+  return
 end
+
+# Main action
+
+$stdout.puts "Launching Retest..."
+Listen.to('.', only: options.extension, relative: true) do |modified, added, removed|
+  begin
+    program.run(modified, added, removed)
+  rescue => e
+    $stdout.puts "Something went wrong: #{e.message}"
+  end
+end.start
+$stdout.puts "Ready to refactor! You can make file changes now"
+
+# not blocking
+
+sleep
