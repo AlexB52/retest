@@ -54,7 +54,7 @@ class AllTestsCommandTest < Minitest::Test
   def test_modify_a_file
     @output, @pid = launch_retest @command
 
-    modify_file 'app/models/post.rb'
+    modify_file 'app/models/post.rb', sleep_seconds: 15
 
     assert_match "9 examples, 0 failures", @output.read
   end
