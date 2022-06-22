@@ -2,13 +2,13 @@ require 'retest'
 require_relative 'support/output_file'
 
 module FileHelper
-  def modify_file(path)
+  def modify_file(path, sleep_seconds: 10)
     return unless File.exist? path
 
     old_content = File.read(path)
     File.open(path, 'w') { |file| file.write old_content }
 
-    sleep 10
+    sleep sleep_seconds
   end
 
   def create_file(path, should_sleep: true)
