@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    retest (1.6.0)
+    retest (1.6.1)
       listen (~> 3.2)
       string-similarity (~> 2.1)
       tty-option (~> 0.1)
