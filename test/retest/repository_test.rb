@@ -126,7 +126,7 @@ module Retest
         test/models/performance/holdings_test.rb
         test/lib/csv_report/holdings_test.rb
       )
-      @subject.input_stream = StringIO.new("1\n")
+      @subject.stdin = StringIO.new("1\n")
 
       out, _ = capture_subprocess_io { @subject.find_test('app/models/valuation/holdings.rb') }
 

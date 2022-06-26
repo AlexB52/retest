@@ -1,12 +1,12 @@
 module Retest
   class Repository
-    attr_accessor :files, :cache, :input_stream, :output_stream
+    attr_accessor :files, :cache, :stdin, :stdout
 
-    def initialize(files: [], cache: {}, input_stream: nil, output_stream: nil)
-      @cache         = cache
-      @files         = files
-      @input_stream  = input_stream || STDIN
-      @output_stream = output_stream|| STDOUT
+    def initialize(files: [], cache: {}, stdin: $stdin, stdout: $stdout)
+      @cache  = cache
+      @files  = files
+      @stdin  = stdin
+      @stdout = stdout
     end
 
     def find_test(path)
@@ -61,7 +61,7 @@ module Retest
     end
 
     def ask_question(tests)
-      output_stream.puts(<<~QUESTION)
+      stdout.puts(<<~QUESTION)
         We found few tests matching: #{@path}
         #{list_options(tests)}
 
@@ -77,7 +77,7 @@ module Retest
     end
 
     def get_input
-      input_stream.gets.chomp.to_i
+      stdin.gets.chomp.to_i
     end
   end
 end
