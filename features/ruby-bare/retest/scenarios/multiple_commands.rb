@@ -19,7 +19,7 @@ class ChangedAndTestPlaceholders < Minitest::Test
 
     assert_match <<~EXPECTED, @output.read
       Files Selected:
-        - file: program.rb
+        - changed: program.rb
         - test: program_test.rb
 
       files: program.rb and program_test.rb

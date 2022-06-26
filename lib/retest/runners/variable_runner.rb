@@ -16,7 +16,7 @@ module Retest
 
         log(<<~FILES)
           Files Selected:
-            - file: #{changed_file}
+            - changed: #{changed_file}
             - test: #{cached_test_file}
 
         FILES
