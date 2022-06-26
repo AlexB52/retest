@@ -13,6 +13,19 @@ module Retest
       include RunnerInterfaceTest
       include OversableRunnerTests
 
+      def test_files_selected_ouptut
+        @subject.output = StringIO.new
+
+        _, _ = capture_subprocess_io { @subject.run('file_path.rb', repository: @repository) }
+
+        assert_equal(<<~EXPECTED, @subject.output.string)
+          Files Selected:
+            - file: file_path.rb
+            - test: file_path_test.rb
+
+        EXPECTED
+      end
+
       def test_run_with_no_match
         out, _ = capture_subprocess_io { @subject.run('another_file_path.rb', repository: @repository) }
 
