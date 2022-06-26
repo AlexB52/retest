@@ -4,23 +4,23 @@ module Retest
 
     def setup
       @setup = SetupFake.new
-      @output_stream = StringIO.new
+      @out = StringIO.new
 
       @subject = Command.new(
         options: Options.new(['--auto']),
         setup: @setup,
-        output_stream: @output_stream)
+        stdout: @out)
     end
 
-    def read_ouput
-      @output_stream.tap(&:rewind).read
+    def output
+      @out.string
     end
 
     def test_for_rspec_setup
       @setup.type = :rspec
 
       assert_equal 'bundle exec rspec <test>', @subject.command.to_s
-      assert_equal <<~OUTPUT, read_ouput
+      assert_equal(<<~OUTPUT, output)
         Setup identified: [RSPEC]. Using command: 'bundle exec rspec <test>'
       OUTPUT
     end
@@ -29,7 +29,7 @@ module Retest
       @setup.type = :rails
 
       assert_equal 'bundle exec rails test <test>', @subject.command.to_s
-      assert_equal <<~OUTPUT, read_ouput
+      assert_equal(<<~OUTPUT, output)
         Setup identified: [RAILS]. Using command: 'bundle exec rails test <test>'
       OUTPUT
     end
@@ -38,7 +38,7 @@ module Retest
       @setup.type = :ruby
 
       assert_equal 'bundle exec ruby <test>', @subject.command.to_s
-      assert_equal <<~OUTPUT, read_ouput
+      assert_equal(<<~OUTPUT, output)
         Setup identified: [RUBY]. Using command: 'bundle exec ruby <test>'
       OUTPUT
     end
@@ -47,7 +47,7 @@ module Retest
       @setup.type = :rake
 
       assert_equal 'bundle exec rake test TEST=<test>', @subject.command.to_s
-      assert_equal <<~OUTPUT, read_ouput
+      assert_equal(<<~OUTPUT, output)
         Setup identified: [RAKE]. Using command: 'bundle exec rake test TEST=<test>'
       OUTPUT
     end
@@ -56,7 +56,7 @@ module Retest
       @setup.type = :unknown
 
       assert_equal 'bundle exec ruby <test>', @subject.command.to_s
-      assert_equal <<~OUTPUT, read_ouput
+      assert_equal(<<~OUTPUT, output)
         Setup identified: [UNKNOWN]. Using command: 'bundle exec ruby <test>'
       OUTPUT
     end
@@ -67,23 +67,23 @@ module Retest
 
     def setup
       @setup = SetupFake.new
-      @output_stream = StringIO.new
+      @out = StringIO.new
 
       @subject = Command.new(
         options: Options.new(['--auto', '--all']),
         setup: @setup,
-        output_stream: @output_stream)
+        stdout: @out)
     end
 
-    def read_ouput
-      @output_stream.tap(&:rewind).read
+    def output
+      @out.string
     end
 
     def test_for_rspec_setup
       @setup.type = :rspec
 
       assert_equal 'bundle exec rspec', @subject.command.to_s
-      assert_equal <<~OUTPUT, read_ouput
+      assert_equal(<<~OUTPUT, output)
         Setup identified: [RSPEC]. Using command: 'bundle exec rspec'
       OUTPUT
     end
@@ -92,7 +92,7 @@ module Retest
       @setup.type = :rails
 
       assert_equal 'bundle exec rails test', @subject.command.to_s
-      assert_equal <<~OUTPUT, read_ouput
+      assert_equal(<<~OUTPUT, output)
         Setup identified: [RAILS]. Using command: 'bundle exec rails test'
       OUTPUT
     end
@@ -101,7 +101,7 @@ module Retest
       @setup.type = :ruby
 
       assert_equal 'bundle exec ruby <test>', @subject.command.to_s
-      assert_equal <<~OUTPUT, read_ouput
+      assert_equal(<<~OUTPUT, output)
         Setup identified: [RUBY]. Using command: 'bundle exec ruby <test>'
       OUTPUT
     end
@@ -110,7 +110,7 @@ module Retest
       @setup.type = :rake
 
       assert_equal 'bundle exec rake test', @subject.command.to_s
-      assert_equal <<~OUTPUT, read_ouput
+      assert_equal(<<~OUTPUT, output)
         Setup identified: [RAKE]. Using command: 'bundle exec rake test'
       OUTPUT
     end
@@ -119,7 +119,7 @@ module Retest
       @setup.type = :unknown
 
       assert_equal 'bundle exec ruby <test>', @subject.command.to_s
-      assert_equal <<~OUTPUT, read_ouput
+      assert_equal(<<~OUTPUT, output)
         Setup identified: [UNKNOWN]. Using command: 'bundle exec ruby <test>'
       OUTPUT
     end

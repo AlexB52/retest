@@ -19,10 +19,10 @@ module Retest
     def_delegators :options, :params, :full_suite?, :auto?
 
     attr_accessor :options, :setup
-    def initialize(options: Options.new, setup: Setup.new, output_stream: STDOUT)
+    def initialize(options: Options.new, setup: Setup.new, stdout: $stdout)
       @options = options
       @setup = setup
-      @output_stream = output_stream
+      @stdout = stdout
     end
 
     def command
@@ -52,7 +52,7 @@ module Retest
     end
 
     def default_command
-      @output_stream.puts "Setup identified: [#{type.upcase}]. Using command: '#{setup_command}'"
+      @stdout.puts "Setup identified: [#{type.upcase}]. Using command: '#{setup_command}'"
       setup_command
     end
 

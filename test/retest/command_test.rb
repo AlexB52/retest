@@ -4,7 +4,7 @@ require_relative 'command/auto_flag'
 module Retest
   class OptionsCommandTest < MiniTest::Test
     def setup
-      @subject = Command.new output_stream: StringIO.new
+      @subject = Command.new stdout: StringIO.new
     end
 
     def test_hardcoded_command
@@ -67,7 +67,7 @@ module Retest
 
     def setup
       @output = StringIO.new
-      @subject = Command.new output_stream: @output
+      @subject = Command.new stdout: @output
     end
 
     def test_setup_command_with_rake
