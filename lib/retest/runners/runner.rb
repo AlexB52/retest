@@ -3,9 +3,9 @@ module Retest
     class Runner
       include Observable
 
-      attr_accessor :command, :output
-      def initialize(command, output: nil)
-        @output = output || STDOUT
+      attr_accessor :command, :stdout
+      def initialize(command, stdout: $stdout)
+        @stdout  = stdout
         @command = command
       end
 
@@ -33,8 +33,8 @@ module Retest
         notify_observers(result)
       end
 
-      def log(out)
-        output.puts(out)
+      def log(message)
+        stdout.puts(message)
       end
     end
   end

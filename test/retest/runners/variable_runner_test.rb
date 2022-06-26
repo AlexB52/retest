@@ -26,13 +26,17 @@ module Retest
     class VariableRunnerTest < MiniTest::Test
       def setup
         @repository = Repository.new files: ['file_path_test.rb']
-        @subject    = VariableRunner.new("echo 'touch <changed> & <test>'", output: StringIO.new)
+        @subject    = VariableRunner.new("echo 'touch <changed> & <test>'", stdout: StringIO.new)
+      end
+
+      def output
+        @subject.stdout.string
       end
 
       def test_files_selected_ouptut
         _, _ = capture_subprocess_io { @subject.run('file_path.rb', repository: @repository) }
 
-        assert_equal(<<~EXPECTED, @subject.output.string)
+        assert_equal(<<~EXPECTED, output)
           Files Selected:
             - file: file_path.rb
             - test: file_path_test.rb
@@ -43,7 +47,7 @@ module Retest
       def test_run_with_no_match
         _, _ = capture_subprocess_io { @subject.run('another_file_path.rb', repository: @repository) }
 
-        assert_equal(<<~EXPECTED, @subject.output.string)
+        assert_equal(<<~EXPECTED, output)
           404 - Test File Not Found
           Retest could not find a matching test file to run.
         EXPECTED

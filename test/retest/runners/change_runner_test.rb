@@ -21,13 +21,17 @@ module Retest
 
     class ChangeRunnerTest < MiniTest::Test
       def setup
-        @subject = ChangeRunner.new("echo 'touch <changed>'", output: StringIO.new)
+        @subject = ChangeRunner.new("echo 'touch <changed>'", stdout: StringIO.new)
+      end
+
+      def output
+        @subject.stdout.string
       end
 
       def test_run_with_no_file_found
         _, _ = capture_subprocess_io { @subject.run }
 
-        assert_equal(<<~EXPECTED, @subject.output.string)
+        assert_equal(<<~EXPECTED, output)
           404 - Test File Not Found
           Retest could not find a changed file to run.
         EXPECTED

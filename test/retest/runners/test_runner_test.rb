@@ -26,13 +26,17 @@ module Retest
     class TestRunnerTest < MiniTest::Test
       def setup
         @repository = Repository.new(files: ['file_path_test.rb'])
-        @subject    = TestRunner.new("echo 'touch <test>'", output: StringIO.new)
+        @subject    = TestRunner.new("echo 'touch <test>'", stdout: StringIO.new)
+      end
+
+      def output
+        @subject.stdout.string
       end
 
       def test_run_with_no_file_found
         _, _ = capture_subprocess_io { @subject.run nil, repository: @repository}
 
-        assert_equal(<<~EXPECTED, @subject.output.string)
+        assert_equal(<<~EXPECTED, output)
           404 - Test File Not Found
           Retest could not find a matching test file to run.
         EXPECTED
