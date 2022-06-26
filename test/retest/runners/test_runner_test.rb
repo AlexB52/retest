@@ -4,19 +4,35 @@ require_relative 'observable_runner'
 
 module Retest
   module Runners
-    class TestRunnerTest < MiniTest::Test
+    class TestRunnerInterfaceTests < MiniTest::Test
       def setup
         @repository = Repository.new(files: ['file_path_test.rb'])
-        @subject = TestRunner.new("echo 'touch <test>'")
+        @subject    = TestRunner.new("echo 'touch <test>'")
       end
 
       include RunnerInterfaceTest
       include OversableRunnerTests
 
-      def test_run_with_no_file_found
-        out, _ = capture_subprocess_io { @subject.run nil, repository: @repository}
+      private
 
-        assert_equal(<<~EXPECTED, out)
+      def observable_act(subject)
+        subject.run(
+          'file_path.rb',
+          repository: Repository.new(files: ['file_path_test.rb'])
+        )
+      end
+    end
+
+    class TestRunnerTest < MiniTest::Test
+      def setup
+        @repository = Repository.new(files: ['file_path_test.rb'])
+        @subject    = TestRunner.new("echo 'touch <test>'", output: StringIO.new)
+      end
+
+      def test_run_with_no_file_found
+        _, _ = capture_subprocess_io { @subject.run nil, repository: @repository}
+
+        assert_equal(<<~EXPECTED, @subject.output.string)
           404 - Test File Not Found
           Retest could not find a matching test file to run.
         EXPECTED
@@ -53,15 +69,6 @@ module Retest
         @subject.cached_test_file = 'file_path_test.rb'
         @subject.sync(added: 'a.rb', removed:'file_path_test.rb')
         assert_nil @subject.cached_test_file
-      end
-
-      private
-
-      def observable_act(subject)
-        subject.run(
-          'file_path.rb',
-          repository: Repository.new(files: ['file_path_test.rb'])
-        )
       end
     end
   end
