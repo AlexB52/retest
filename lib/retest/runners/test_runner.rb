@@ -13,10 +13,10 @@ module Retest
         self.cached_test_file = repository.find_test(changed_file)
 
         if cached_test_file
-          puts "Test File Selected: #{cached_test_file}"
+          log("Test File Selected: #{cached_test_file}")
           system_run command.gsub('<test>', cached_test_file)
         else
-          puts <<~ERROR
+          log(<<~ERROR)
             404 - Test File Not Found
             Retest could not find a matching test file to run.
           ERROR

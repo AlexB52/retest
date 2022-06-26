@@ -14,7 +14,7 @@ module Retest
 
         return print_test_file_not_found unless cached_test_file
 
-        puts(<<~FILES)
+        log(<<~FILES)
           Files Selected:
             - file: #{changed_file}
             - test: #{cached_test_file}
@@ -33,7 +33,7 @@ module Retest
       private
 
       def print_test_file_not_found
-        puts <<~ERROR
+        log(<<~ERROR)
           404 - Test File Not Found
           Retest could not find a matching test file to run.
         ERROR
