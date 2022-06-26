@@ -38,7 +38,7 @@ module Retest
 
         assert_equal(<<~EXPECTED, output)
           Files Selected:
-            - file: file_path.rb
+            - changed: file_path.rb
             - test: file_path_test.rb
 
         EXPECTED
