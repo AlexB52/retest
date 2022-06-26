@@ -1,49 +1,6 @@
 #!/usr/bin/env ruby
 
 require "bundler/setup"
-require "retest"
 require "byebug"
 
-$stdout.sync = true
-
-options = Retest::Options.new(ARGV)
-
-if options.help?
-  $stdout.puts options.help
-  return
-end
-
-repository = Retest::Repository.new(files: Retest::VersionControl.files)
-command    = Retest::Command.for_options(options)
-runner     = Retest::Runners.runner_for(command.to_s)
-sounds     = Retest::Sounds.for(options)
-
-sounds.play(:tests_pass)
-runner.add_observer(sounds)
-
-program = Retest::Program.new(
-  repository: repository,
-  command: command,
-  runner: runner
-)
-
-if options.params[:diff]
-  program.diff(options.params[:diff])
-  return
-end
-
-# Main action
-
-$stdout.puts "Launching Retest..."
-Listen.to('.', only: options.extension, relative: true) do |modified, added, removed|
-  begin
-    program.run(modified, added, removed)
-  rescue => e
-    $stdout.puts "Something went wrong: #{e.message}"
-  end
-end.start
-$stdout.puts "Ready to refactor! You can make file changes now"
-
-# not blocking
-
-sleep
+eval(File.read("exe/retest"))
