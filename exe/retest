@@ -16,7 +16,7 @@ command    = Retest::Command.for_options(options)
 runner     = Retest::Runners.runner_for(command.to_s)
 sounds     = Retest::Sounds.for(options)
 
-sounds.play(:tests_pass)
+sounds.play(:start)
 runner.add_observer(sounds)
 
 program = Retest::Program.new(
