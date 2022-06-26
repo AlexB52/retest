@@ -3,6 +3,4 @@
 bundle install
 bundle exec rake build
 ls -t pkg | head -n1 | xargs -I {} mv pkg/{} features/hanami-app/retest.gem
-docker-compose -f features/hanami-app/docker-compose.yml build
-docker-compose -f features/hanami-app/docker-compose.yml run retest sh bin/test_setup
-docker-compose -f features/hanami-app/docker-compose.yml up --exit-code-from retest
+docker-compose -f features/hanami-app/docker-compose.yml up --build --exit-code-from retest
