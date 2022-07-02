@@ -84,26 +84,6 @@ class AutoFlagTest < Minitest::Test
       Ready to refactor! You can make file changes now
     OUTPUT
   end
-
-  def test_with_auto_flag
-    @output, @pid = launch_retest 'retest --auto'
-
-    assert_match <<~OUTPUT, @output.read
-      Setup identified: [RSPEC]. Using command: 'bundle exec rspec <test>'
-      Launching Retest...
-      Ready to refactor! You can make file changes now
-    OUTPUT
-  end
-
-  def test_with_auto_flag_all
-    @output, @pid = launch_retest 'retest --auto --all'
-
-    assert_match <<~OUTPUT, @output.read
-      Setup identified: [RSPEC]. Using command: 'bundle exec rspec'
-      Launching Retest...
-      Ready to refactor! You can make file changes now
-    OUTPUT
-  end
 end
 
 class SetupTest < Minitest::Test
