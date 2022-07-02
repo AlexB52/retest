@@ -13,13 +13,18 @@ module Retest
 
       example <<~EOS
       Runs a matching rails test after a file change
-        $ retest 'bundle exec rails test <test>'
+        $ retest 'bin/rails test <test>'
         $ retest --rails
       EOS
 
       example <<~EOS
+      Runs rubocop and matching rails test after a file change
+        $ retest 'rubocop <changed> && bin/rails test <test>'
+      EOS
+
+      example <<~EOS
       Runs all rails tests after a file change
-        $ retest 'bundle exec rails test'
+        $ retest 'bin/rails test'
         $ retest --rails --all
       EOS
 
@@ -51,7 +56,7 @@ module Retest
       optional
       desc <<~EOS
       The test command to rerun when a file changes.
-      Use <test> placeholder to tell retest where to put the matching spec.
+      Use <test> or <changed> placeholders to tell retest where to reference the matching spec or the changed file in the command.
       EOS
     end
 

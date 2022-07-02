@@ -4,8 +4,8 @@ Watch a file change and run it matching spec.
 
 Arguments:
   COMMAND  The test command to rerun when a file changes.
-           Use <test> placeholder to tell retest where to put the matching
-           spec.
+           Use <test> or <changed> placeholders to tell retest where to
+           reference the matching spec or the changed file in the command.
            
 
 Options:
@@ -25,11 +25,14 @@ Options:
 
 Examples:
   Runs a matching rails test after a file change
-    $ retest 'bundle exec rails test <test>'
+    $ retest 'bin/rails test <test>'
     $ retest --rails
 
+  Runs rubocop and matching rails test after a file change
+    $ retest 'rubocop <changed> && bin/rails test <test>'
+
   Runs all rails tests after a file change
-    $ retest 'bundle exec rails test'
+    $ retest 'bin/rails test'
     $ retest --rails --all
 
   Runs a hardcoded command after a file change
