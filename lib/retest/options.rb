@@ -36,19 +36,16 @@ module Retest
       example <<~EOS
       Let retest identify which command to run
         $ retest
-        $ retest --auto
       EOS
 
       example <<~EOS
       Let retest identify which command to run for all tests
         $ retest --all
-        $ retest --auto --all
       EOS
 
       example <<~EOS
       Run a sanity check on changed files from a branch
         $ retest --diff origin/main --rails
-        $ retest --diff main --auto
       EOS
     end
 
@@ -74,11 +71,6 @@ module Retest
     flag :all do
       long "--all"
       desc "Run all the specs of a specificied ruby setup"
-    end
-
-    flag :auto do
-      long "--auto"
-      desc "Indentify repository setup and runs appropriate command"
     end
 
     flag :notify do
@@ -135,23 +127,12 @@ module Retest
       params[:all]
     end
 
-    def auto?
-      return true if no_options_passed?
-      params[:auto]
-    end
-
     def notify?
       params[:notify]
     end
 
     def extension
       Regexp.new(params[:ext])
-    end
-
-    private
-
-    def no_options_passed?
-      params.to_h.values.compact.uniq == ["\\.rb$", false]
     end
   end
 end

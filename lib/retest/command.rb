@@ -26,7 +26,6 @@ module Retest
     end
 
     def command
-      return default_command if auto?
       options_command || default_command
     end
 

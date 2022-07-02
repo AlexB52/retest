@@ -6,10 +6,7 @@ module Retest
       @setup = SetupFake.new
       @out = StringIO.new
 
-      @subject = Command.new(
-        options: Options.new(['--auto']),
-        setup: @setup,
-        stdout: @out)
+      @subject = Command.new(setup: @setup, stdout: @out)
     end
 
     def output
@@ -70,7 +67,7 @@ module Retest
       @out = StringIO.new
 
       @subject = Command.new(
-        options: Options.new(['--auto', '--all']),
+        options: Options.new(['--all']),
         setup: @setup,
         stdout: @out)
     end
