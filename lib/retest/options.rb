@@ -45,6 +45,7 @@ module Retest
 
       example <<~EOS
       Run a sanity check on changed files from a branch
+        $ retest --diff main
         $ retest --diff origin/main --rails
       EOS
     end
