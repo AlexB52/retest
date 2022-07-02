@@ -16,9 +16,6 @@ module Retest
       # returning the gem setup in this test
       @subject.options = Options.new([])
       assert_equal 'bundle exec rake test TEST=<test>', @subject.command.to_s
-
-      @subject.options = Options.new(['--auto'])
-      assert_equal 'bundle exec rake test TEST=<test>', @subject.command.to_s
     end
 
     def test_matching_test_options

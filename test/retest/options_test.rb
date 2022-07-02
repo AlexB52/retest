@@ -6,17 +6,6 @@ module Retest
       @subject = Options.new
     end
 
-    def test_auto?
-      @subject.args = ['--auto']
-      assert @subject.auto?
-
-      @subject.args = ['--rspec']
-      refute @subject.auto?
-
-      @subject.args = []
-      assert @subject.auto?
-    end
-
     def test_full_suite?
       refute @subject.full_suite?
       @subject.args = ["--all"]

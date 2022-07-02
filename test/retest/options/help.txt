@@ -10,8 +10,6 @@ Arguments:
 
 Options:
       --all              Run all the specs of a specificied ruby setup
-      --auto             Indentify repository setup and runs appropriate
-                         command
       --diff=git-branch  Pipes all matching tests from diffed branch to test
                          command
       --ext=regex        Regex of file extensions to listen to (default
@@ -40,12 +38,10 @@ Examples:
 
   Let retest identify which command to run
     $ retest
-    $ retest --auto
 
   Let retest identify which command to run for all tests
     $ retest --all
-    $ retest --auto --all
 
   Run a sanity check on changed files from a branch
+    $ retest --diff main
     $ retest --diff origin/main --rails
-    $ retest --diff main --auto
