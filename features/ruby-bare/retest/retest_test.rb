@@ -7,6 +7,7 @@ require_relative 'scenarios/changed_placeholder.rb'
 require_relative 'scenarios/changed_and_test_placeholders.rb'
 require_relative 'scenarios/multiple_commands.rb'
 require_relative 'scenarios/force_polling.rb'
+require_relative 'scenarios/interruptions.rb'
 
 $stdout.sync = true
 
