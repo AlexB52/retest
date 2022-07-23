@@ -141,6 +141,10 @@ module Retest
       params[:notify]
     end
 
+    def force_polling?
+      params[:polling]
+    end
+
     def extension
       Regexp.new(params[:ext])
     end
