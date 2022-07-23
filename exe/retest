@@ -30,16 +30,21 @@ if options.params[:diff]
   return
 end
 
+launching_message = "Launching Retest..."
+if options.force_polling?
+  launching_message = "Launching Retest with polling method..."
+end
+
 # Main action
 
-$stdout.puts "Launching Retest..."
-Listen.to('.', only: options.extension, relative: true) do |modified, added, removed|
+$stdout.puts launching_message
+Retest.listen(options) do |modified, added, removed|
   begin
     program.run(modified, added, removed)
   rescue => e
     $stdout.puts "Something went wrong: #{e.message}"
   end
-end.start
+end
 $stdout.puts "Ready to refactor! You can make file changes now"
 
 # not blocking

@@ -1,26 +1,6 @@
-require_relative 'test_helper'
-require 'minitest/autorun'
-
-require_relative 'scenarios/auto_flag.rb'
-require_relative 'scenarios/custom_extensions.rb'
-require_relative 'scenarios/changed_placeholder.rb'
-require_relative 'scenarios/changed_and_test_placeholders.rb'
-require_relative 'scenarios/multiple_commands.rb'
-require_relative 'scenarios/force_polling.rb'
-
-$stdout.sync = true
-
-include FileHelper
-
-class SetupTest < Minitest::Test
-  def test_repository_setup
-    assert_equal :ruby, Retest::Setup.new.type
-  end
-end
-
-class FileChangesTest < Minitest::Test
+class ForcePollingTest < Minitest::Test
   def setup
-    @command = 'retest --ruby'
+    @command = 'retest --ruby --polling'
   end
 
   def teardown
@@ -31,7 +11,7 @@ class FileChangesTest < Minitest::Test
     @output, @pid = launch_retest @command
 
     assert_match <<~EXPECTED, @output.read
-      Launching Retest...
+      Launching Retest with polling method...
       Ready to refactor! You can make file changes now
     EXPECTED
   end

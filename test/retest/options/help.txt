@@ -16,6 +16,9 @@ Options:
                          "\\.rb$")
   -h, --help             Print usage
       --notify           Play a sound when specs pass or fail (macOS only)
+      --polling          Use polling method when listening to file changes
+                         Some filesystems won't work without it
+                         VM/Vagrant Shared folders, NFS, Samba, sshfs...
       --rails            Shortcut for a standard Rails setup
       --rake             Shortcut for a standard Rake setup
       --rspec            Shortcut for a standard RSpec setup

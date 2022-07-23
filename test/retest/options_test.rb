@@ -20,6 +20,14 @@ module Retest
       assert @subject.help?
     end
 
+    def test_force_polling?
+      @subject.args = []
+      refute @subject.force_polling?
+
+      @subject.args = ["--polling"]
+      assert @subject.force_polling?
+    end
+
     def test_help_text
       assert_equal File.read('test/retest/options/help.txt'), @subject.help
     end
