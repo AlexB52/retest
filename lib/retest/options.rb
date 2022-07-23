@@ -85,6 +85,15 @@ module Retest
       desc "Print usage"
     end
 
+    option :polling do
+      long '--polling'
+      desc <<~DESC.strip
+        Use polling method when listening to file changes
+        Some filesystems won't work without it
+        VM/Vagrant Shared folders, NFS, Samba, sshfs...
+      DESC
+    end
+
     flag :rspec do
       long "--rspec"
       desc "Shortcut for a standard RSpec setup"
