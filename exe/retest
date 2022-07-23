@@ -4,6 +4,8 @@ require 'retest'
 
 $stdout.sync = true
 
+Signal.trap(:INT) { $stdout.puts "Goodbye"; exit }
+
 options = Retest::Options.new(ARGV)
 
 if options.help?
