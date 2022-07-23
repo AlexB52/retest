@@ -38,7 +38,7 @@ end
 # Main action
 
 $stdout.puts launching_message
-program.listen(options) do |modified, added, removed|
+Retest.listen(options) do |modified, added, removed|
   begin
     program.run(modified, added, removed)
   rescue => e
