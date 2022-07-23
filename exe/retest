@@ -32,8 +32,13 @@ end
 
 # Main action
 
-$stdout.puts "Launching Retest..."
-Listen.to('.', only: options.extension, relative: true) do |modified, added, removed|
+launching_message = "Launching Retest..."
+if options.force_polling?
+  launching_message = "Launching Retest with polling method..."
+end
+
+$stdout.puts launching_message
+Listen.to('.', only: options.extension, relative: true, force_polling: options.force_polling?) do |modified, added, removed|
   begin
     program.run(modified, added, removed)
   rescue => e
