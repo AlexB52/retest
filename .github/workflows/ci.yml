@@ -52,6 +52,7 @@ jobs:
           - rails-app
           - rspec-rails
           - rspec-ruby
+          - bundler-app
     steps:
       - uses: actions/checkout@v2
       - name: Set up Ruby
