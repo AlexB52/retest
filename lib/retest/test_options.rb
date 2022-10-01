@@ -2,15 +2,16 @@ require 'forwardable'
 
 module Retest
   class TestOptions
-    def self.for(path, files: [])
-      new(path, files: files).filtered_results
+    def self.for(path, files: [], limit: nil)
+      new(path, files: files, limit: limit).filtered_results
     end
 
     attr_reader :path, :files
 
-    def initialize(path, files: [])
+    def initialize(path, files: [], limit: 5)
       @path = Path.new(path)
       @files = files
+      @limit = limit || 5
     end
 
     def filtered_results
@@ -27,7 +28,7 @@ module Retest
 
     def possible_tests
       @possible_tests ||= filter_by_string_similarities(path, files)
-        .last(5)
+        .last(@limit)
         .reverse
     end
 
@@ -62,11 +63,11 @@ module Retest
       end
 
       def test?
-        test_regex =~ to_s
+        test_regexs.any? { |regex| regex =~ to_s }
       end
 
       def possible_test?(file)
-        possible_test_regex =~ file
+        possible_test_regexs.any? { |regex| regex =~ file }
       end
 
       def similarity_score(file)
@@ -75,12 +76,22 @@ module Retest
 
       private
 
-      def test_regex
-        Regexp.new(".*(?:spec|test)#{extname}")
+      def test_regexs
+        [
+          Regexp.new("^(.*\/)?.*_(?:spec|test)#{extname}$"),
+          Regexp.new("^(.*\/)?(?:spec|test)_.*#{extname}$"),
+        ]
       end
 
-      def possible_test_regex
-        Regexp.new(".*#{basename(extname)}_(?:spec|test)#{extname}")
+      def possible_test_regexs
+        [
+          Regexp.new("^(.*\/)?.*#{filename}_(?:spec|test)#{extname}$"),
+          Regexp.new("^(.*\/)?.*(?:spec|test)_#{filename}#{extname}$"),
+        ]
+      end
+
+      def filename
+        basename(extname)
       end
     end
   end
