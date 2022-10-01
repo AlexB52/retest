@@ -5,7 +5,7 @@ require 'observer'
 require "retest/version"
 require "retest/runners"
 require "retest/repository"
-require "retest/test_options"
+require "retest/matching_options"
 require "retest/options"
 require "retest/version_control"
 require "retest/setup"
