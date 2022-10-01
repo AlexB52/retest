@@ -96,8 +96,8 @@ module Retest
       files = %w(
         test/models/taxation/holdings_test.rb
         test/models/schedule/holdings_test.rb
-        test/models/performance/holdings_test.rb
         test/models/holdings_test.rb
+        test/models/performance/holdings_test.rb
         test/lib/csv_report/holdings_test.rb
       )
 
@@ -108,14 +108,14 @@ module Retest
   class MultiplePatternTest < MiniTest::Test
     def test_multiple_test_naming_patterns
       files = %w(
-        test_holdings.rb
         spec_holdings.rb
-        test/holdings_test.rb
-        test/holdings_spec.rb
-        spec/holdings_test.rb
-        spec/holdings_spec.rb
-        holdings_test.rb
+        test_holdings.rb
         holdings_spec.rb
+        holdings_test.rb
+        spec/holdings_spec.rb
+        spec/holdings_test.rb
+        test/holdings_spec.rb
+        test/holdings_test.rb
       )
 
       assert_equal files, MatchingOptions.for('lib/holdings.rb', files: files, limit: 8)

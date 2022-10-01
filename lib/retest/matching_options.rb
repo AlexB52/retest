@@ -27,14 +27,10 @@ module Retest
     private
 
     def possible_tests
-      @possible_tests ||= filter_by_string_similarities(path, files)
-        .last(@limit)
-        .reverse
-    end
-
-    def filter_by_string_similarities(path, files)
-      files.select  { |file| path.possible_test?(file) }
-           .sort_by { |file| [path.similarity_score(file), file] }
+      @possible_tests ||= files
+        .select  { |file| path.possible_test?(file) }
+        .sort_by { |file| [-path.similarity_score(file), file] }
+        .first(@limit)
     end
 
     def namespace_screens
