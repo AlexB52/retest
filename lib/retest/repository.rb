@@ -14,7 +14,7 @@ module Retest
       return if path.empty?
 
       @path = path
-      cache[@path] ||= select_from TestOptions.for(@path, files: files)
+      cache[@path] ||= select_from MatchingOptions.for(@path, files: files)
     end
 
     def find_tests(paths)

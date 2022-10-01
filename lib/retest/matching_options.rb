@@ -1,7 +1,7 @@
 require 'forwardable'
 
 module Retest
-  class TestOptions
+  class MatchingOptions
     def self.for(path, files: [], limit: nil)
       new(path, files: files, limit: limit).filtered_results
     end
