@@ -1,21 +1,13 @@
 module Retest
   class Setup
-    def self.type
-      new.type
-    end
-
     def type
       @type ||= begin
         return :ruby unless has_lock_file?
 
-        if rspec?
-          :rspec
-        elsif rails?
-          :rails
-        elsif rake?
-          :rake
-        else
-          :ruby
+        if rspec?    then :rspec
+        elsif rails? then :rails
+        elsif rake?  then :rake
+        else              :ruby
         end
       end
     end
