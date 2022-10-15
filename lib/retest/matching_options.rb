@@ -17,8 +17,8 @@ module Retest
     def filtered_results
       if path.test?
         [path]
-      elsif namespace_screens.any?
-        namespace_screens
+      elsif (screened_tests = screen_namespaces(possible_tests)).any?
+        screened_tests
       else
         possible_tests
       end.map(&:to_s)
@@ -33,14 +33,15 @@ module Retest
         .first(@limit)
     end
 
-    def namespace_screens
-      @namespace_screens ||= path
+    def screen_namespaces(files)
+      path
         .reversed_dirnames
-        .each_with_index
-        .with_object(possible_tests.map { |file| Path.new(file) }) do |(reference, index), result|
-          unless [1, 0].include? result.count
-            result.keep_if { |path| path.reversed_dirnames[index] == reference }
-          end
+        .each
+        .with_index
+        .with_object(files.map { |file| Path.new(file) }) do |(dirname, index), paths|
+          break paths if paths.count <= 1
+
+          paths.keep_if { |path| path.reversed_dirnames[index] == dirname }
         end
     end
   end
