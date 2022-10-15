@@ -40,5 +40,10 @@ module Retest
 
       assert_equal "hello world\n", @subject.read_output
     end
+
+    def test_puts
+      out, _ = capture_subprocess_io { Prompt.puts "hello world\n" }
+      assert_equal "hello world\n", out
+    end
   end
 end
