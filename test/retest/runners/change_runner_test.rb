@@ -32,7 +32,7 @@ module Retest
         _, _ = capture_subprocess_io { @subject.run }
 
         assert_equal(<<~EXPECTED, output)
-          404 - Test File Not Found
+          404 - File Not Found
           Retest could not find a changed file to run.
         EXPECTED
       end
