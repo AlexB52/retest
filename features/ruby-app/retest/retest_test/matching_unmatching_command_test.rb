@@ -24,6 +24,7 @@ class MatchingUnmatchingCommandTest < Minitest::Test
 
     assert_match <<~EXPECTED, @output.read
       We found few tests matching: lib/bottles.rb
+
       [0] - test/bottles_test.rb
       [1] - test/other_bottles_test.rb
 

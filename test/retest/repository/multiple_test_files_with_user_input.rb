@@ -10,17 +10,17 @@ module Retest
         core/spec/controllers/admin/billing_agent_customers_controller_spec.rb
       )
 
-      @subject = Repository.new files: files, stdout: StringIO.new
+      @subject = Repository.new(files: files)
     end
 
     def test_find_test_user_input_question
-      @subject.stdin = StringIO.new("1\n")
-      @subject.stdout = STDOUT
+      @subject.prompt = Prompt.new(input: StringIO.new("1\n"), output: StringIO.new)
 
-      output, _ = capture_subprocess_io { @subject.find_test('app/models/billing_agent_customer.rb') }
+      @subject.find_test('app/models/billing_agent_customer.rb')
 
-      assert_match <<~EXPECTED, output
+      assert_equal <<~EXPECTED, @subject.prompt.read_output
         We found few tests matching: app/models/billing_agent_customer.rb
+
         [0] - spec/models/billing_agent_customer_spec.rb
         [1] - core/spec/models/billing_agent_customer_spec.rb
 
@@ -29,32 +29,34 @@ module Retest
       EXPECTED
     end
 
-    def test_find_test_user_select_0
-      @subject.stdin = StringIO.new("0\n")
+    FakePrompt = Struct.new(:input_choice, keyword_init: true) do
+      def ask_which_test_to_use(path, files)
+        files[input_choice]
+      end
+    end
 
+    def test_find_test_user_select_0
+      @subject.prompt = FakePrompt.new(input_choice: 0)
       assert_equal 'spec/models/billing_agent_customer_spec.rb', @subject.find_test('app/models/billing_agent_customer.rb')
     end
 
     def test_find_test_user_select_1
-      @subject.stdin = StringIO.new("1\n")
-
+      @subject.prompt = FakePrompt.new(input_choice: 1)
       assert_equal 'core/spec/models/billing_agent_customer_spec.rb', @subject.find_test('app/models/billing_agent_customer.rb')
     end
 
     def test_find_test_user_select_2
-      @subject.stdin = StringIO.new("2\n")
-
+      @subject.prompt = FakePrompt.new(input_choice: 2)
       assert_nil @subject.find_test('app/models/billing_agent_customer.rb')
     end
 
     def test_find_test_user_select_cache_answer
-      @subject.stdin = StringIO.new("0\n")
       expected = 'spec/models/billing_agent_customer_spec.rb'
 
+      @subject.prompt = FakePrompt.new(input_choice: 0)
       assert_equal expected, @subject.find_test('app/models/billing_agent_customer.rb')
 
-      @subject.stdin = StringIO.new("2\n") # A wrong input
-
+      @subject.prompt = FakePrompt.new(input_choice: 2)
       assert_equal expected, @subject.find_test('app/models/billing_agent_customer.rb')
     end
   end

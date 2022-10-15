@@ -1,12 +1,11 @@
 module Retest
   class Repository
-    attr_accessor :files, :cache, :stdin, :stdout
+    attr_accessor :files, :cache, :prompt
 
-    def initialize(files: [], cache: {}, stdin: $stdin, stdout: $stdout)
+    def initialize(files: [], cache: {}, prompt: nil)
       @cache  = cache
       @files  = files
-      @stdin  = stdin
-      @stdout = stdout
+      @prompt = prompt || Prompt.new
     end
 
     def find_test(path)
@@ -55,26 +54,8 @@ module Retest
       when 0, 1
         tests.first
       else
-        ask_which_test_to_use(tests)
+        prompt.ask_which_test_to_use(@path, tests)
       end
-    end
-
-    def ask_which_test_to_use(tests)
-      stdout.puts(<<~QUESTION)
-        We found few tests matching: #{@path}
-        #{list_options(tests)}
-
-        Which file do you want to use?
-        Enter the file number now:
-      QUESTION
-
-      tests[stdin.gets.chomp.to_i]
-    end
-
-    def list_options(tests)
-      tests.map.with_index do |file, index|
-        "[#{index}] - #{file}"
-      end.join("\n")
     end
   end
 end
