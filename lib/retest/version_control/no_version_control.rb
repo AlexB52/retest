@@ -1,15 +1,20 @@
-class Retest::VersionControl
-  class NoVersionControl
-    def self.installed?
-      true
-    end
+module Retest
+  module VersionControl
+    module NoVersionControl
 
-    def name
-      'default'
-    end
+      module_function
 
-    def files
-      Dir.glob('**/*') - Dir.glob('{tmp,node_modules}/**/*')
+      def installed?
+        true
+      end
+
+      def name
+        'default'
+      end
+
+      def files
+        Dir.glob('**/*') - Dir.glob('{tmp,node_modules}/**/*')
+      end
     end
   end
 end
