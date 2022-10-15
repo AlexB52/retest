@@ -126,12 +126,14 @@ module Retest
         test/models/performance/holdings_test.rb
         test/lib/csv_report/holdings_test.rb
       )
-      @subject.stdin = StringIO.new("1\n")
+
+      @subject.prompt = Prompt.new(input: StringIO.new("1\n"))
 
       out, _ = capture_subprocess_io { @subject.find_test('app/models/valuation/holdings.rb') }
 
       assert_match <<~EXPECTED, out
         We found few tests matching: app/models/valuation/holdings.rb
+
         [0] - test/models/taxation/holdings_test.rb
         [1] - test/models/schedule/holdings_test.rb
         [2] - test/models/holdings_test.rb
