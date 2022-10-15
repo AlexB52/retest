@@ -4,7 +4,7 @@ require_relative 'shared_interface'
 module Retest
   class VersionControl::NoVersionControlTest < Minitest::Test
     def setup
-      @subject = VersionControl::NoVersionControl.new
+      @subject = VersionControl::NoVersionControl
     end
 
     include VersionControl::SharedInterface

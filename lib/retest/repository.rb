@@ -14,7 +14,7 @@ module Retest
       return if path.empty?
 
       @path = path
-      cache[@path] ||= select_from TestOptions.for(@path, files: files)
+      cache[@path] ||= select_from MatchingOptions.for(@path, files: files)
     end
 
     def find_tests(paths)
@@ -55,12 +55,11 @@ module Retest
       when 0, 1
         tests.first
       else
-        ask_question tests
-        tests[get_input]
+        ask_which_test_to_use(tests)
       end
     end
 
-    def ask_question(tests)
+    def ask_which_test_to_use(tests)
       stdout.puts(<<~QUESTION)
         We found few tests matching: #{@path}
         #{list_options(tests)}
@@ -68,16 +67,14 @@ module Retest
         Which file do you want to use?
         Enter the file number now:
       QUESTION
+
+      tests[stdin.gets.chomp.to_i]
     end
 
     def list_options(tests)
       tests.map.with_index do |file, index|
         "[#{index}] - #{file}"
       end.join("\n")
-    end
-
-    def get_input
-      stdin.gets.chomp.to_i
     end
   end
 end
