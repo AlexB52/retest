@@ -106,6 +106,33 @@ module Retest
   end
 
   class MultiplePatternTest < MiniTest::Test
+    def test_no_default_pattern_match
+      files = %w(
+        lib/active_record/fixtures.rb
+        lib/active_record/test_fixtures.rb
+        test/cases/test_fixtures_test.rb
+        test/cases/fixtures_test.rb
+      )
+
+      expected_matches = %w[
+        lib/active_record/test_fixtures.rb
+        test/cases/fixtures_test.rb
+      ]
+
+      assert_equal expected_matches, MatchingOptions.for('lib/active_record/fixtures.rb', files: files)
+    end
+
+    def test_multiple_pattern_combinations
+      files = %w(
+        lib/active_record/fixtures.rb
+        lib/active_record/test_fixtures.rb
+        test/cases/test_fixtures_test.rb
+        test/cases/fixtures_test.rb
+      )
+
+      assert_equal %w[test/cases/test_fixtures_test.rb], MatchingOptions.for('lib/active_record/test_fixtures.rb', files: files)
+    end
+
     def test_multiple_test_naming_patterns
       files = %w(
         spec_holdings.rb
