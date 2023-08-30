@@ -1,6 +1,22 @@
 require 'test_helper'
 
 module Retest
+  class TestRootLevelFiles < MiniTest::Test
+    def test_root_file_level
+      files = %w(foo_spec.rb)
+
+      assert_equal files, MatchingOptions.for('foo_spec.rb', files: files)
+
+      files = %w(foo.rb)
+
+      assert_equal [], MatchingOptions.for('foo.rb', files: files)
+
+      files = %w(foo.rb foo_spec.rb)
+
+      assert_equal %w[foo_spec.rb], MatchingOptions.for('foo.rb', files: files)
+    end
+  end
+
   class TestPrefixPatternTest < MiniTest::Test
     def test_find_test
       files = %w(
@@ -114,12 +130,13 @@ module Retest
         test/cases/fixtures_test.rb
       )
 
-      expected_matches = %w[
+      expected = %w[
         lib/active_record/test_fixtures.rb
         test/cases/fixtures_test.rb
+        test/cases/test_fixtures_test.rb
       ]
 
-      assert_equal expected_matches, MatchingOptions.for('lib/active_record/fixtures.rb', files: files)
+      assert_equal expected, MatchingOptions.for('lib/active_record/fixtures.rb', files: files)
     end
 
     def test_multiple_pattern_combinations

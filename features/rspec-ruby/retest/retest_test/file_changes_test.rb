@@ -41,6 +41,7 @@ class FileChangesTest < Minitest::Test
 
     assert_match "Test File Selected: foo_spec.rb", @output.read
 
+  ensure
     delete_file 'foo_spec.rb'
   end
 
@@ -62,6 +63,7 @@ class FileChangesTest < Minitest::Test
     modify_file('foo.rb')
     assert_match "Test File Selected: foo_spec.rb", @output.read
 
+  ensure
     delete_file 'foo.rb'
     delete_file 'foo_spec.rb'
   end
@@ -75,6 +77,7 @@ class FileChangesTest < Minitest::Test
     modify_file 'foo.rb'
     assert_match "Test File Selected: foo_spec.rb", @output.read
 
+  ensure
     delete_file 'foo.rb'
     delete_file 'foo_spec.rb'
   end
