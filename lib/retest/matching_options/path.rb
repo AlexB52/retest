@@ -21,7 +21,7 @@ module Retest
       end
 
       def test?(test_directories: nil)
-        if !test_path?(test_directories)
+        if test_directories && (test_directories & dirnames).empty?
           return false
         end
 
@@ -37,16 +37,6 @@ module Retest
       end
 
       private
-
-      def test_path?(test_directories)
-        return true unless test_directories
-
-        root_file? || (test_directories & dirnames).any?
-      end
-
-      def root_file?
-        dirnames == %w[.]
-      end
 
       def test_regexs
         [

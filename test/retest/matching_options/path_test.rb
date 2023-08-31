@@ -42,9 +42,10 @@ module Retest
         assert Path.new("test/cases/test_fixtures_test.rb").test?(test_directories: %w[test])
         assert Path.new("test/cases/fixtures_test.rb").test?(test_directories: %w[test])
 
-        # assert root level files successfully regardless of test_directories
-        assert Path.new("foo_spec.rb").test?(test_directories: %w[spec test])
+        # assert root level files regardless of test_directories
         assert Path.new("foo_spec.rb").test?
+        refute Path.new("foo_spec.rb").test?(test_directories: %w[spec test])
+        assert Path.new("foo_spec.rb").test?(test_directories: %w[spec test .])
         refute Path.new("foo.rb").test?(test_directories: %w[spec test])
         refute Path.new("foo.rb").test?
       end

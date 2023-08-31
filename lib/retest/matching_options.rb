@@ -12,7 +12,7 @@ module Retest
       @path = Path.new(path)
       @files = files
       @limit = limit || 5
-      @test_directories = test_directories || %w[spec test]
+      @test_directories = (test_directories || %w[spec test]) + %w[.] # add root file as a valid test directory
     end
 
     def filtered_results
