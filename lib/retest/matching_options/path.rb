@@ -13,10 +13,18 @@ module Retest
       end
 
       def reversed_dirnames
-        @reversed_dirnames ||= dirname.each_filename.to_a.reverse
+        @reversed_dirnames ||= dirnames.reverse
       end
 
-      def test?
+      def dirnames
+        @dirnames ||= dirname.each_filename.to_a
+      end
+
+      def test?(test_directories: nil)
+        if test_directories && (test_directories & dirnames).empty?
+          return false
+        end
+
         test_regexs.any? { |regex| regex =~ to_s }
       end
 

@@ -6,16 +6,17 @@ module Retest
       new(path, files: files, limit: limit).filtered_results
     end
 
-    attr_reader :path, :files
+    attr_reader :path, :files, :test_directories
 
-    def initialize(path, files: [], limit: 5)
+    def initialize(path, files: [], limit: 5, test_directories: nil)
       @path = Path.new(path)
       @files = files
       @limit = limit || 5
+      @test_directories = (test_directories || %w[spec test]) + %w[.] # add root file as a valid test directory
     end
 
     def filtered_results
-      if path.test?
+      if path.test?(test_directories: test_directories)
         [path]
       elsif (screened_tests = screen_namespaces(possible_tests)).any?
         screened_tests
@@ -34,14 +35,18 @@ module Retest
     end
 
     def screen_namespaces(files)
+      test_files = files
+        .map { |file| Path.new(file) }
+        .select { |path| (path.reversed_dirnames & test_directories).any? }
+
       path
         .reversed_dirnames
         .each
         .with_index
-        .with_object(files.map { |file| Path.new(file) }) do |(dirname, index), paths|
-          break paths if paths.count <= 1
+        .with_object(test_files) do |(dirname, index), tests|
+          break tests if tests.count <= 1
 
-          paths.keep_if { |path| path.reversed_dirnames[index] == dirname }
+          tests.keep_if { |test| test.reversed_dirnames[index] == dirname }
         end
     end
   end

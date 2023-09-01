@@ -1,6 +1,22 @@
 require 'test_helper'
 
 module Retest
+  class TestRootLevelFiles < MiniTest::Test
+    def test_root_file_level
+      files = %w(foo_spec.rb)
+
+      assert_equal files, MatchingOptions.for('foo_spec.rb', files: files)
+
+      files = %w(foo.rb)
+
+      assert_equal [], MatchingOptions.for('foo.rb', files: files)
+
+      files = %w(foo.rb foo_spec.rb)
+
+      assert_equal %w[foo_spec.rb], MatchingOptions.for('foo.rb', files: files)
+    end
+  end
+
   class TestPrefixPatternTest < MiniTest::Test
     def test_find_test
       files = %w(
@@ -106,6 +122,34 @@ module Retest
   end
 
   class MultiplePatternTest < MiniTest::Test
+    def test_no_default_pattern_match
+      files = %w(
+        lib/active_record/fixtures.rb
+        lib/active_record/test_fixtures.rb
+        test/cases/test_fixtures_test.rb
+        test/cases/fixtures_test.rb
+      )
+
+      expected = %w[
+        lib/active_record/test_fixtures.rb
+        test/cases/fixtures_test.rb
+        test/cases/test_fixtures_test.rb
+      ]
+
+      assert_equal expected, MatchingOptions.for('lib/active_record/fixtures.rb', files: files)
+    end
+
+    def test_multiple_pattern_combinations
+      files = %w(
+        lib/active_record/fixtures.rb
+        lib/active_record/test_fixtures.rb
+        test/cases/test_fixtures_test.rb
+        test/cases/fixtures_test.rb
+      )
+
+      assert_equal %w[test/cases/test_fixtures_test.rb], MatchingOptions.for('lib/active_record/test_fixtures.rb', files: files)
+    end
+
     def test_multiple_test_naming_patterns
       files = %w(
         spec_holdings.rb
