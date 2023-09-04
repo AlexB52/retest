@@ -20,7 +20,7 @@ GEM
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     string-similarity (2.1.0)
-    tty-option (0.2.0)
+    tty-option (0.3.0)
 
 PLATFORMS
   ruby
