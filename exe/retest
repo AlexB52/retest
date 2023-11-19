@@ -13,13 +13,15 @@ if options.help?
   return
 end
 
-repository = Retest::Repository.new(files: Retest::VersionControl.files)
+prompt     = Retest::Prompt.new
+repository = Retest::Repository.new(files: Retest::VersionControl.files, prompt: prompt)
 command    = Retest::Command.for_options(options)
 runner     = Retest::Runners.runner_for(command.to_s)
 sounds     = Retest::Sounds.for(options)
 
 sounds.play(:start)
 runner.add_observer(sounds)
+prompt.add_observer(sounds)
 
 program = Retest::Program.new(
   repository: repository,

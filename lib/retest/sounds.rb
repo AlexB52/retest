@@ -26,6 +26,8 @@ module Retest
           ['afplay', '/System/Library/Sounds/Funk.aiff']
         when :start
           ['afplay', '/System/Library/Sounds/Blow.aiff']
+        when :question
+          ['afplay', '/System/Library/Sounds/Glass.aiff']
         else
           raise ArgumentError.new("No sounds were found for type: #{sound}.")
         end
@@ -40,15 +42,18 @@ end
 # List of Mac Audio Files:
 # afplay /System/Library/Sounds/Basso.aiff
 # afplay /System/Library/Sounds/Bottle.aiff
-# afplay /System/Library/Sounds/Funk.aiff
 # afplay /System/Library/Sounds/Hero.aiff
 # afplay /System/Library/Sounds/Ping.aiff
 # afplay /System/Library/Sounds/Purr.aiff
 # afplay /System/Library/Sounds/Submarine.aiff
-# afplay /System/Library/Sounds/Blow.aiff
 # afplay /System/Library/Sounds/Frog.aiff
-# afplay /System/Library/Sounds/Glass.aiff
 # afplay /System/Library/Sounds/Morse.aiff
 # afplay /System/Library/Sounds/Pop.aiff
-# afplay /System/Library/Sounds/Sosumi.aiff
 # afplay /System/Library/Sounds/Tink.aiff
+
+# USED
+
+# fail:     afplay /System/Library/Sounds/Sosumi.aiff
+# pass:     afplay /System/Library/Sounds/Funk.aiff
+# start:    afplay /System/Library/Sounds/Blow.aiff
+# question: afplay /System/Library/Sounds/Glass.aiff
