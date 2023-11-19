@@ -94,9 +94,11 @@ end
 
 class DiffOptionTest < Minitest::Test
   def setup
+    `git config --global init.defaultBranch main`
+    `git config --global user.email "you@example.com"`
+    `git config --global user.name "Your Name"`
+    `git config --global --add safe.directory /usr/src/app`
     `git init`
-    `git config --local user.email "you@example.com"`
-    `git config --local user.name "Your Name"`
     `git add .`
     `git commit -m "First commit"`
     `git checkout -b feature-branch`
@@ -104,7 +106,7 @@ class DiffOptionTest < Minitest::Test
 
   def teardown
     @output.delete
-    `git checkout master`
+    `git checkout -`
     `git clean -fd .`
     `git checkout .`
     `git branch -D feature-branch`
@@ -118,7 +120,7 @@ class DiffOptionTest < Minitest::Test
     `git add .`
     `git commit -m "Scaffold books"`
 
-    @output, @pid = launch_retest 'retest --diff=master'
+    @output, @pid = launch_retest 'retest --diff=main'
     sleep 10
 
     assert_match <<~EXPECTED, @output.read
