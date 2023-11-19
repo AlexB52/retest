@@ -1,4 +1,4 @@
-FROM ruby:2.4.10-alpine
+FROM ruby:2.5.9-alpine3.13
 
 ARG BUILD_PACKAGES="build-base git"
 

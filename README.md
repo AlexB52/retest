@@ -119,7 +119,7 @@ $ retest 'bundle exec rails test <test>'
 
 ## Ruby Support
 
-Retest supports ruby 2.4 and above.
+Retest supports ruby 2.5 and above.
 
 ## Roadmap
 
