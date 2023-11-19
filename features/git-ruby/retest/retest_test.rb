@@ -27,6 +27,7 @@ end
 class GitChangesTest < Minitest::Test
   def setup
     `git init`
+    `git config --global init.defaultBranch main`
     `git config --local user.email "you@example.com"`
     `git config --local user.name "Your Name"`
     `git add .`
@@ -53,7 +54,7 @@ class GitChangesTest < Minitest::Test
     `git add .`
     `git commit -m "Rename, Add and Remove files"`
 
-    @output, @pid = launch_retest 'retest --diff=master --ruby'
+    @output, @pid = launch_retest 'retest --diff=main --ruby'
     sleep 2
 
     assert_match <<~EXPECTED, @output.read
