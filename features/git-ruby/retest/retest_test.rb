@@ -26,8 +26,8 @@ end
 
 class GitChangesTest < Minitest::Test
   def setup
-    `git init`
     `git config --global init.defaultBranch main`
+    `git init`
     `git config --local user.email "you@example.com"`
     `git config --local user.name "Your Name"`
     `git add .`
