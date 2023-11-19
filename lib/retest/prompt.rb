@@ -1,5 +1,7 @@
 module Retest
   class Prompt
+    include Observable
+
     def self.ask_which_test_to_use(path, files)
       new.ask_which_test_to_use(path, files)
     end
@@ -15,6 +17,9 @@ module Retest
     end
 
     def ask_which_test_to_use(path, files)
+      changed
+      notify_observers(:question)
+
       output.puts(<<~QUESTION)
         We found few tests matching: #{path}
 

@@ -33,6 +33,24 @@ module Retest
 
         kernel.verify
       end
+
+      def test_play_question
+        kernel = MiniTest::Mock.new
+        kernel.expect(:system, true, ['afplay', '/System/Library/Sounds/Glass.aiff'])
+
+        MacOS.new(kernel: kernel, thread: FakeThread).play(:question)
+
+        kernel.verify
+      end
+
+      def test_play_start
+        kernel = MiniTest::Mock.new
+        kernel.expect(:system, true, ['afplay', '/System/Library/Sounds/Blow.aiff'])
+
+        MacOS.new(kernel: kernel, thread: FakeThread).play(:start)
+
+        kernel.verify
+      end
     end
   end
 end
