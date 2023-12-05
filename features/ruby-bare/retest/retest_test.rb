@@ -9,6 +9,8 @@ require_relative 'scenarios/multiple_commands.rb'
 require_relative 'scenarios/force_polling.rb'
 require_relative 'scenarios/interruptions.rb'
 
+require_relative 'flags/help.rb'
+
 $stdout.sync = true
 
 include FileHelper
