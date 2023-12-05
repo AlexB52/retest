@@ -1,4 +1,6 @@
 require 'listen'
+require 'config/listen'
+
 require 'string/similarity'
 require 'observer'
 
