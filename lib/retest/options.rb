@@ -85,6 +85,12 @@ module Retest
       desc "Print usage"
     end
 
+    flag :version do
+      short "-v"
+      long "--version"
+      desc "Print retest version"
+    end
+
     option :polling do
       long '--polling'
       desc <<~DESC.strip
@@ -131,6 +137,10 @@ module Retest
 
     def help?
       params[:help]
+    end
+
+    def version?
+      params[:version]
     end
 
     def full_suite?

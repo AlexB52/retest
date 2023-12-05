@@ -13,6 +13,11 @@ if options.help?
   return
 end
 
+if options.version?
+  $stdout.puts Retest::VERSION
+  return
+end
+
 prompt     = Retest::Prompt.new
 repository = Retest::Repository.new(files: Retest::VersionControl.files, prompt: prompt)
 command    = Retest::Command.for_options(options)
