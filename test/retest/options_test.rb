@@ -32,6 +32,17 @@ module Retest
       assert_equal File.read('test/retest/options/help.txt'), @subject.help
     end
 
+    def test_version?
+      @subject.args = ["--version"]
+      assert @subject.version?
+
+      @subject.args = ["-v"]
+      assert @subject.version?
+
+      @subject.args = ["-h"]
+      refute @subject.version?
+    end
+
     def test_notify?
       refute @subject.notify?
       @subject.args = ["--notify"]

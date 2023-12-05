@@ -23,6 +23,7 @@ Options:
       --rake             Shortcut for a standard Rake setup
       --rspec            Shortcut for a standard RSpec setup
       --ruby             Shortcut for a Ruby project
+  -v, --version          Print retest version
 
 Examples:
   Runs a matching rails test after a file change
