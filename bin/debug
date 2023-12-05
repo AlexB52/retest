@@ -3,4 +3,8 @@
 require "bundler/setup"
 require "byebug"
 
-eval(File.read("exe/retest"))
+begin
+  eval(File.read("exe/retest"))
+rescue LocalJumpError
+  # Silence early returns in the eval block
+end
