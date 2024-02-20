@@ -41,6 +41,7 @@ module Retest
         [2] - test/models/holdings_test.rb
         [3] - test/models/performance/holdings_test.rb
         [4] - test/lib/csv_report/holdings_test.rb
+        [5] - none
 
         Which file do you want to use?
         Enter the file number now:

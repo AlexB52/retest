@@ -19,17 +19,18 @@ module Retest
     def ask_which_test_to_use(path, files)
       changed
       notify_observers(:question)
+      options = options(files)
 
       output.puts(<<~QUESTION)
         We found few tests matching: #{path}
 
-        #{list_options(files)}
+        #{list_options(options.keys)}
 
         Which file do you want to use?
         Enter the file number now:
       QUESTION
 
-      files[input.gets.chomp.to_i]
+      options.values[input.gets.chomp.to_i]
     end
 
     def puts(*args)
@@ -42,8 +43,15 @@ module Retest
 
     private
 
-    def list_options(files)
-      files
+    def options(files, blank_option: 'none')
+      result = {}
+      files.each { |file| result[file] = file }
+      result[blank_option] = nil # blank option last
+      result
+    end
+
+    def list_options(options)
+      options
         .map
         .with_index { |file, index| "[#{index}] - #{file}" }
         .join("\n")
