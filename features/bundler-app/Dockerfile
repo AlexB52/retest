@@ -22,5 +22,6 @@ COPY . /usr/src/app
 RUN gem install bundler
 RUN bundle
 RUN gem install retest.gem
+RUN git init
 
 CMD ["retest", "--ruby"]
