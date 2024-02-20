@@ -29,7 +29,7 @@ class OutputFile
   private
 
   def create_file
-    Dir.mkdir('tmp') unless Dir.exists?('tmp')
+    Dir.mkdir('tmp') unless Dir.exist?('tmp')
     File.open(path, "w")
   end
 end
