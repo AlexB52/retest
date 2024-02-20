@@ -12,8 +12,14 @@ module Retest
       return unless path
       return if path.empty?
 
-      @path = path
-      cache[@path] ||= select_from MatchingOptions.for(@path, files: files)
+      unless cache.key?(path)
+        ok_to_cache, test_file = select_from path, MatchingOptions.for(path, files: files)
+        if ok_to_cache
+          cache[path] = test_file
+        end
+      end
+
+      cache[path]
     end
 
     def find_tests(paths)
@@ -49,12 +55,14 @@ module Retest
 
     private
 
-    def select_from(tests)
-      case tests.count
-      when 0, 1
-        tests.first
+    def select_from(path, matching_tests)
+      case matching_tests.count
+      when 0
+        [false, nil]
+      when  1
+        [true, matching_tests.first]
       else
-        prompt.ask_which_test_to_use(@path, tests)
+        [true, prompt.ask_which_test_to_use(path, matching_tests)]
       end
     end
   end

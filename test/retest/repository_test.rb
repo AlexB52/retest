@@ -139,10 +139,45 @@ module Retest
         [2] - test/models/holdings_test.rb
         [3] - test/models/performance/holdings_test.rb
         [4] - test/lib/csv_report/holdings_test.rb
+        [5] - none
 
         Which file do you want to use?
         Enter the file number now:
       EXPECTED
+    end
+
+    def test_no_matches_with_multiple_possible_tests
+      mock_cache = {}
+
+      @subject.files = %w(
+        test/models/schedule/holdings_test.rb
+        test/models/taxation/holdings_test.rb
+        test/models/holdings_test.rb
+        test/models/performance/holdings_test.rb
+        test/lib/csv_report/holdings_test.rb
+      )
+
+      @subject.cache = mock_cache
+      @subject.prompt = Prompt.new(input: StringIO.new("5\n"), output: StringIO.new)
+
+      @subject.find_test('app/models/valuation/holdings.rb')
+
+      assert_equal({ 'app/models/valuation/holdings.rb' => nil }, mock_cache)
+    end
+
+    def test_no_matches_with_no_match
+      mock_cache = {}
+
+      @subject.files = %w(
+        bar.rb
+        bar_test.rb
+      )
+
+      @subject.cache = mock_cache
+
+      @subject.find_test('foo.rb')
+
+      assert_equal({}, mock_cache)
     end
 
     class TestFileChanged < MiniTest::Test

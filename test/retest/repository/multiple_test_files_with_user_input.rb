@@ -23,6 +23,7 @@ module Retest
 
         [0] - spec/models/billing_agent_customer_spec.rb
         [1] - core/spec/models/billing_agent_customer_spec.rb
+        [2] - none
 
         Which file do you want to use?
         Enter the file number now:
@@ -30,8 +31,15 @@ module Retest
     end
 
     FakePrompt = Struct.new(:input_choice, keyword_init: true) do
+      def options(files)
+        result = {}
+        files.each { |file| result[file] = file }
+        result['none'] = nil
+        result
+      end
+
       def ask_which_test_to_use(path, files)
-        files[input_choice]
+        options(files).values[input_choice]
       end
     end
 
@@ -46,6 +54,7 @@ module Retest
     end
 
     def test_find_test_user_select_2
+      # none exist
       @subject.prompt = FakePrompt.new(input_choice: 2)
       assert_nil @subject.find_test('app/models/billing_agent_customer.rb')
     end
