@@ -131,7 +131,7 @@ module Retest
 
       out, _ = capture_subprocess_io { @subject.find_test('app/models/valuation/holdings.rb') }
 
-      assert_match <<~EXPECTED, out
+      assert_match <<~EXPECTED.chomp, out
         We found few tests matching: app/models/valuation/holdings.rb
 
         [0] - test/models/taxation/holdings_test.rb
@@ -143,6 +143,7 @@ module Retest
 
         Which file do you want to use?
         Enter the file number now:
+        > 
       EXPECTED
     end
 

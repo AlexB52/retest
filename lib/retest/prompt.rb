@@ -29,6 +29,7 @@ module Retest
         Which file do you want to use?
         Enter the file number now:
       QUESTION
+      output.print("> ")
 
       options.values[input.gets.chomp.to_i]
     end

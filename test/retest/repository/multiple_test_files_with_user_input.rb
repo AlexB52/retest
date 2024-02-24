@@ -18,7 +18,7 @@ module Retest
 
       @subject.find_test('app/models/billing_agent_customer.rb')
 
-      assert_equal <<~EXPECTED, @subject.prompt.read_output
+      assert_equal <<~EXPECTED.chomp, @subject.prompt.read_output
         We found few tests matching: app/models/billing_agent_customer.rb
 
         [0] - spec/models/billing_agent_customer_spec.rb
@@ -27,6 +27,7 @@ module Retest
 
         Which file do you want to use?
         Enter the file number now:
+        > 
       EXPECTED
     end
 

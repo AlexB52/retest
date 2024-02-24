@@ -33,7 +33,7 @@ module Retest
       result = @subject.ask_which_test_to_use("app/models/valuation/holdings.rb", files)
 
       assert_equal "test/models/schedule/holdings_test.rb", result
-      assert_equal <<~EXPECTED, @subject.read_output
+      assert_equal <<~EXPECTED.chomp, @subject.read_output
         We found few tests matching: app/models/valuation/holdings.rb
 
         [0] - test/models/taxation/holdings_test.rb
@@ -45,6 +45,7 @@ module Retest
 
         Which file do you want to use?
         Enter the file number now:
+        > 
       EXPECTED
     end
 
