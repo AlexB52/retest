@@ -55,7 +55,7 @@ class TestMatchingUnmatchingCommand < Minitest::Test
     assert_match "Test File Selected: foo_test.rb", stdout.tap(&:rewind).read
 
     modify_file('lib/bottles.rb')
-    assert_match <<~EXPECTED, stdout.tap(&:rewind).read
+    assert_match <<~EXPECTED.chomp, stdout.tap(&:rewind).read
       We found few tests matching: lib/bottles.rb
 
       [0] - test/bottles_test.rb
@@ -64,6 +64,7 @@ class TestMatchingUnmatchingCommand < Minitest::Test
 
       Which file do you want to use?
       Enter the file number now:
+      > 
     EXPECTED
 
     assert_match "Test File Selected: foo_test.rb", stdout.tap(&:rewind).read
