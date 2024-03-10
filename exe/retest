@@ -47,15 +47,20 @@ end
 # Main action
 
 $stdout.puts launching_message
-Retest.listen(options) do |modified, added, removed|
+listener = Retest.listen(options) do |modified, added, removed|
   begin
     program.run(modified, added, removed)
   rescue => e
     $stdout.puts "Something went wrong: #{e.message}"
   end
-end
+end.tap(&:start)
 $stdout.puts "Ready to refactor! You can make file changes now"
 
 # not blocking
 
-sleep
+loop do
+  case input = gets.chomp
+  when /^pause/ then listener.pause
+  when /^start/ then listener.start if listener.paused?
+  end
+end
