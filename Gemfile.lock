@@ -3,7 +3,7 @@ PATH
   specs:
     retest (1.13.0)
       listen (~> 3.9)
-      observer (~> 0.1.0)
+      observer (~> 0.1)
       string-similarity (~> 2.1)
       tty-option (~> 0.1)
 
