@@ -59,11 +59,8 @@ $stdout.puts "Press [Enter] to run all tests"
 
 loop do
   input = $stdin.getc
-  if input == "\r" || input == "\n"
-    puts "Enter pressed, sleeping for 3 seconds..."
-    sleep 3
-    puts "Enter done."
-  else
-    puts "You pressed: #{input.inspect}"
+  if ["\r", "\n"].include?(input)
+    puts "Enter pressed, running all tests"
+    runner.run_all_tests
   end
 end
