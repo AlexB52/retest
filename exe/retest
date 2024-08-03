@@ -55,7 +55,15 @@ Retest.listen(options) do |modified, added, removed|
   end
 end
 $stdout.puts "Ready to refactor! You can make file changes now"
+$stdout.puts "Press [Enter] to run all tests"
 
-# not blocking
-
-sleep
+loop do
+  input = $stdin.getc
+  if input == "\r" || input == "\n"
+    puts "Enter pressed, sleeping for 3 seconds..."
+    sleep 3
+    puts "Enter done."
+  else
+    puts "You pressed: #{input.inspect}"
+  end
+end
