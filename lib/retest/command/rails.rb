@@ -10,7 +10,7 @@ module Retest
 
       def to_s
         return "#{root_command} <test>" unless all
-        all_command
+        "#{root_command}:all"
       end
 
       def format_batch(*files)
@@ -23,12 +23,6 @@ module Retest
         return 'bin/rails test' if file_system.exist? 'bin/rails'
 
         'bundle exec rails test'
-      end
-
-      def all_command
-        return 'bin/rails test:all' if file_system.exist? 'bin/rails'
-
-        'bundle exec rails test:all'
       end
     end
   end
