@@ -20,9 +20,9 @@ module Retest
       private
 
       def root_command
-        return 'bin/rails test' if file_system.exist? 'bin/rails'
+        return 'bin/rails test:all' if file_system.exist? 'bin/rails'
 
-        'bundle exec rails test'
+        'bundle exec rails test:all'
       end
     end
   end
