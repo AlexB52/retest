@@ -57,7 +57,7 @@ end
 $stdout.puts "Ready to refactor! You can make file changes now"
 $stdout.puts "Press [Enter] to run all tests"
 
-run_all_command = Retest::Command.for_options(Retest::Options.new(["--all"]))
+run_all_command = Retest::Command.for_options(Retest::Options.new(["--all"]), quiet: true)
 run_all_runner  = Retest::Runners.runner_for(run_all_command.to_s)
 loop do
   input = $stdin.getc

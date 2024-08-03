@@ -7,8 +7,8 @@ module Retest
   class Command
     extend Forwardable
 
-    def self.for_options(options)
-      new(options: options).command
+    def self.for_options(options, quiet: false)
+      new(options: options, quiet: quiet).command
     end
 
     def self.for_setup(setup)
@@ -19,10 +19,11 @@ module Retest
     def_delegators :options, :params, :full_suite?, :auto?
 
     attr_accessor :options, :setup
-    def initialize(options: Options.new, setup: Setup.new, stdout: $stdout)
+    def initialize(options: Options.new, setup: Setup.new, stdout: $stdout, quiet: false)
       @options = options
       @setup = setup
       @stdout = stdout
+      @quiet = quiet
     end
 
     def command
@@ -51,7 +52,7 @@ module Retest
     end
 
     def default_command
-      @stdout.puts "Setup identified: [#{type.upcase}]. Using command: '#{setup_command}'"
+      @stdout.puts "Setup identified: [#{type.upcase}]. Using command: '#{setup_command}'" unless @quiet
       setup_command
     end
 

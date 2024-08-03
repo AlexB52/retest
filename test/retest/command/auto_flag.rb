@@ -88,9 +88,9 @@ module Retest
     def test_for_rails_setup
       @setup.type = :rails
 
-      assert_equal 'bundle exec rails test', @subject.command.to_s
+      assert_equal 'bundle exec rails test:all', @subject.command.to_s
       assert_equal(<<~OUTPUT, output)
-        Setup identified: [RAILS]. Using command: 'bundle exec rails test'
+        Setup identified: [RAILS]. Using command: 'bundle exec rails test:all'
       OUTPUT
     end
 

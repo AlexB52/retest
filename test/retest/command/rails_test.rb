@@ -11,13 +11,13 @@ module Retest
       include CommandInterface
 
       def test_to_s
-        assert_equal 'bin/rails test',                Rails.new(all: true, file_system: FakeFS.new(['bin/rails'])).to_s
-        assert_equal 'bundle exec rails test',        Rails.new(all: true, file_system: FakeFS.new([])).to_s
+        assert_equal 'bin/rails test:all',            Rails.new(all: true, file_system: FakeFS.new(['bin/rails'])).to_s
+        assert_equal 'bundle exec rails test:all',    Rails.new(all: true, file_system: FakeFS.new([])).to_s
         assert_equal 'bin/rails test <test>',         Rails.new(all: false, file_system: FakeFS.new(['bin/rails'])).to_s
         assert_equal 'bundle exec rails test <test>', Rails.new(all: false, file_system: FakeFS.new([])).to_s
         # take into account gem repository which doesn't have a bin file
         assert_equal 'bundle exec rails test <test>', Rails.new(all: false).to_s
-        assert_equal 'bundle exec rails test',        Rails.new(all: true).to_s
+        assert_equal 'bundle exec rails test:all',    Rails.new(all: true).to_s
       end
 
       def test_format_with_one_file

@@ -37,7 +37,7 @@ module Retest
       assert_equal 'bundle exec rspec', @subject.command.to_s
 
       @subject.options = Options.new(['--rails', '--all'])
-      assert_equal 'bundle exec rails test', @subject.command.to_s
+      assert_equal 'bundle exec rails test:all', @subject.command.to_s
 
       @subject.options = Options.new(['--rake', '--all'])
       assert_equal 'bundle exec rake test', @subject.command.to_s
