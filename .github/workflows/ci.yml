@@ -28,7 +28,7 @@ jobs:
           - 3.2
           - 3.3
         include:
-          - os: macos-latest
+          - os: macos-13
             ruby: 2.5
     name: Ruby ${{ matrix.ruby }} test (${{ matrix.os }})
     steps:
