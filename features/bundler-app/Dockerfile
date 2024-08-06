@@ -19,6 +19,7 @@ ENV GEM_HOME="/usr/local/bundle"
 ENV PATH $GEM_HOME/bin:$GEM_HOME/gems/bin:$PATH
 
 COPY . /usr/src/app
+RUN gem update --system 3.2.3
 RUN gem install bundler
 RUN bundle
 RUN gem install retest.gem
