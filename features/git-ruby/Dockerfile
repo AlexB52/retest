@@ -19,6 +19,7 @@ ENV GEM_HOME="/usr/local/bundle"
 ENV PATH $GEM_HOME/bin:$GEM_HOME/gems/bin:$PATH
 
 COPY Gemfile Gemfile.lock retest.gem ./
+RUN gem update --system 3.2.3
 RUN gem install bundler -v 2.1.4
 RUN bundle config --delete frozen
 RUN bundle install

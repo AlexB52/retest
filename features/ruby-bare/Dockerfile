@@ -12,6 +12,7 @@ WORKDIR /usr/src/app
 ENV LANG C.UTF-8
 
 COPY retest.gem ./
+RUN gem update --system 3.2.3
 RUN gem install retest.gem
 RUN gem install minitest -v 5.15.0 # minitest doesn't support some ruby versions
 

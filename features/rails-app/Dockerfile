@@ -13,6 +13,7 @@ ENV LANG C.UTF-8
 ENV BUNDLER_VERSION 2.1
 
 COPY Gemfile Gemfile.lock retest.gem ./
+RUN gem update --system 3.2.3
 RUN gem install bundler -v 2.1.4
 RUN bundle install
 RUN gem install retest.gem
