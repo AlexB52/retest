@@ -45,7 +45,7 @@ module Retest
 
         Which file do you want to use?
         Enter the file number now:
-        > 
+        >\s
       EXPECTED
     end
 
@@ -53,11 +53,6 @@ module Retest
       @subject.output.puts "hello world\n"
 
       assert_equal "hello world\n", @subject.read_output
-    end
-
-    def test_puts
-      out, _ = capture_subprocess_io { Prompt.puts "hello world\n" }
-      assert_equal "hello world\n", out
     end
 
     def test_observers_receive_correct_update_on_ask_which_test_to_use

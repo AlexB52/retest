@@ -2,14 +2,6 @@ module Retest
   class Prompt
     include Observable
 
-    def self.ask_which_test_to_use(path, files)
-      new.ask_which_test_to_use(path, files)
-    end
-
-    def self.puts(*args)
-      new.puts(*args)
-    end
-
     attr_accessor :input, :output
     def initialize(input: nil, output: nil)
       @input  = input || $stdin
