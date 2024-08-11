@@ -58,7 +58,9 @@ module Retest
         test/lib/csv_report/holdings_test.rb
       )
 
-      @subject.input = BlockingInput.new
+      rd, wr = IO.pipe
+
+      @subject.input = rd
 
       th = Thread.new do
         @subject.ask_which_test_to_use("app/models/valuation/holdings.rb", files)
@@ -66,10 +68,13 @@ module Retest
 
       wait_until { assert @subject.question_asked? }
 
-      @subject.input.puts("1\n")
+      wr.puts("1\n")
 
       assert_equal "test/models/schedule/holdings_test.rb", th.value
       refute @subject.question_asked?
+    ensure
+      rd.close
+      wr.close
     end
 
     def test_read_output

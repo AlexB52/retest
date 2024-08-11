@@ -16,24 +16,6 @@ FakeFS = Struct.new(:files) do
   end
 end
 
-class BlockingInput
-  def initialize
-    @io = StringIO.new
-  end
-
-  def puts(value)
-    @io = StringIO.new(value)
-  end
-
-  def gets
-    loop do
-      wait
-      line = @io.gets.to_s
-      break line unless line.empty?
-    end
-  end
-end
-
 def wait_until(max_attempts: 10)
   attempts = 0
   begin
