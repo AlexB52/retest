@@ -49,21 +49,6 @@ module Retest
       EXPECTED
     end
 
-    class ListeningIO
-      attr_accessor :io
-      def initialize
-        @io = StringIO.new
-      end
-
-      def gets
-        loop do
-          sleep 0.0001
-          line = @io.gets.to_s
-          break line unless line.empty?
-        end
-      end
-    end
-
     def test_question_asked_when_asking_question
       files = %w(
         test/models/taxation/holdings_test.rb
@@ -73,26 +58,18 @@ module Retest
         test/lib/csv_report/holdings_test.rb
       )
 
-      @subject.input = stdin = ListeningIO.new
+      @subject.input = BlockingInput.new
 
       th = Thread.new do
         @subject.ask_which_test_to_use("app/models/valuation/holdings.rb", files)
       end
 
-      attempts = 0
-      begin
-        assert @subject.question_asked?
-      rescue Minitest::Assertion => e
-        raise e if attempts >= 10
-        sleep 0.0001
-        attempts += 1
-      end
+      wait_until { assert @subject.question_asked? }
 
-      stdin.io = StringIO.new("1\n")
-      th.join
+      @subject.input.puts("1\n")
 
-      refute @subject.question_asked?
       assert_equal "test/models/schedule/holdings_test.rb", th.value
+      refute @subject.question_asked?
     end
 
     def test_read_output
