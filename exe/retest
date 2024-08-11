@@ -3,8 +3,14 @@
 require 'retest'
 
 $stdout.sync = true
+prompt_rd, prompt_wr = IO.pipe
 
-Signal.trap(:INT) { $stdout.puts "Goodbye"; exit }
+Signal.trap(:INT) do
+  $stdout.puts "Goodbye"
+  prompt_rd.close
+  prompt_wr.close
+  exit
+end
 
 options = Retest::Options.new(ARGV)
 
@@ -18,7 +24,7 @@ if options.version?
   return
 end
 
-prompt     = Retest::Prompt.new
+prompt     = Retest::Prompt.new(input: prompt_rd)
 repository = Retest::Repository.new(files: Retest::VersionControl.files, prompt: prompt)
 command    = Retest::Command.for_options(options)
 runner     = Retest::Runners.runner_for(command.to_s)
@@ -58,4 +64,15 @@ $stdout.puts "Ready to refactor! You can make file changes now"
 
 # not blocking
 
-sleep
+loop do
+  input = $stdin.gets.chomp
+  if prompt.question_asked?
+    prompt_wr.puts input
+    next
+  end
+
+  case input
+  when /^pause/ then puts "it's been paused"
+  when /^start/ then puts "it's been restarted"
+  end
+end
