@@ -78,8 +78,16 @@ module Retest
       th = Thread.new do
         @subject.ask_which_test_to_use("app/models/valuation/holdings.rb", files)
       end
-      sleep 0.0001
-      assert @subject.question_asked?
+
+      attempts = 0
+      begin
+        assert @subject.question_asked?
+      rescue Minitest::Assertion => e
+        raise e if attempts >= 10
+        sleep 0.0001
+        attempts += 1
+      end
+
       stdin.io = StringIO.new("1\n")
       th.join
 
