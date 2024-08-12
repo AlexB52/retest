@@ -1,10 +1,10 @@
 class GracefulExitWhenInterrupting < Minitest::Test
   def teardown
-    end_retest @output, @pid
+    end_retest
   end
 
   def test_interruption
-    @output, @pid = launch_retest 'retest --ruby'
+    launch_retest 'retest --ruby'
 
     assert_match <<~EXPECTED, @output.read
       Launching Retest...

@@ -1,6 +1,10 @@
 class AutoFlag < Minitest::Test
+  def teardown
+    end_retest
+  end
+
   def test_start_retest
-    @output, @pid = launch_retest 'retest'
+    launch_retest 'retest'
 
     assert_match <<~OUTPUT, @output.read
       Setup identified: [RUBY]. Using command: 'ruby <test>'
@@ -11,7 +15,5 @@ class AutoFlag < Minitest::Test
     modify_file('program.rb')
 
     assert_match "Test File Selected: program_test.rb", @output.read
-
-    end_retest @output, @pid
   end
 end

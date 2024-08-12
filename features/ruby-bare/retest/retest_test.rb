@@ -1,4 +1,5 @@
-require_relative 'test_helper'
+require 'retest'
+require_relative 'support/test_helper'
 require 'minitest/autorun'
 
 require_relative 'scenarios/auto_flag.rb'
@@ -28,11 +29,11 @@ class FileChangesTest < Minitest::Test
   end
 
   def teardown
-    end_retest @output, @pid
+    end_retest
   end
 
   def test_start_retest
-    @output, @pid = launch_retest @command
+    launch_retest @command
 
     assert_match <<~EXPECTED, @output.read
       Launching Retest...
@@ -41,7 +42,7 @@ class FileChangesTest < Minitest::Test
   end
 
   def test_modifying_existing_file
-    @output, @pid = launch_retest @command
+    launch_retest @command
 
     modify_file('program.rb')
 
@@ -50,7 +51,7 @@ class FileChangesTest < Minitest::Test
   end
 
   def test_modifying_existing_test_file
-    @output, @pid = launch_retest @command
+    launch_retest @command
 
     modify_file('program_test.rb')
 
@@ -59,7 +60,7 @@ class FileChangesTest < Minitest::Test
   end
 
   def test_creating_a_new_test_file
-    @output, @pid = launch_retest @command
+    launch_retest @command
 
     create_file 'foo_test.rb'
 
@@ -69,7 +70,7 @@ class FileChangesTest < Minitest::Test
   end
 
   def test_creating_a_new_file
-    @output, @pid = launch_retest @command
+    launch_retest @command
 
     create_file 'foo.rb'
     assert_match <<~EXPECTED, @output.read
@@ -94,7 +95,7 @@ class FileChangesTest < Minitest::Test
     create_file 'foo.rb', should_sleep: false
     create_file 'foo_test.rb', should_sleep: false
 
-    @output, @pid = launch_retest @command
+    launch_retest @command
 
     modify_file 'foo.rb'
     assert_match "Test File Selected: foo_test.rb", @output.read

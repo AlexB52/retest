@@ -3,4 +3,7 @@ services:
     build: .
     volumes:
       - .:/usr/src/app
+    environment:
+      - DEFAULT_SLEEP_SECONDS=5
+      - LAUNCH_SLEEP_SECONDS=1.5
     command: ruby retest/retest_test.rb

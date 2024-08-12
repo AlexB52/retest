@@ -1,4 +1,5 @@
-require_relative 'test_helper'
+require 'retest'
+require_relative 'support/test_helper'
 require 'minitest/autorun'
 
 $stdout.sync = true
@@ -11,11 +12,11 @@ class FileChangesTest < Minitest::Test
   end
 
   def teardown
-    end_retest @output, @pid
+    end_retest
   end
 
   def test_start_retest
-    @output, @pid = launch_retest @command
+    launch_retest @command
 
     assert_match <<~EXPECTED, @output.read
       Launching Retest...
@@ -55,7 +56,7 @@ class GitChangesTest < Minitest::Test
     `git add .`
     `git commit -m "Rename, Add and Remove files"`
 
-    @output, @pid = launch_retest 'retest --diff=main --ruby'
+    launch_retest 'retest --diff=main --ruby'
     sleep 2
 
     assert_match <<~EXPECTED, @output.read
