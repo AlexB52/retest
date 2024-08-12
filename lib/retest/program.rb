@@ -1,10 +1,15 @@
+require_relative 'program/pausable'
+
 module Retest
   class Program
+    include Pausable
+
     attr_accessor :runner, :repository, :command
     def initialize(runner: nil, repository: nil, command: nil)
       @runner = runner
       @repository = repository
       @command = command
+      initialize_pause(false)
     end
 
     def run(modified, added, removed)
