@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+%w[
+  ruby-app
+  ruby-bare
+  git-ruby
+  hanami-app
+  rails-app
+  rspec-rails
+  rspec-ruby
+  bundler-app
+].each do |folder|
+  `cp -R ./features/support ./features/#{folder}/retest`
+end

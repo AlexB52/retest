@@ -1,35 +1,21 @@
-require 'securerandom'
-
 class OutputFile
-  attr_reader :id
-
+  attr_reader :output
   def initialize
-    @id = SecureRandom.hex(10)
-    create_file
+    @output = Tempfile.new
   end
 
   def path
-    "tmp/output-#{id}.log"
+    @output.path
   end
-  alias :to_s :path
 
   def read
-    return unless File.exists?(path)
-
-    File.read(path).split('[H[J').last
+    @output.rewind
+    @output.read.split('[H[J').last
   end
 
   def delete
-    return unless File.exists?(path)
-
-    File.delete(path)
+    @output.close
+    @output.unlink
   end
   alias :clear :delete
-
-  private
-
-  def create_file
-    Dir.mkdir('tmp') unless Dir.exist?('tmp')
-    File.open(path, "w")
-  end
 end

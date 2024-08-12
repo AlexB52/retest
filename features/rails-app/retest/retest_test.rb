@@ -1,4 +1,5 @@
-require_relative 'test_helper'
+require 'retest'
+require_relative 'support/test_helper'
 require 'minitest/autorun'
 
 $stdout.sync = true
@@ -11,11 +12,11 @@ class MatchingTestsCommandTest < Minitest::Test
   end
 
   def teardown
-    end_retest @output, @pid
+    end_retest
   end
 
   def test_start_retest
-    @output, @pid = launch_retest @command
+    launch_retest @command
 
     assert_match <<~EXPECTED, @output.read
       Launching Retest...
@@ -24,7 +25,7 @@ class MatchingTestsCommandTest < Minitest::Test
   end
 
   def test_modify_a_file
-    @output, @pid = launch_retest @command
+    launch_retest @command
 
     modify_file 'app/models/post.rb'
 
@@ -39,11 +40,11 @@ class AllTestsCommandTest < Minitest::Test
   end
 
   def teardown
-    end_retest @output, @pid
+    end_retest
   end
 
   def test_start_retest
-    @output, @pid = launch_retest @command
+    launch_retest @command
 
     assert_match <<~EXPECTED, @output.read
       Launching Retest...
@@ -52,7 +53,7 @@ class AllTestsCommandTest < Minitest::Test
   end
 
   def test_modify_a_file
-    @output, @pid = launch_retest @command
+    launch_retest @command
 
     modify_file 'app/models/post.rb'
 
@@ -62,11 +63,11 @@ end
 
 class AutoFlagTest < Minitest::Test
   def teardown
-    end_retest @output, @pid
+    end_retest
   end
 
   def test_with_no_command
-    @output, @pid = launch_retest 'retest'
+    launch_retest 'retest'
 
     assert_match <<~OUTPUT, @output.read
       Setup identified: [RAILS]. Using command: 'bin/rails test <test>'
@@ -76,7 +77,7 @@ class AutoFlagTest < Minitest::Test
   end
 
   def test_with_no_command_all
-    @output, @pid = launch_retest 'retest --all'
+    launch_retest 'retest --all'
 
     assert_match <<~OUTPUT, @output.read
       Setup identified: [RAILS]. Using command: 'bin/rails test'
@@ -120,8 +121,8 @@ class DiffOptionTest < Minitest::Test
     `git add .`
     `git commit -m "Scaffold books"`
 
-    @output, @pid = launch_retest 'retest --diff=main'
-    sleep 10
+    launch_retest 'retest --diff=main'
+    wait
 
     assert_match <<~EXPECTED, @output.read
       Setup identified: [RAILS]. Using command: 'bin/rails test <test>'

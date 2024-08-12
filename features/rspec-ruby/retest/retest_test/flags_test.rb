@@ -3,11 +3,11 @@ class FlagTest < Minitest::Test
   end
 
   def teardown
-    end_retest @output, @pid
+    end_retest
   end
 
   def test_with_no_command
-    @output, @pid = launch_retest 'retest'
+    launch_retest 'retest'
 
     assert_match <<~OUTPUT, @output.read
       Setup identified: [RSPEC]. Using command: 'bundle exec rspec <test>'

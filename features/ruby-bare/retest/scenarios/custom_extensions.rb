@@ -4,7 +4,7 @@ class CustomExtensionTest < Minitest::Test
   end
 
   def teardown
-    end_retest @output, @pid
+    end_retest
   end
 
   def test_custom_extension
@@ -12,7 +12,7 @@ class CustomExtensionTest < Minitest::Test
     create_file 'foo.rb',      should_sleep: false
     create_file 'foo_test.rb', should_sleep: false
 
-    @output, @pid = launch_retest @command
+    launch_retest @command
 
     modify_file 'foo.rb'
     assert_match <<~EXPECTED, @output.read
@@ -23,6 +23,7 @@ class CustomExtensionTest < Minitest::Test
     modify_file 'foo.txt'
     assert_match "I captured a change", @output.read
 
+  ensure
     delete_file 'foo.rb'
     delete_file 'foo_test.rb'
     delete_file 'foo.txt'

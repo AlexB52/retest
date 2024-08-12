@@ -4,11 +4,11 @@ class ChangedPlaceholder < Minitest::Test
   end
 
   def teardown
-    end_retest @output, @pid
+    end_retest
   end
 
   def test_file_modification
-    @output, @pid = launch_retest @command
+    launch_retest @command
 
     assert_match <<~OUTPUT, @output.read
       Launching Retest...

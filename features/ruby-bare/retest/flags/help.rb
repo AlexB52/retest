@@ -1,6 +1,10 @@
 class TestHelpFlag < Minitest::Test
+  def teardown
+    end_retest
+  end
+
   def test_help
-    @output, @pid = launch_retest 'retest --help'
+    launch_retest 'retest --help'
 
     assert_match <<~EXPECTED, @output.read
       Usage: retest  [OPTIONS] [COMMAND]
@@ -10,7 +14,7 @@ class TestHelpFlag < Minitest::Test
   end
 
   def test_help_short_flag
-    @output, @pid = launch_retest 'retest -h'
+    launch_retest 'retest -h'
 
     assert_match <<~EXPECTED, @output.read
       Usage: retest  [OPTIONS] [COMMAND]
