@@ -65,6 +65,9 @@ $stdout.puts "Ready to refactor! You can make file changes now"
 # not blocking
 
 loop do
+  puts "\nType interactive command and press enter"
+  print(">\s")
+
   input = $stdin.gets.chomp
   if prompt.question_asked?
     prompt_wr.puts input
@@ -72,7 +75,15 @@ loop do
   end
 
   case input
-  when /^pause/ then puts "it's been paused"
-  when /^start/ then puts "it's been restarted"
+  when 'p', 'pause'
+    program.pause
+    puts "Program is paused\n"
+  when 'r', 'resume'
+    program.resume
+    puts "Program has been resumed\n"
+  when 'exit'
+    Process.kill("INT", 0)
+  else
+    puts "Not interactive command: #{input}\n"
   end
 end
