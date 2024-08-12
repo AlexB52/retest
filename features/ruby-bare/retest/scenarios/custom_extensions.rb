@@ -23,6 +23,7 @@ class CustomExtensionTest < Minitest::Test
     modify_file 'foo.txt'
     assert_match "I captured a change", @output.read
 
+  ensure
     delete_file 'foo.rb'
     delete_file 'foo_test.rb'
     delete_file 'foo.txt'

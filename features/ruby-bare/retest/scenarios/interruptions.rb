@@ -12,7 +12,7 @@ class GracefulExitWhenInterrupting < Minitest::Test
     EXPECTED
 
     Process.kill("INT", @pid)
-    sleep 1
+    wait
 
     assert_match <<~EXPECTED, @output.read
       Goodbye

@@ -122,7 +122,7 @@ class DiffOptionTest < Minitest::Test
     `git commit -m "Scaffold books"`
 
     launch_retest 'retest --diff=main'
-    sleep 10
+    wait
 
     assert_match <<~EXPECTED, @output.read
       Setup identified: [RAILS]. Using command: 'bin/rails test <test>'

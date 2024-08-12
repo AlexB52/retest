@@ -41,6 +41,7 @@ class ForcePollingTest < Minitest::Test
 
     assert_match "Test File Selected: foo_test.rb", @output.read
 
+  ensure
     delete_file 'foo_test.rb'
   end
 
@@ -62,6 +63,7 @@ class ForcePollingTest < Minitest::Test
     modify_file('foo.rb')
     assert_match "Test File Selected: foo_test.rb", @output.read
 
+  ensure
     delete_file 'foo.rb'
     delete_file 'foo_test.rb'
   end
@@ -75,6 +77,7 @@ class ForcePollingTest < Minitest::Test
     modify_file 'foo.rb'
     assert_match "Test File Selected: foo_test.rb", @output.read
 
+  ensure
     delete_file 'foo.rb'
     delete_file 'foo_test.rb'
   end
