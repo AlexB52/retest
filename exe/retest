@@ -55,7 +55,9 @@ end
 $stdout.puts launching_message
 Retest.listen(options) do |modified, added, removed|
   begin
-    program.run(modified, added, removed)
+    program.run(modified, added, removed) do
+      print_interactive_message
+    end
   rescue => e
     $stdout.puts "Something went wrong: #{e.message}"
   end
@@ -64,9 +66,13 @@ $stdout.puts "Ready to refactor! You can make file changes now"
 
 # not blocking
 
-loop do
+def print_interactive_message
   puts "\nType interactive command and press enter"
   print(">\s")
+end
+
+loop do
+  print_interactive_message
 
   input = $stdin.gets.chomp
   if prompt.question_asked?
@@ -78,12 +84,35 @@ loop do
   when 'p', 'pause'
     program.pause
     puts "Program is paused\n"
-  when 'r', 'resume'
+  when 'u', 'unpause'
     program.resume
     puts "Program has been resumed\n"
-  when 'exit'
+  when 'e', 'exit'
     Process.kill("INT", 0)
+  when ''
+    puts "Running last command\n"
+    runner.run(nil, repository: repository)
+  when 'ra', 'run all'
+    puts "Running all tests\n"
+    tmp_opts = options.dup.tap { |opts| opts.params[:all] = true }
+    tmp_cmd = Retest::Command.for_options(tmp_opts)
+    tmp_runner = Retest::Runners.runner_for(tmp_cmd.to_s)
+    tmp_runner.add_observer(sounds)
+    tmp_runner.run
+    tmp_runner.delete_observers
+  when /^di?f?f?\s(.*)$/
+    program.diff($1)
+  when 'h', 'help'
+    puts <<~HELP
+
+      * 'h' or 'help'    -> Prints help
+      * 'p' or 'pause'   -> Pauses Retest. Tests aren't run until unpaused.
+      * 'u' or 'unpause' -> Unpauses Retest
+      * <Enter>          -> Runs last changed triggered command
+      * 'ra', 'run all'  -> Runs all tests
+      * 'e' or 'exit'    -> Exits Retest
+    HELP
   else
-    puts "Not interactive command: #{input}\n"
+    puts "Unknown interactive command #{input}\n"
   end
 end

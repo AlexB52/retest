@@ -21,6 +21,7 @@ module Retest
 
       clear_terminal
       runner.run (modified + added).first, repository: repository
+      yield if block_given?
     end
 
     def diff(branch)
