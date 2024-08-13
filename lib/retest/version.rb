@@ -1,3 +1,3 @@
 module Retest
-  VERSION = "1.13.2"
+  VERSION = "2.0.0.pre"
 end
