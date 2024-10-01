@@ -105,12 +105,13 @@ loop do
   when 'h', 'help'
     puts <<~HELP
 
-      * 'h' or 'help'    -> Prints help
-      * 'p' or 'pause'   -> Pauses Retest. Tests aren't run until unpaused.
-      * 'u' or 'unpause' -> Unpauses Retest
-      * <Enter>          -> Runs last changed triggered command
-      * 'ra', 'run all'  -> Runs all tests
-      * 'e' or 'exit'    -> Exits Retest
+      * 'h', 'help'              # Prints help
+      * 'p', 'pause'             # Pauses Retest. Tests aren't run until unpaused.
+      * 'u', 'unpause'           # Unpauses Retest
+      * <ENTER>                  # Runs last changed triggered command
+      * 'ra, 'run all'           # Runs all tests
+      * 'd', 'diff' [GIT BRANCH] # Run matching specs that changed from a target branch
+      * 'e', 'exit'              # Exits Retest
     HELP
   else
     puts "Unknown interactive command #{input}\n"
