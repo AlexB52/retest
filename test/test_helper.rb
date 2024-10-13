@@ -2,6 +2,7 @@ $LOAD_PATH.unshift File.expand_path("../lib", __dir__)
 
 require "retest"
 require "byebug"
+require "debug"
 require "minitest/autorun"
 
 WAITING_TIME = 0.0001

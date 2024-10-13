@@ -7,7 +7,7 @@ module Retest
   module Runners
     module_function
 
-    def runner_for(command)
+    def runner_for(command, **opts)
       for_test   = command.include?('<test>')
       for_change = command.include?('<changed>')
 
@@ -15,7 +15,7 @@ module Retest
       elsif for_test            then TestRunner
       elsif for_change          then ChangeRunner
       else                           Runner
-      end.new command
+      end.new command, **opts
     end
   end
 end
