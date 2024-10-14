@@ -28,7 +28,7 @@ module Retest
           Enter the file number now:
         QUESTION
         output.print("> ")
-        options.values[input.gets.chomp.to_i]
+        options.values[input.gets.to_s.chomp.to_i]
       end
     end
 
