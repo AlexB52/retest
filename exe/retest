@@ -74,7 +74,7 @@ end
 loop do
   print_interactive_message
 
-  input = $stdin.gets.chomp
+  input = $stdin.gets.to_s.chomp
   if prompt.question_asked?
     prompt_wr.puts input
     next
