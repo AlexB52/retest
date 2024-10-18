@@ -3,7 +3,7 @@ require_relative 'command_interface'
 
 module Retest
   class Command
-    class RspecTest < MiniTest::Test
+    class RspecTest < Minitest::Test
       def setup
         @subject = Rspec.new(all: true, file_system: FakeFS.new([]))
       end

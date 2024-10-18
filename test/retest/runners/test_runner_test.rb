@@ -4,7 +4,7 @@ require_relative 'observable_runner'
 
 module Retest
   module Runners
-    class TestRunnerInterfaceTests < MiniTest::Test
+    class TestRunnerInterfaceTests < Minitest::Test
       def setup
         @repository = Repository.new(files: ['file_path_test.rb'])
         @subject    = TestRunner.new("echo 'touch <test>'")
@@ -23,7 +23,7 @@ module Retest
       end
     end
 
-    class TestRunnerTest < MiniTest::Test
+    class TestRunnerTest < Minitest::Test
       def setup
         @repository = Repository.new(files: ['file_path_test.rb'])
         @subject    = TestRunner.new("echo 'touch <test>'", stdout: StringIO.new)

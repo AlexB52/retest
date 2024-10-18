@@ -4,7 +4,7 @@ require_relative 'observable_runner'
 
 module Retest
   module Runners
-    class ChangeRunnerInterfaceTests < MiniTest::Test
+    class ChangeRunnerInterfaceTests < Minitest::Test
       def setup
         @subject = ChangeRunner.new("echo 'touch <changed>'")
       end
@@ -19,7 +19,7 @@ module Retest
       end
     end
 
-    class ChangeRunnerTest < MiniTest::Test
+    class ChangeRunnerTest < Minitest::Test
       def setup
         @subject = ChangeRunner.new("echo 'touch <changed>'", stdout: StringIO.new)
       end
