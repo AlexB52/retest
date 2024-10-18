@@ -33,12 +33,10 @@ module Retest
       private
 
       def system_run(command)
-        puts "running is true"
         @running = true
-        result = system(command, in: @command_stdin, out: @stdout) ? :tests_pass : :tests_fail
+        result = system(command, in: @command_stdin) ? :tests_pass : :tests_fail
         changed
         notify_observers(result)
-        puts "running is false"
         @running = false
       end
 

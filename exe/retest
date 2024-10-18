@@ -31,6 +31,11 @@ command    = Retest::Command.for_options(options)
 runner     = Retest::Runners.runner_for(command.to_s, command_stdin: runner_rd)
 sounds     = Retest::Sounds.for(options)
 
+# All test runner
+all_test_runner = Retest::Runners.runner_for(
+  Retest::Command.for_options(options.dup.tap { |opts| opts.params[:all] = true }).to_s)
+all_test_runner.add_observer(sounds)
+
 sounds.play(:start)
 runner.add_observer(sounds)
 prompt.add_observer(sounds)
@@ -85,8 +90,13 @@ loop do
     next
   end
 
-  if prompt.question_asked?
-    prompt_wr.puts input
+  if all_test_runner.running?
+    $stdin.puts input
+    next
+  end
+
+  if runner.running?
+    runner_wr.puts input
     next
   end
 
@@ -110,12 +120,7 @@ loop do
     end
   when 'ra', 'run all'
     puts "Running all tests\n"
-    tmp_opts = options.dup.tap { |opts| opts.params[:all] = true }
-    tmp_cmd = Retest::Command.for_options(tmp_opts)
-    tmp_runner = Retest::Runners.runner_for(tmp_cmd.to_s, command_stdin: runner_rd)
-    tmp_runner.add_observer(sounds)
-    tmp_runner.run
-    tmp_runner.delete_observers
+    all_test_runner.run
   when /^di?f?f?\s(.*)$/
     program.diff($1)
   when 'h', 'help'
