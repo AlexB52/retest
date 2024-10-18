@@ -4,7 +4,7 @@ require_relative 'observable_runner'
 
 module Retest
   module Runners
-    class RunnerInterfaceTests < MiniTest::Test
+    class RunnerInterfaceTests < Minitest::Test
       def setup
         @subject = Runner.new("echo 'hello world'")
       end
@@ -19,7 +19,7 @@ module Retest
       end
     end
 
-    class RunnerTest < MiniTest::Test
+    class RunnerTest < Minitest::Test
       def setup
         @subject = Runner.new("echo 'hello world'")
       end

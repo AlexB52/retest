@@ -1,7 +1,7 @@
 require 'test_helper'
 
 module Retest
-  class TestRootLevelFiles < MiniTest::Test
+  class TestRootLevelFiles < Minitest::Test
     def test_root_file_level
       files = %w(foo_spec.rb)
 
@@ -17,7 +17,7 @@ module Retest
     end
   end
 
-  class TestPrefixPatternTest < MiniTest::Test
+  class TestPrefixPatternTest < Minitest::Test
     def test_find_test
       files = %w(
         test/songs/99bottles.txt
@@ -66,7 +66,7 @@ module Retest
     end
   end
 
-  class TestSuffixPatternTest < MiniTest::Test
+  class TestSuffixPatternTest < Minitest::Test
     def test_find_test
       files = %w(
         test/songs/99bottles.txt
@@ -121,7 +121,7 @@ module Retest
     end
   end
 
-  class MultiplePatternTest < MiniTest::Test
+  class MultiplePatternTest < Minitest::Test
     def test_no_default_pattern_match
       files = %w(
         lib/active_record/fixtures.rb

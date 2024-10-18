@@ -6,6 +6,6 @@ require 'capybara/dsl'
 
 Capybara.app = Hanami.app
 
-class MiniTest::Spec
+class Minitest::Spec
   include Capybara::DSL
 end

@@ -2,7 +2,7 @@ require 'test_helper'
 
 module Retest
   class MatchingOptions
-    class PathTest < MiniTest::Test
+    class PathTest < Minitest::Test
       def setup
         @subject = Path.new('test/models/taxation/test_holdings.rb')
       end
