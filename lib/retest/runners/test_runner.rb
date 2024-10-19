@@ -14,6 +14,11 @@ module Retest
         system_run command.gsub('<test>', cached_test_file)
       end
 
+      def run_all_tests(tests_string)
+        log("Test File Selected: #{tests_string}")
+        system_run command.gsub('<test>', tests_string)
+      end
+
       def sync(added:, removed:)
         purge_test_file(removed)
       end
