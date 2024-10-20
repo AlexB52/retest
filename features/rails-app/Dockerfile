@@ -1,4 +1,5 @@
-FROM ruby:2.5.9-alpine3.13
+
+FROM ruby:2.7.8-alpine3.16
 
 ARG BUILD_PACKAGES="build-base git nodejs tzdata sqlite-dev"
 

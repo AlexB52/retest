@@ -3,7 +3,7 @@ require_relative './sounds_interface'
 
 module Retest
   module Sounds
-    class MuteTests < MiniTest::Test
+    class MuteTests < Minitest::Test
       include SoundsInterfaceTests
 
       def setup

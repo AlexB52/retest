@@ -7,7 +7,7 @@ module FileSystemShared
 end
 
 module Retest
-  class FileSystemTest < MiniTest::Test
+  class FileSystemTest < Minitest::Test
     include FileSystemShared
 
     def setup
@@ -19,7 +19,7 @@ module Retest
     end
   end
 
-  class FakeFSTest < MiniTest::Test
+  class FakeFSTest < Minitest::Test
     include FileSystemShared
 
     def setup

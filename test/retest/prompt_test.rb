@@ -1,7 +1,7 @@
 require 'test_helper'
 
 module Retest
-  class PromptTest < MiniTest::Test
+  class PromptTest < Minitest::Test
     MethodCall = Struct.new(:name, :args, keyword_init: true)
     class FakeObserver
       attr_reader :notepad

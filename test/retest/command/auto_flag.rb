@@ -1,5 +1,5 @@
 module Retest
-  class AutoFlagTest < MiniTest::Test
+  class AutoFlagTest < Minitest::Test
     SetupFake = Struct.new(:type)
 
     def setup
@@ -59,7 +59,7 @@ module Retest
     end
   end
 
-  class AutoAllFlagTest < MiniTest::Test
+  class AutoAllFlagTest < Minitest::Test
     SetupFake = Struct.new(:type)
 
     def setup
