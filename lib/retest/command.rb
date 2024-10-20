@@ -7,12 +7,8 @@ module Retest
   class Command
     extend Forwardable
 
-    def self.for_options(options)
-      new(options: options).command
-    end
-
-    def self.for_setup(setup)
-      new(setup: setup).command
+    def self.for_options(options, stdout: $stdout)
+      new(options: options, stdout: stdout).command
     end
 
     def_delegator :setup, :type
@@ -51,11 +47,15 @@ module Retest
     end
 
     def default_command
-      @stdout.puts "Setup identified: [#{type.upcase}]. Using command: '#{setup_command}'"
+      log "Setup identified: [#{type.upcase}]. Using command: '#{setup_command}'"
       setup_command
     end
 
     private
+
+    def log(message)
+      @stdout&.puts(message)
+    end
 
     def rspec_command
       Rspec.new(all: full_suite?)

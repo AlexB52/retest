@@ -4,6 +4,7 @@ require 'retest'
 
 $stdout.sync = true
 prompt_rd, prompt_wr = IO.pipe
+runner_rd, runner_wr = IO.pipe
 
 Signal.trap(:INT) do
   $stdout.puts "Goodbye"
@@ -27,8 +28,13 @@ end
 prompt     = Retest::Prompt.new(input: prompt_rd)
 repository = Retest::Repository.new(files: Retest::VersionControl.files, prompt: prompt)
 command    = Retest::Command.for_options(options)
-runner     = Retest::Runners.runner_for(command.to_s)
+runner     = Retest::Runners.runner_for(command.to_s, command_stdin: runner_rd)
 sounds     = Retest::Sounds.for(options)
+
+# All test runner
+all_test_command = Retest::Command.for_options(options.merge(%w[--all]), stdout: nil)
+all_test_runner = Retest::Runners.runner_for(all_test_command.to_s)
+all_test_runner.add_observer(sounds)
 
 sounds.play(:start)
 runner.add_observer(sounds)
@@ -41,6 +47,8 @@ program = Retest::Program.new(
 )
 
 if options.params[:diff]
+  prompt.input = $stdin
+  runner.command_stdin = $stdin
   program.diff(options.params[:diff])
   return
 end
@@ -74,9 +82,23 @@ end
 loop do
   print_interactive_message
 
+  puts "waiting for input"
   input = $stdin.gets.to_s.chomp
+
+  puts "input is: #{input.inspect}"
+
   if prompt.question_asked?
     prompt_wr.puts input
+    next
+  end
+
+  if all_test_runner.running?
+    $stdin.puts input
+    next
+  end
+
+  if runner.running?
+    runner_wr.puts input
     next
   end
 
@@ -90,16 +112,17 @@ loop do
   when 'e', 'exit'
     Process.kill("INT", 0)
   when ''
-    puts "Running last command\n"
-    runner.run(nil, repository: repository)
+    begin
+      puts "Running last command\n"
+      old_stdin = runner.command_stdin
+      runner.command_stdin = $stdin
+      runner.run(nil, repository: repository)
+    ensure
+      runner.command_stdin = old_stdin
+    end
   when 'ra', 'run all'
     puts "Running all tests\n"
-    tmp_opts = options.dup.tap { |opts| opts.params[:all] = true }
-    tmp_cmd = Retest::Command.for_options(tmp_opts)
-    tmp_runner = Retest::Runners.runner_for(tmp_cmd.to_s)
-    tmp_runner.add_observer(sounds)
-    tmp_runner.run
-    tmp_runner.delete_observers
+    all_test_runner.run
   when /^di?f?f?\s(.*)$/
     program.diff($1)
   when 'h', 'help'

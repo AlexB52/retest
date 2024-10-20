@@ -48,5 +48,14 @@ module Retest
       @subject.args = ["--notify"]
       assert @subject.notify?
     end
+
+    def test_all_version_copy
+      @subject.args = %w[--notify --rake]
+
+      copy = @subject.merge(%w[--all])
+
+      assert_equal %w[--notify --rake --all], copy.args
+      refute_equal copy.object_id, @subject.object_id
+    end
   end
 end

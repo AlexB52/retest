@@ -158,5 +158,9 @@ module Retest
     def extension
       Regexp.new(params[:ext])
     end
+
+    def merge(options = [])
+      self.class.new(@args.dup.concat(options))
+    end
   end
 end

@@ -143,7 +143,7 @@ module Retest
 
         Which file do you want to use?
         Enter the file number now:
-        > 
+        >\s
       EXPECTED
     end
 

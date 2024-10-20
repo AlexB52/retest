@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    retest (2.0.0.pre)
+    retest (2.0.0.pre1)
       listen (~> 3.9)
       observer (~> 0.1)
       string-similarity (~> 2.1)
@@ -11,7 +11,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     byebug (11.1.3)
-    ffi (1.17.0)
+    ffi (1.16.3)
     listen (3.9.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
