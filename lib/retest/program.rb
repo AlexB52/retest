@@ -35,6 +35,23 @@ module Retest
       runner.run_all_tests command.format_batch(*test_files)
     end
 
+    def run_synchronously(runner: @runner, prompt: @repository.prompt)
+      raise ArgumentError, 'need a block' unless block_given?
+
+      begin
+        pause
+        old_command_stdin = runner.command_stdin
+        old_prompt_stdin = prompt.input
+        prompt.input = $stdin
+        runner.command_stdin = $stdin
+        yield
+      ensure
+        resume
+        runner.command_stdin = old_command_stdin
+        prompt.input = old_prompt_stdin
+      end
+    end
+
     private
 
     def clear_terminal
