@@ -47,9 +47,7 @@ program = Retest::Program.new(
 )
 
 if options.params[:diff]
-  prompt.input = $stdin
-  runner.command_stdin = $stdin
-  program.diff(options.params[:diff])
+  program.run_synchronously { program.diff(options.params[:diff]) }
   return
 end
 
@@ -112,19 +110,13 @@ loop do
   when 'e', 'exit'
     Process.kill("INT", 0)
   when ''
-    begin
-      puts "Running last command\n"
-      old_stdin = runner.command_stdin
-      runner.command_stdin = $stdin
-      runner.run(nil, repository: repository)
-    ensure
-      runner.command_stdin = old_stdin
-    end
+    puts "Running last command\n"
+    program.run_synchronously { runner.run(nil, repository: repository) }
   when 'ra', 'run all'
     puts "Running all tests\n"
     all_test_runner.run
   when /^di?f?f?\s(.*)$/
-    program.diff($1)
+    program.run_synchronously { program.diff($1) }
   when 'h', 'help'
     puts <<~HELP
 
