@@ -85,6 +85,10 @@ module Retest
         @subject.sync(added: 'a.rb', removed:'file_path_test.rb')
         assert_nil @subject.cached_test_file
       end
+
+      def test_run_all_tests
+        assert_raises(NotSupportedError) { @subject.run_all_tests('file_path.rb file_path_two.rb') }
+      end
     end
   end
 end

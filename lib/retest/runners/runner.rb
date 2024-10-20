@@ -18,8 +18,7 @@ module Retest
       end
 
       def run_all_tests(tests_string)
-        log("Test File Selected: #{tests_string}")
-        system_run command.gsub('<test>', tests_string)
+        raise NotSupportedError, 'cannot run multiple test files against this command'
       end
 
       def sync(added:, removed:)

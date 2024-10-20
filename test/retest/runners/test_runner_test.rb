@@ -74,6 +74,18 @@ module Retest
         @subject.sync(added: 'a.rb', removed:'file_path_test.rb')
         assert_nil @subject.cached_test_file
       end
+
+      def test_run_all_tests
+        out, _ = capture_subprocess_io { @subject.run_all_tests('file_path.rb file_path_two.rb') }
+
+        assert_equal(<<~EXPECATIONS, @subject.stdout.string)
+          Test File Selected: file_path.rb file_path_two.rb
+        EXPECATIONS
+
+        assert_equal(<<~EXPECATIONS, out)
+          touch file_path.rb file_path_two.rb
+        EXPECATIONS
+      end
     end
   end
 end

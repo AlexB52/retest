@@ -42,6 +42,10 @@ module Retest
 
         assert_match "touch file_path.rb", out
       end
+
+      def test_run_all_tests
+        assert_raises(NotSupportedError) { @subject.run_all_tests('file_path.rb file_path_two.rb') }
+      end
     end
   end
 end

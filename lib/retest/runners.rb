@@ -5,6 +5,8 @@ require_relative 'runners/variable_runner'
 
 module Retest
   module Runners
+    class NotSupportedError < StandardError; end
+
     module_function
 
     def runner_for(command)

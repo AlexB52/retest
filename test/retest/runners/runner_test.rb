@@ -35,17 +35,7 @@ module Retest
       end
 
       def test_run_all_tests
-        runner = Runner.new("echo '<test>'", stdout: StringIO.new)
-
-        out, _ = capture_subprocess_io { runner.run_all_tests('file_path.rb file_path_two.rb') }
-
-        assert_equal(<<~EXPECATIONS, runner.stdout.string)
-        Test File Selected: file_path.rb file_path_two.rb
-        EXPECATIONS
-
-        assert_equal(<<~EXPECATIONS, out)
-        file_path.rb file_path_two.rb
-        EXPECATIONS
+        assert_raises(NotSupportedError) { @subject.run_all_tests('file_path.rb file_path_two.rb') }
       end
     end
   end
