@@ -4,34 +4,34 @@ module Retest
   class Program
     include Pausable
 
-    attr_accessor :runner, :repository, :command
-    def initialize(runner: nil, repository: nil, command: nil, clear_window: true)
+    attr_accessor :runner, :repository, :command, :stdout
+    def initialize(runner: nil, repository: nil, command: nil, clear_window: true, stdout: $stdout)
       @runner = runner
       @repository = repository
       @command = command
       @clear_window = clear_window
+      @stdout = stdout
       initialize_pause(false)
     end
 
-    def run(modified, added, removed)
-      repository.sync(added: added, removed: removed)
-      runner.sync(added: added, removed: removed)
-
-      return if paused?
+    def run(file, force_run: false)
+      if paused? && !force_run
+        @stdout.puts "Main program paused. Please resume program first."
+        return
+      end
 
       clear_terminal
-      runner.run (modified + added).first, repository: repository
-      yield if block_given?
+      runner.run file, repository: repository
     end
 
     def diff(branch)
       raise "Git not installed" unless VersionControl::Git.installed?
       test_files = repository.find_tests VersionControl::Git.diff_files(branch)
 
-      puts "Tests found:"
-      test_files.each { |test_file| puts "  - #{test_file}" }
+      @stdout.puts "Tests found:"
+      test_files.each { |test_file| @stdout.puts "  - #{test_file}" }
 
-      puts "Running tests..."
+      @stdout.puts "Running tests..."
       runner.run_all_tests command.format_batch(*test_files)
     end
 

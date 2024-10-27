@@ -69,11 +69,11 @@ Retest.listen(options) do |modified, added, removed|
 end
 $stdout.puts "Ready to refactor! You can make file changes now"
 
-def run_command(input:, program:, runner:, all_test_runner:, repository:)
+def run_command(input:, program:, all_test_runner:)
   case input
   when /^file changed:\s(.*)$/
-    program.clear_terminal
-    runner.run $1, repository: repository
+    puts "File changed: #{$1}"
+    program.run($1)
   when 'p', 'pause'
     program.pause
     puts "Program is paused\n"
@@ -84,7 +84,7 @@ def run_command(input:, program:, runner:, all_test_runner:, repository:)
     Process.kill("INT", 0)
   when ''
     puts "Running last command\n"
-    runner.run(nil, repository: repository)
+    program.run(nil, force_run: true)
   when 'ra', 'run all'
     puts "Running all tests\n"
     all_test_runner.run
@@ -112,19 +112,9 @@ loop do
   print(">\s")
 
   ready = IO.select(connections)
-
-  # Read data only from the available connections.
   readable_connections = ready[0]
   readable_connections.each do |conn|
     data = conn.readpartial(4096)
-    data = data.to_s.chomp
-    puts data
-    run_command(
-      input: data,
-      program: program,
-      runner: runner,
-      all_test_runner: all_test_runner,
-      repository: repository
-    )
+    run_command(input: data.to_s.chomp, program: program, all_test_runner: all_test_runner)
   end
 end
