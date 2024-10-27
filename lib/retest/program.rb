@@ -52,8 +52,6 @@ module Retest
       end
     end
 
-    private
-
     def clear_terminal
       return unless @clear_window
 
