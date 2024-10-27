@@ -45,7 +45,7 @@ program = Retest::Program.new(
 )
 
 if options.params[:diff]
-  program.run_synchronously { program.diff(options.params[:diff]) }
+  program.diff(options.params[:diff])
   return
 end
 
@@ -84,12 +84,12 @@ def run_command(input:, program:, runner:, all_test_runner:, repository:)
     Process.kill("INT", 0)
   when ''
     puts "Running last command\n"
-    program.run_synchronously { runner.run(nil, repository: repository) }
+    runner.run(nil, repository: repository)
   when 'ra', 'run all'
     puts "Running all tests\n"
     all_test_runner.run
   when /^di?f?f?\s(.*)$/
-    program.run_synchronously { program.diff($1) }
+    program.diff($1)
   when 'h', 'help'
     puts <<~HELP
 
