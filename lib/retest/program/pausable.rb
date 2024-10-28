@@ -14,4 +14,8 @@ module Pausable
   def resume
     @paused = false
   end
+
+  def running_state
+    @paused
+  end
 end

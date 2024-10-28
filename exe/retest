@@ -3,13 +3,11 @@
 require 'retest'
 
 $stdout.sync = true
-prompt_rd, prompt_wr = IO.pipe
-runner_rd, runner_wr = IO.pipe
-
+listen_rd, listen_wr = IO.pipe
 Signal.trap(:INT) do
   $stdout.puts "Goodbye"
-  prompt_rd.close
-  prompt_wr.close
+  listen_rd.close
+  listen_wr.close
   exit
 end
 
@@ -25,10 +23,10 @@ if options.version?
   return
 end
 
-prompt     = Retest::Prompt.new(input: prompt_rd)
+prompt     = Retest::Prompt.new
 repository = Retest::Repository.new(files: Retest::VersionControl.files, prompt: prompt)
 command    = Retest::Command.for_options(options)
-runner     = Retest::Runners.runner_for(command.to_s, command_stdin: runner_rd)
+runner     = Retest::Runners.runner_for(command.to_s)
 sounds     = Retest::Sounds.for(options)
 
 # All test runner
@@ -47,7 +45,7 @@ program = Retest::Program.new(
 )
 
 if options.params[:diff]
-  program.run_synchronously { program.diff(options.params[:diff]) }
+  program.diff(options.params[:diff])
   return
 end
 
@@ -61,46 +59,21 @@ end
 $stdout.puts launching_message
 Retest.listen(options) do |modified, added, removed|
   begin
-    program.run(modified, added, removed) do
-      print_interactive_message
-    end
+    repository.sync(added: added, removed: removed)
+    runner.sync(added: added, removed: removed)
+
+    listen_wr.puts "file changed: #{(modified + added).first}"
   rescue => e
     $stdout.puts "Something went wrong: #{e.message}"
   end
 end
 $stdout.puts "Ready to refactor! You can make file changes now"
 
-# not blocking
-
-def print_interactive_message
-  puts "\nType interactive command and press enter"
-  print(">\s")
-end
-
-loop do
-  print_interactive_message
-
-  puts "waiting for input"
-  input = $stdin.gets.to_s.chomp
-
-  puts "input is: #{input.inspect}"
-
-  if prompt.question_asked?
-    prompt_wr.puts input
-    next
-  end
-
-  if all_test_runner.running?
-    $stdin.puts input
-    next
-  end
-
-  if runner.running?
-    runner_wr.puts input
-    next
-  end
-
+def run_command(input:, program:, all_test_runner:)
   case input
+  when /^file changed:\s(.*)$/
+    puts "File changed: #{$1}"
+    program.run($1)
   when 'p', 'pause'
     program.pause
     puts "Program is paused\n"
@@ -111,12 +84,12 @@ loop do
     Process.kill("INT", 0)
   when ''
     puts "Running last command\n"
-    program.run_synchronously { runner.run(nil, repository: repository) }
+    program.run(nil, force_run: true)
   when 'ra', 'run all'
     puts "Running all tests\n"
     all_test_runner.run
   when /^di?f?f?\s(.*)$/
-    program.run_synchronously { program.diff($1) }
+    program.diff($1)
   when 'h', 'help'
     puts <<~HELP
 
@@ -130,5 +103,18 @@ loop do
     HELP
   else
     puts "Unknown interactive command #{input}\n"
+  end
+end
+
+connections = [$stdin, listen_rd]
+loop do
+  puts "\nType interactive command and press enter"
+  print(">\s")
+
+  ready = IO.select(connections)
+  readable_connections = ready[0]
+  readable_connections.each do |conn|
+    data = conn.readpartial(4096)
+    run_command(input: data.to_s.chomp, program: program, all_test_runner: all_test_runner)
   end
 end

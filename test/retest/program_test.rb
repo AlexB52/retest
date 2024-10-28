@@ -5,7 +5,7 @@ module Retest
   class ProgramTest < MiniTest::Test
     class PauseTest < Minitest::Test
       def setup
-        @subject = Program.new(repository: Repository.new, clear_window: false)
+        @subject = Program.new(repository: Repository.new, clear_window: false, stdout: StringIO.new)
       end
 
       def test_paused?
@@ -21,7 +21,7 @@ module Retest
       def test_no_run_when_paused
         @subject.runner = RaisingRunner.new
         @subject.pause
-        @subject.run(['modified'], ['added'], ['removed'])
+        @subject.run('file_path')
       end
     end
   end
