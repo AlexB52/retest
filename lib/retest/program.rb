@@ -35,6 +35,11 @@ module Retest
       runner.run_all_tests command.format_batch(*test_files)
     end
 
+    def run_selected(test_files)
+      @stdout.puts "Running tests..."
+      runner.run_all_tests command.format_batch(*test_files)
+    end
+
     def clear_terminal
       return unless @clear_window
 

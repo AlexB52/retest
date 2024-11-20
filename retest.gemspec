@@ -28,5 +28,6 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "string-similarity", ["~> 2.1"]
   spec.add_runtime_dependency "listen", ["~> 3.9"]
   spec.add_runtime_dependency "tty-option", ["~> 0.1"]
+  spec.add_runtime_dependency "tty-prompt", ["~> 0.1"]
   spec.add_runtime_dependency "observer", ["~> 0.1"]
 end
