@@ -82,6 +82,14 @@ def run_command(input:, program:, all_test_runner:)
     puts "Program has been resumed\n"
   when 'e', 'exit'
     Process.kill("INT", 0)
+  when 'f', 'force'
+    require 'tty-prompt'
+    prompt = TTY::Prompt.new
+    program.run_selected prompt.multi_select(
+      "What test files do you want to run when saving a file?",
+      program.repository.test_files,
+      filter: true, min: 1
+    )
   when ''
     puts "Running last command\n"
     program.run(nil, force_run: true)

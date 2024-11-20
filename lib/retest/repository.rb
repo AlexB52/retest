@@ -31,6 +31,10 @@ module Retest
         .sort
     end
 
+    def test_files
+      files.select { |file| MatchingOptions::Path.new(file).test? }
+    end
+
     def sync(added:, removed:)
       add(added)
       remove(removed)

@@ -193,5 +193,58 @@ module Retest
         assert_equal expected, @subject.find_test(file_changed)
       end
     end
+
+    class TestTestFiles < Minitest::Test
+      def setup
+        @subject = Repository.new
+      end
+
+      def test_returns_test_files_only
+        @subject.files = %w(
+          exe/retest
+          lib/retest.rb
+          lib/bottles.rb
+          lib/glasses.rb
+          lib/pints.rb
+          test/bottles_test.rb
+          test/glasses_test.rb
+          test/plates_test.rb
+          test/test_bottles_test.rb
+          test/test_glasses_test.rb
+          test/test_plates_test.rb
+          spec/bottles_spec.rb
+          spec/glasses_spec.rb
+          spec/plates_spec.rb
+          bottles_spec.rb
+          glasses_spec.rb
+          plates_spec.rb
+          bottles_test.rb
+          glasses_test.rb
+          plates_test.rb
+          program.rb
+          README.md
+          Gemfile
+          Gemfile.lock
+        )
+
+        assert_equal %w[
+          test/bottles_test.rb
+          test/glasses_test.rb
+          test/plates_test.rb
+          test/test_bottles_test.rb
+          test/test_glasses_test.rb
+          test/test_plates_test.rb
+          spec/bottles_spec.rb
+          spec/glasses_spec.rb
+          spec/plates_spec.rb
+          bottles_spec.rb
+          glasses_spec.rb
+          plates_spec.rb
+          bottles_test.rb
+          glasses_test.rb
+          plates_test.rb
+        ], @subject.test_files
+      end
+    end
   end
 end
