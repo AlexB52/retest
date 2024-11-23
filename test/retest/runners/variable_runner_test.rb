@@ -6,8 +6,9 @@ module Retest
   module Runners
     class VariableRunnerInterfaceTests < MiniTest::Test
       def setup
+        @command = Command::Hardcoded.new(command: "echo 'touch <changed> & <test>'")
         @repository = Repository.new files: ['file_path_test.rb']
-        @subject    = VariableRunner.new("echo 'touch <changed> & <test>'")
+        @subject    = VariableRunner.new(@command)
       end
 
       include RunnerInterfaceTest
@@ -17,7 +18,7 @@ module Retest
 
       def observable_act(subject)
         subject.run(
-          'file_path.rb',
+          changed_files: ['file_path.rb'],
           repository: Repository.new(files: ['file_path_test.rb'])
         )
       end
@@ -25,8 +26,9 @@ module Retest
 
     class VariableRunnerTest < MiniTest::Test
       def setup
+        @command = Command::Hardcoded.new(command: "echo 'touch <changed> & <test>'")
         @repository = Repository.new files: ['file_path_test.rb']
-        @subject    = VariableRunner.new("echo 'touch <changed> & <test>'", stdout: StringIO.new)
+        @subject    = VariableRunner.new(@command, stdout: StringIO.new)
       end
 
       def output
@@ -34,7 +36,7 @@ module Retest
       end
 
       def test_files_selected_ouptut
-        _, _ = capture_subprocess_io { @subject.run('file_path.rb', repository: @repository) }
+        _, _ = capture_subprocess_io { @subject.run(changed_files: ['file_path.rb'], repository: @repository) }
 
         assert_equal(<<~EXPECTED, output)
           Files Selected:
@@ -45,7 +47,7 @@ module Retest
       end
 
       def test_run_with_no_match
-        _, _ = capture_subprocess_io { @subject.run('another_file_path.rb', repository: @repository) }
+        _, _ = capture_subprocess_io { @subject.run(changed_files: ['another_file_path.rb'], repository: @repository) }
 
         assert_equal(<<~EXPECTED, output)
           404 - Test File Not Found
@@ -54,17 +56,17 @@ module Retest
       end
 
       def test_run_with_a_file_found
-        out, _ = capture_subprocess_io { @subject.run('file_path.rb', repository: @repository) }
+        out, _ = capture_subprocess_io { @subject.run(changed_files: ['file_path.rb'], repository: @repository) }
 
         assert_match "touch file_path.rb & file_path_test.rb", out
       end
 
       def test_returns_last_command
-        out, _ = capture_subprocess_io { @subject.run('file_path.rb', repository: @repository) }
+        out, _ = capture_subprocess_io { @subject.run(changed_files: ['file_path.rb'], repository: @repository) }
 
         assert_match "touch file_path.rb & file_path_test.rb", out
 
-        out, _ = capture_subprocess_io { @subject.run('another_file_path.rb', repository: @repository) }
+        out, _ = capture_subprocess_io { @subject.run(changed_files: ['another_file_path.rb'], repository: @repository) }
 
         assert_match "touch another_file_path.rb & file_path_test.rb", out
       end

@@ -6,8 +6,9 @@ module Retest
   module Runners
     class TestRunnerInterfaceTests < MiniTest::Test
       def setup
+        @command = Command::Hardcoded.new(command: "echo 'touch <test>'")
         @repository = Repository.new(files: ['file_path_test.rb'])
-        @subject    = TestRunner.new("echo 'touch <test>'")
+        @subject    = TestRunner.new(@command)
       end
 
       include RunnerInterfaceTest
@@ -17,7 +18,7 @@ module Retest
 
       def observable_act(subject)
         subject.run(
-          'file_path.rb',
+          changed_files: ['file_path.rb'],
           repository: Repository.new(files: ['file_path_test.rb'])
         )
       end
@@ -25,8 +26,9 @@ module Retest
 
     class TestRunnerTest < MiniTest::Test
       def setup
+        @command = Command::Hardcoded.new(command: "echo 'touch <test>'")
         @repository = Repository.new(files: ['file_path_test.rb'])
-        @subject    = TestRunner.new("echo 'touch <test>'", stdout: StringIO.new)
+        @subject    = TestRunner.new(@command, stdout: StringIO.new)
       end
 
       def output
@@ -34,7 +36,7 @@ module Retest
       end
 
       def test_run_with_no_file_found
-        _, _ = capture_subprocess_io { @subject.run nil, repository: @repository}
+        _, _ = capture_subprocess_io { @subject.run changed_files: [nil], repository: @repository}
 
         assert_equal(<<~EXPECTED, output)
           404 - Test File Not Found
@@ -43,17 +45,17 @@ module Retest
       end
 
       def test_run_with_a_file_found
-        out, _ = capture_subprocess_io { @subject.run('file_path.rb', repository: @repository) }
+        out, _ = capture_subprocess_io { @subject.run(changed_files: ['file_path.rb'], repository: @repository) }
 
         assert_match "touch file_path_test.rb", out
       end
 
       def test_returns_last_command
-        out, _ = capture_subprocess_io { @subject.run('file_path.rb', repository: @repository) }
+        out, _ = capture_subprocess_io { @subject.run(changed_files: ['file_path.rb'], repository: @repository) }
 
         assert_match "touch file_path_test.rb", out
 
-        out, _ = capture_subprocess_io { @subject.run 'some-weird-path.rb', repository: @repository}
+        out, _ = capture_subprocess_io { @subject.run changed_files: ['some-weird-path.rb'], repository: @repository}
 
         assert_match "touch file_path_test.rb", out
       end

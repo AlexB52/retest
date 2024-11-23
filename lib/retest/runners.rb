@@ -10,8 +10,8 @@ module Retest
     module_function
 
     def runner_for(command, **opts)
-      for_test   = command.include?('<test>')
-      for_change = command.include?('<changed>')
+      for_test   = command.to_s.include?('<test>')
+      for_change = command.to_s.include?('<changed>')
 
       if for_test && for_change then VariableRunner
       elsif for_test            then TestRunner

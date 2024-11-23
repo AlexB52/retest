@@ -21,7 +21,7 @@ module Retest
       end
 
       clear_terminal
-      runner.run file, repository: repository
+      runner.run changed_files: [file], repository: repository
     end
 
     def diff(branch)

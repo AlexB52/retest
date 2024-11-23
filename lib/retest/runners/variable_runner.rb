@@ -5,7 +5,9 @@ module Retest
     class VariableRunner < Runner
       include CachedTestFile
 
-      def run(changed_file, repository:)
+      def run(changed_files: [], test_files: [], repository:)
+        changed_file = changed_files.is_a?(Array) ? changed_files.first : changed_files
+
         self.cached_test_file = repository.find_test(changed_file)
 
         return print_file_not_found unless cached_test_file
@@ -17,7 +19,7 @@ module Retest
 
         FILES
 
-        system_run command
+        system_run command.to_s
           .gsub('<test>', cached_test_file)
           .gsub('<changed>', changed_file)
       end

@@ -6,7 +6,8 @@ module Retest
   module Runners
     class RunnerInterfaceTests < MiniTest::Test
       def setup
-        @subject = Runner.new("echo 'hello world'")
+        @command = Command::Hardcoded.new(command: "echo 'hello world'")
+        @subject = Runner.new(@command)
       end
 
       include RunnerInterfaceTest
@@ -21,11 +22,12 @@ module Retest
 
     class RunnerTest < MiniTest::Test
       def setup
-        @subject = Runner.new("echo 'hello world'")
+        @command = Command::Hardcoded.new(command: "echo 'hello world'")
+        @subject = Runner.new(@command)
       end
 
       def test_run
-        out, _ = capture_subprocess_io { @subject.run('file_path.rb') }
+        out, _ = capture_subprocess_io { @subject.run(changed_files: ['file_path.rb']) }
 
         assert_match "hello world", out
 

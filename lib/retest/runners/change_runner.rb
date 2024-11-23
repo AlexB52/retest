@@ -1,11 +1,14 @@
 module Retest
   module Runners
     class ChangeRunner < Runner
-      def run(changed_file = nil, repository: nil)
+      def run(changed_files: [], test_files: [], repository: nil)
+        changed_file = changed_files
+        changed_file = changed_files.first if changed_files.is_a?(Array)
+
         return print_file_not_found unless changed_file
 
         log("Changed File Selected: #{changed_file}")
-        system_run command.gsub('<changed>', changed_file)
+        system_run command.to_s.gsub('<changed>', changed_file)
       end
 
       private

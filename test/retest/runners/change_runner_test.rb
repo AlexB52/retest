@@ -6,7 +6,8 @@ module Retest
   module Runners
     class ChangeRunnerInterfaceTests < MiniTest::Test
       def setup
-        @subject = ChangeRunner.new("echo 'touch <changed>'")
+        @command = Command::Hardcoded.new(command: "echo 'touch <changed>'")
+        @subject = ChangeRunner.new(@command)
       end
 
       include RunnerInterfaceTest
@@ -15,13 +16,14 @@ module Retest
       private
 
       def observable_act(subject)
-        subject.run('file_path.rb')
+        subject.run(changed_files: ['file_path.rb'])
       end
     end
 
     class ChangeRunnerTest < MiniTest::Test
       def setup
-        @subject = ChangeRunner.new("echo 'touch <changed>'", stdout: StringIO.new)
+        @command = Command::Hardcoded.new(command: "echo 'touch <changed>'")
+        @subject = ChangeRunner.new(@command, stdout: StringIO.new)
       end
 
       def output
@@ -38,7 +40,7 @@ module Retest
       end
 
       def test_run_with_a_file_found
-        out, _ = capture_subprocess_io { @subject.run('file_path.rb') }
+        out, _ = capture_subprocess_io { @subject.run(changed_files: ['file_path.rb']) }
 
         assert_match "touch file_path.rb", out
       end

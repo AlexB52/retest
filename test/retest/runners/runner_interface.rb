@@ -9,7 +9,7 @@ module Retest
       end
 
       def test_run_accepts_the_right_parameter
-        _, _ = capture_subprocess_io { @subject.run 'some-path.rb', repository: Repository.new }
+        _, _ = capture_subprocess_io { @subject.run changed_files: ['some-path.rb'], repository: Repository.new }
       end
 
       def test_equal

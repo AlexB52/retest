@@ -26,7 +26,7 @@ end
 prompt     = Retest::Prompt.new
 repository = Retest::Repository.new(files: Retest::VersionControl.files, prompt: prompt)
 command    = Retest::Command.for_options(options)
-runner     = Retest::Runners.runner_for(command.to_s)
+runner     = Retest::Runners.runner_for(command)
 sounds     = Retest::Sounds.for(options)
 
 # All test runner

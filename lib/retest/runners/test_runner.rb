@@ -5,18 +5,21 @@ module Retest
     class TestRunner < Runner
       include CachedTestFile
 
-      def run(changed_file, repository:)
+      def run(changed_files: [], test_files: [], repository: nil)
+        changed_file = changed_files
+        changed_file = changed_files.first if changed_files.is_a?(Array)
+
         self.cached_test_file = repository.find_test(changed_file)
 
         return print_file_not_found unless cached_test_file
 
         log("Test File Selected: #{cached_test_file}")
-        system_run command.gsub('<test>', cached_test_file)
+        system_run command.to_s.gsub('<test>', cached_test_file)
       end
 
       def run_all_tests(tests_string)
         log("Test Files Selected: #{tests_string}")
-        system_run command.gsub('<test>', tests_string)
+        system_run command.to_s.gsub('<test>', tests_string)
       end
 
       def sync(added:, removed:)

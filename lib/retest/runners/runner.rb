@@ -10,11 +10,13 @@ module Retest
       end
 
       def ==(obj)
-        command == obj.command && obj.class == self.class
+        return false unless obj.command
+
+        command.to_s == obj.command.to_s && self.class == obj.class
       end
 
-      def run(changed_file = nil, repository: nil)
-        system_run command
+      def run(changed_files: [], test_files: [], repository: nil)
+        system_run command.to_s
       end
 
       def run_all_tests(tests_string)
