@@ -131,7 +131,7 @@ class DiffOptionTest < Minitest::Test
         - test/models/book_test.rb
         - test/system/books_test.rb
       Running tests...
-      Test File Selected: test/controllers/books_controller_test.rb test/models/book_test.rb test/system/books_test.rb
+      Test Files Selected: test/controllers/books_controller_test.rb test/models/book_test.rb test/system/books_test.rb
     EXPECTED
 
     assert_match <<~EXPECTED, @output.read

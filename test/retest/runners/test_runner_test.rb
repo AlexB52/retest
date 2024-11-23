@@ -79,7 +79,7 @@ module Retest
         out, _ = capture_subprocess_io { @subject.run_all_tests('file_path.rb file_path_two.rb') }
 
         assert_equal(<<~EXPECATIONS, @subject.stdout.string)
-          Test File Selected: file_path.rb file_path_two.rb
+          Test Files Selected: file_path.rb file_path_two.rb
         EXPECATIONS
 
         assert_equal(<<~EXPECATIONS, out)
