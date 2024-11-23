@@ -7,8 +7,7 @@ module Retest
     class VariableRunnerInterfaceTests < MiniTest::Test
       def setup
         @command = Command::Hardcoded.new(command: "echo 'touch <changed> & <test>'")
-        @repository = Repository.new files: ['file_path_test.rb']
-        @subject    = VariableRunner.new(@command)
+        @subject = VariableRunner.new(@command)
       end
 
       include RunnerInterfaceTest
@@ -17,18 +16,14 @@ module Retest
       private
 
       def observable_act(subject)
-        subject.run(
-          changed_files: ['file_path.rb'],
-          repository: Repository.new(files: ['file_path_test.rb'])
-        )
+        subject.run(changed_files: ['file_path.rb'], test_files: ['file_path_test.rb'])
       end
     end
 
     class VariableRunnerTest < MiniTest::Test
       def setup
         @command = Command::Hardcoded.new(command: "echo 'touch <changed> & <test>'")
-        @repository = Repository.new files: ['file_path_test.rb']
-        @subject    = VariableRunner.new(@command, stdout: StringIO.new)
+        @subject = VariableRunner.new(@command, stdout: StringIO.new)
       end
 
       def output
@@ -36,7 +31,7 @@ module Retest
       end
 
       def test_files_selected_ouptut
-        _, _ = capture_subprocess_io { @subject.run(changed_files: ['file_path.rb'], repository: @repository) }
+        _, _ = capture_subprocess_io { @subject.run(changed_files: ['file_path.rb'], test_files: ['file_path_test.rb']) }
 
         assert_equal(<<~EXPECTED, output)
           Files Selected:
@@ -47,7 +42,7 @@ module Retest
       end
 
       def test_run_with_no_match
-        _, _ = capture_subprocess_io { @subject.run(changed_files: ['another_file_path.rb'], repository: @repository) }
+        _, _ = capture_subprocess_io { @subject.run(changed_files: ['another_file_path.rb'], test_files: [nil]) }
 
         assert_equal(<<~EXPECTED, output)
           404 - Test File Not Found
@@ -56,17 +51,17 @@ module Retest
       end
 
       def test_run_with_a_file_found
-        out, _ = capture_subprocess_io { @subject.run(changed_files: ['file_path.rb'], repository: @repository) }
+        out, _ = capture_subprocess_io { @subject.run(changed_files: ['file_path.rb'], test_files: ['file_path_test.rb']) }
 
         assert_match "touch file_path.rb & file_path_test.rb", out
       end
 
       def test_returns_last_command
-        out, _ = capture_subprocess_io { @subject.run(changed_files: ['file_path.rb'], repository: @repository) }
+        out, _ = capture_subprocess_io { @subject.run(changed_files: ['file_path.rb'], test_files: ['file_path_test.rb']) }
 
         assert_match "touch file_path.rb & file_path_test.rb", out
 
-        out, _ = capture_subprocess_io { @subject.run(changed_files: ['another_file_path.rb'], repository: @repository) }
+        out, _ = capture_subprocess_io { @subject.run(changed_files: ['another_file_path.rb'], test_files: ['file_path_test.rb']) }
 
         assert_match "touch another_file_path.rb & file_path_test.rb", out
       end

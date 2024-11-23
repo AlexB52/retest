@@ -15,7 +15,7 @@ module Retest
         command.to_s == obj.command.to_s && self.class == obj.class
       end
 
-      def run(changed_files: [], test_files: [], repository: nil)
+      def run(changed_files: [], test_files: [])
         system_run command.to_s
       end
 

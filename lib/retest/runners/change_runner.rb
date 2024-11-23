@@ -1,7 +1,7 @@
 module Retest
   module Runners
     class ChangeRunner < Runner
-      def run(changed_files: [], test_files: [], repository: nil)
+      def run(changed_files: [], test_files: [])
         changed_file = changed_files
         changed_file = changed_files.first if changed_files.is_a?(Array)
 
