@@ -28,7 +28,9 @@ module Retest
     end
 
     def options_command
-      return params[:command] if params[:command]
+      if params[:command]
+        return hardcoded_command(params[:command])
+      end
 
       if    params[:rspec] then rspec_command
       elsif params[:rails] then rails_command
@@ -57,6 +59,10 @@ module Retest
 
     def log(message)
       @stdout&.puts(message)
+    end
+
+    def hardcoded_command(command)
+      Hardcoded.new(command: command)
     end
 
     def rspec_command
