@@ -1,13 +1,6 @@
 module Retest
   class Command
-    class Ruby
-      attr_reader :all, :file_system
-
-      def initialize(all:, file_system: FileSystem)
-        @file_system = file_system
-        @all = all
-      end
-
+    class Ruby < Base
       def format_batch(*files)
         %Q{-e "#{files.map { |file| "require './#{file}';" }.join}"}
       end
