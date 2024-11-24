@@ -35,7 +35,7 @@ module Retest
         @repository = RaisingRepository.new
         @subject = Program.new(runner: @runner, repository: @repository)
 
-        out, _ = capture_subprocess_io { @subject.run('path.rb') }
+        capture_subprocess_io { @subject.run('path.rb') }
       end
     end
   end

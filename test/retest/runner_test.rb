@@ -70,6 +70,7 @@ module Retest
         assert_equal(<<~EXPECTED, output)
           Changed file: file_path.rb
           Test file: file_path_test.rb
+
         EXPECTED
       end
 

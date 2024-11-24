@@ -39,6 +39,7 @@ module Retest
         log("Test file: #{cached_test_file}")
       end
 
+      log("\n")
       system_run command.to_s
         .gsub('<test>', cached_test_file.to_s)
         .gsub('<changed>', changed_file.to_s)
