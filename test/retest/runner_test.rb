@@ -111,7 +111,7 @@ module Retest
       end
 
       def test_run_with_no_file_found
-        _, _ = capture_subprocess_io { @subject.run }
+        @subject.run
 
         assert_equal(<<~EXPECTED, output)
           FileNotFound - Retest could not find a changed file to run.
@@ -159,16 +159,15 @@ module Retest
         assert_match "touch file_path_test.rb", out
       end
 
-      def test_run_all_tests
-        out, _ = capture_subprocess_io { @subject.run_all_tests('file_path.rb file_path_two.rb') }
+      def test_run_multiple_tests
+        assert_raises(Command::MultipleTestsNotSupported) do
+          @subject.command = @command
+          @subject.format_instruction(test_files: ['file_path.rb', 'file_path_two.rb'])
+        end
 
-        assert_equal(<<~EXPECATIONS, @subject.stdout.string)
-          Test Files Selected: file_path.rb file_path_two.rb
-        EXPECATIONS
-
-        assert_equal(<<~EXPECATIONS, out)
-          touch file_path.rb file_path_two.rb
-        EXPECATIONS
+        @subject.command = Command::Rails.new(all: false)
+        instruction = @subject.format_instruction(test_files: ['file_path.rb', 'file_path_two.rb'])
+        assert_equal 'bundle exec rails test file_path.rb file_path_two.rb', instruction
       end
     end
   end

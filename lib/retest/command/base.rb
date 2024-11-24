@@ -1,5 +1,7 @@
 module Retest
   class Command
+    class MultipleTestsNotSupported < StandardError; end
+
     class Base
       def initialize(all: false, file_system: FileSystem, command: nil)
         @file_system = file_system
@@ -7,28 +9,40 @@ module Retest
         @command = command
       end
 
-      def changed_type?
+      def clone(params = {})
+        self.class.new(**{ all: all, file_system: file_system, command: command }.merge(params))
+      end
+
+      def has_changed?
         to_s.include?('<changed>')
       end
 
-      def test_type?
+      def has_test?
         to_s.include?('<test>')
       end
 
+      def changed_type?
+        !has_test? && has_changed?
+      end
+
+      def test_type?
+        has_test? && !has_changed?
+      end
+
       def variable_type?
-        test_type? && changed_type?
+        has_test? && has_changed?
       end
 
       def hardcoded_type?
-        !test_type? && !changed_type?
+        !has_test? && !has_changed?
       end
 
       def to_s
-        raise NotImplementedError
+        @command
       end
 
       def format_batch(*files)
-        raise NotImplementedError
+        raise MultipleTestsNotSupported, "Multiple test files run not supported for '#{to_s}'"
       end
 
       private

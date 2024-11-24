@@ -2,8 +2,11 @@ module Retest
   class Command
     class Rails < Base
       def to_s
-        return "#{root_command} <test>" unless all
-        root_command
+        if all
+          root_command
+        else
+          "#{root_command} <test>"
+        end
       end
 
       def format_batch(*files)
@@ -13,9 +16,11 @@ module Retest
       private
 
       def root_command
-        return 'bin/rails test' if file_system.exist? 'bin/rails'
-
-        'bundle exec rails test'
+        if file_system.exist? 'bin/rails'
+          'bin/rails test'
+        else
+          'bundle exec rails test'
+        end
       end
     end
   end

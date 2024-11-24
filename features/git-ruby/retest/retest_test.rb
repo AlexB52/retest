@@ -60,7 +60,7 @@ class GitChangesTest < Minitest::Test
     sleep 2
 
     assert_match <<~EXPECTED, @output.read
-    Tests found:
+    Tests selected:
       - test/created_with_test_file_test.rb
       - test/renamed_with_test_file_test.rb
       - test/to_be_renamed_test.rb

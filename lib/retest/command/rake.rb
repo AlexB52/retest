@@ -2,20 +2,25 @@ module Retest
   class Command
     class Rake < Base
       def to_s
-        return "#{root_command} TEST=<test>" unless all
-        root_command
+        if all
+          root_command
+        else
+          "#{root_command} TEST=<test>"
+        end
       end
 
       def format_batch(*files)
-        files.size > 1 ? "\"{#{files.join(',')}}\"" : files.first
+        files.size > 1 ? %Q{"{#{files.join(',')}}"} : files.first
       end
 
       private
 
       def root_command
-        return 'bin/rake test' if file_system.exist? 'bin/rake'
-
-        'bundle exec rake test'
+        if file_system.exist? 'bin/rake'
+          'bin/rake test'
+        else
+          'bundle exec rake test'
+        end
       end
     end
   end

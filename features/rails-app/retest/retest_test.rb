@@ -126,12 +126,10 @@ class DiffOptionTest < Minitest::Test
 
     assert_match <<~EXPECTED, @output.read
       Setup identified: [RAILS]. Using command: 'bin/rails test <test>'
-      Tests found:
+      Tests selected:
         - test/controllers/books_controller_test.rb
         - test/models/book_test.rb
         - test/system/books_test.rb
-      Running tests...
-      Test Files Selected: test/controllers/books_controller_test.rb test/models/book_test.rb test/system/books_test.rb
     EXPECTED
 
     assert_match <<~EXPECTED, @output.read

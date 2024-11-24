@@ -1,12 +1,5 @@
 module Retest
   class Command
-    class Hardcoded < Base
-      def to_s
-        @command
-      end
-
-      def format_batch(*files)
-      end
-    end
+    class Hardcoded < Base; end
   end
 end
