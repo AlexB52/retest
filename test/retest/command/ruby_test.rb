@@ -37,7 +37,7 @@ module Retest
       end
 
       def test_format_with_one_file
-        assert_equal %Q{-e "require './a/file/path.rb';"}, @subject.format_batch('a/file/path.rb')
+        assert_equal 'a/file/path.rb', @subject.format_batch('a/file/path.rb')
       end
 
       def test_format_with_multiple_files

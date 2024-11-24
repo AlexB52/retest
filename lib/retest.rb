@@ -20,6 +20,7 @@ Listen.adapter_warn_behavior = :log
 
 module Retest
   class Error < StandardError; end
+  class FileNotFound < StandardError; end
 
   def self.listen(options, listener: Listen)
     listener.to('.', only: options.extension, relative: true, force_polling: options.force_polling?) do |modified, added, removed|

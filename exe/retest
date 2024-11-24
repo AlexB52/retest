@@ -29,11 +29,6 @@ command    = Retest::Command.for_options(options)
 runner     = Retest::Runner.new(command)
 sounds     = Retest::Sounds.for(options)
 
-# All test runner
-all_test_command = Retest::Command.for_options(options.merge(%w[--all]), stdout: nil)
-all_test_runner = Retest::Runner.new(all_test_command)
-all_test_runner.add_observer(sounds)
-
 sounds.play(:start)
 runner.add_observer(sounds)
 prompt.add_observer(sounds)
@@ -69,7 +64,7 @@ Retest.listen(options) do |modified, added, removed|
 end
 $stdout.puts "Ready to refactor! You can make file changes now"
 
-def run_command(input:, program:, all_test_runner:)
+def run_command(input:, program:)
   case input
   when /^file changed:\s(.*)$/
     puts "File changed: #{$1}"
@@ -95,7 +90,7 @@ def run_command(input:, program:, all_test_runner:)
     program.run(nil, force_run: true)
   when 'ra', 'run all'
     puts "Running all tests\n"
-    all_test_runner.run
+    program.run_all
   when /^di?f?f?\s(.*)$/
     program.diff($1)
   when 'h', 'help'
@@ -123,6 +118,6 @@ loop do
   readable_connections = ready[0]
   readable_connections.each do |conn|
     data = conn.readpartial(4096)
-    run_command(input: data.to_s.chomp, program: program, all_test_runner: all_test_runner)
+    run_command(input: data.to_s.chomp, program: program)
   end
 end

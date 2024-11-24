@@ -20,24 +20,25 @@ module Retest
         return
       end
 
-      test_file = repository.find_test(file) if runner.command.test_type?
+      test_file = if runner.has_test?
+        repository.find_test(file)
+      end
+
       runner.run changed_files: [file], test_files: [test_file]
     end
 
     def diff(branch)
       raise "Git not installed" unless VersionControl::Git.installed?
       test_files = repository.find_tests VersionControl::Git.diff_files(branch)
+      run_selected(test_files)
+    end
 
-      @stdout.puts "Tests found:"
-      test_files.each { |test_file| @stdout.puts "  - #{test_file}" }
-
-      @stdout.puts "Running tests..."
-      runner.run_all_tests command.format_batch(*test_files)
+    def run_all
+      runner.run_all
     end
 
     def run_selected(test_files)
-      @stdout.puts "Running tests..."
-      runner.run_all_tests command.format_batch(*test_files)
+      runner.run(test_files: test_files)
     end
 
     def clear_terminal
