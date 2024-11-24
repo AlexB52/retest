@@ -1,13 +1,6 @@
 module Retest
   class Command
-    class Rake
-      attr_reader :all, :file_system
-
-      def initialize(all:, file_system: FileSystem)
-        @file_system = file_system
-        @all = all
-      end
-
+    class Rake < Base
       def to_s
         return "#{root_command} TEST=<test>" unless all
         root_command

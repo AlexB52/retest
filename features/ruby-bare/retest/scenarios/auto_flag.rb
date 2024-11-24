@@ -14,6 +14,6 @@ class AutoFlag < Minitest::Test
 
     modify_file('program.rb')
 
-    assert_match "Test File Selected: program_test.rb", @output.read
+    assert_match "Test file: program_test.rb", @output.read
   end
 end

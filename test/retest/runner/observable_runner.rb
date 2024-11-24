@@ -1,5 +1,5 @@
 module Retest
-  module Runners
+  class Runner
     module OversableRunnerTests
       def test_publishes_event_after_running_command
         observer = MiniTest::Mock.new

@@ -29,7 +29,7 @@ class MatchingTestsCommandTest < Minitest::Test
 
     modify_file 'app/models/post.rb'
 
-    assert_match "Test File Selected: test/models/post_test.rb", @output.read
+    assert_match "Test file: test/models/post_test.rb", @output.read
     assert_match "1 runs, 1 assertions, 0 failures, 0 errors, 0 skips", @output.read
   end
 end
@@ -131,7 +131,7 @@ class DiffOptionTest < Minitest::Test
         - test/models/book_test.rb
         - test/system/books_test.rb
       Running tests...
-      Test File Selected: test/controllers/books_controller_test.rb test/models/book_test.rb test/system/books_test.rb
+      Test Files Selected: test/controllers/books_controller_test.rb test/models/book_test.rb test/system/books_test.rb
     EXPECTED
 
     assert_match <<~EXPECTED, @output.read

@@ -26,12 +26,12 @@ end
 prompt     = Retest::Prompt.new
 repository = Retest::Repository.new(files: Retest::VersionControl.files, prompt: prompt)
 command    = Retest::Command.for_options(options)
-runner     = Retest::Runners.runner_for(command.to_s)
+runner     = Retest::Runner.new(command)
 sounds     = Retest::Sounds.for(options)
 
 # All test runner
 all_test_command = Retest::Command.for_options(options.merge(%w[--all]), stdout: nil)
-all_test_runner = Retest::Runners.runner_for(all_test_command.to_s)
+all_test_runner = Retest::Runner.new(all_test_command)
 all_test_runner.add_observer(sounds)
 
 sounds.play(:start)
