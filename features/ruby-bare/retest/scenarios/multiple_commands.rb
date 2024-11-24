@@ -17,10 +17,6 @@ class ChangedAndTestPlaceholders < Minitest::Test
 
     modify_file('program.rb')
 
-    log("Changed file: #{changed_file}")
-
-    log("Test file: #{cached_test_file}")
-
     assert_match <<~EXPECTED, @output.read
       Changed file: program.rb
       Test file: program_test.rb
