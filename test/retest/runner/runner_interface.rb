@@ -1,5 +1,5 @@
 module Retest
-  module Runners
+  class Runner
     module RunnerInterfaceTest
       def test_behaviour
         assert_respond_to @subject, :==

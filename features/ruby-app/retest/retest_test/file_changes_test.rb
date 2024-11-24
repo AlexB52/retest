@@ -21,7 +21,7 @@ class FileChangesTest < Minitest::Test
 
     modify_file('lib/bottles.rb')
 
-    assert_match "Test File Selected: test/bottles_test.rb", @output.read
+    assert_match "Test file: test/bottles_test.rb", @output.read
     assert_match "12 runs, 12 assertions, 0 failures, 0 errors, 0 skips", @output.read
   end
 
@@ -30,7 +30,7 @@ class FileChangesTest < Minitest::Test
 
     modify_file('test/bottles_test.rb')
 
-    assert_match "Test File Selected: test/bottles_test.rb", @output.read
+    assert_match "Test file: test/bottles_test.rb", @output.read
     assert_match "12 runs, 12 assertions, 0 failures, 0 errors, 0 skips", @output.read
   end
 
@@ -39,7 +39,7 @@ class FileChangesTest < Minitest::Test
 
     create_file 'foo_test.rb'
 
-    assert_match "Test File Selected: foo_test.rb", @output.read
+    assert_match "Test file: foo_test.rb", @output.read
 
   ensure
     delete_file 'foo_test.rb'
@@ -50,18 +50,17 @@ class FileChangesTest < Minitest::Test
 
     create_file 'foo.rb'
     assert_match <<~EXPECTED, @output.read
-      404 - Test File Not Found
-      Retest could not find a matching test file to run.
+      FileNotFound - Retest could not find a matching test file to run.
     EXPECTED
 
     create_file 'foo_test.rb'
-    assert_match "Test File Selected: foo_test.rb", @output.read
+    assert_match "Test file: foo_test.rb", @output.read
 
     modify_file('lib/bottles.rb')
-    assert_match "Test File Selected: test/bottles_test.rb", @output.read
+    assert_match "Test file: test/bottles_test.rb", @output.read
 
     modify_file('foo.rb')
-    assert_match "Test File Selected: foo_test.rb", @output.read
+    assert_match "Test file: foo_test.rb", @output.read
 
   ensure
     delete_file 'foo.rb'
@@ -75,7 +74,7 @@ class FileChangesTest < Minitest::Test
     launch_retest @command
 
     modify_file 'foo.rb'
-    assert_match "Test File Selected: foo_test.rb", @output.read
+    assert_match "Test file: foo_test.rb", @output.read
 
   ensure
     delete_file 'foo.rb'

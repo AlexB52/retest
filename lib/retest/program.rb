@@ -21,7 +21,8 @@ module Retest
       end
 
       clear_terminal
-      runner.run changed_files: [file], test_files: [repository.find_test(file)]
+      test_file = repository.find_test(file) if runner.command.test_type?
+      runner.run changed_files: [file], test_files: [test_file]
     end
 
     def diff(branch)

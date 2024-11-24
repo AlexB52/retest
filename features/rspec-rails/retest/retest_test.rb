@@ -29,7 +29,7 @@ class MatchingTestsCommandTest < Minitest::Test
 
     modify_file 'app/models/post.rb'
 
-    assert_match "Test File Selected: spec/models/post_spec.rb", @output.read
+    assert_match "Test file: spec/models/post_spec.rb", @output.read
     assert_match "2 examples, 0 failures", @output.read
   end
 end

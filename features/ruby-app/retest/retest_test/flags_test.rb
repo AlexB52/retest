@@ -17,6 +17,6 @@ class FlagTest < Minitest::Test
 
     modify_file('lib/bottles.rb')
 
-    assert_match "Test File Selected: test/bottles_test.rb", @output.read
+    assert_match "Test file: test/bottles_test.rb", @output.read
   end
 end

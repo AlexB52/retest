@@ -7,6 +7,22 @@ module Retest
         @command = command
       end
 
+      def changed_type?
+        to_s.include?('<changed>')
+      end
+
+      def test_type?
+        to_s.include?('<test>')
+      end
+
+      def variable_type?
+        test_type? && changed_type?
+      end
+
+      def hardcoded_type?
+        !test_type? && !changed_type?
+      end
+
       def to_s
         raise NotImplementedError
       end

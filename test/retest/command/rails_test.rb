@@ -10,6 +10,20 @@ module Retest
 
       include CommandInterface
 
+      def test_type
+        all_cmd = Rails.new(all: true, file_system: FakeFS.new([]))
+        refute all_cmd.test_type?
+        refute all_cmd.variable_type?
+        refute all_cmd.changed_type?
+        assert all_cmd.hardcoded_type?
+
+        cmd = Rails.new(all: false, file_system: FakeFS.new([]))
+        assert cmd.test_type?
+        refute cmd.variable_type?
+        refute cmd.changed_type?
+        refute cmd.hardcoded_type?
+      end
+
       def test_to_s
         assert_equal 'bin/rails test',                Rails.new(all: true, file_system: FakeFS.new(['bin/rails'])).to_s
         assert_equal 'bundle exec rails test',        Rails.new(all: true, file_system: FakeFS.new([])).to_s

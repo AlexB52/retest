@@ -21,7 +21,7 @@ class MatchingUnmatchingCommandTest < Minitest::Test
     launch_retest('retest --ruby')
 
     create_file 'foo_test.rb'
-    assert_match "Test File Selected: foo_test.rb", @output.read
+    assert_match "Test file: foo_test.rb", @output.read
 
     modify_file('lib/bottles.rb')
     assert_match <<~EXPECTED.chomp, @output.read
@@ -39,7 +39,7 @@ class MatchingUnmatchingCommandTest < Minitest::Test
     @input.write "2\n"
     wait
 
-    assert_match "Test File Selected: foo_test.rb", @output.read
+    assert_match "Test file: foo_test.rb", @output.read
 
   ensure
     delete_file 'foo_test.rb'

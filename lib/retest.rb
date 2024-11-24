@@ -4,7 +4,7 @@ require 'string/similarity'
 require 'observer'
 
 require "retest/version"
-require "retest/runners"
+require "retest/runner"
 require "retest/repository"
 require "retest/matching_options"
 require "retest/options"
