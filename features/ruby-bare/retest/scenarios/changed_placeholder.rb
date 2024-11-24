@@ -19,6 +19,7 @@ class ChangedPlaceholder < Minitest::Test
 
     assert_match <<~EXPECTED, @output.read
       Changed file: program.rb
+
       file modified: program.rb
     EXPECTED
   end
