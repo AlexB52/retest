@@ -20,7 +20,6 @@ module Retest
         return
       end
 
-      clear_terminal
       test_file = repository.find_test(file) if runner.command.test_type?
       runner.run changed_files: [file], test_files: [test_file]
     end
