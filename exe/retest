@@ -35,7 +35,6 @@ prompt.add_observer(sounds)
 
 program = Retest::Program.new(
   repository: repository,
-  command: command,
   runner: runner
 )
 
@@ -65,7 +64,8 @@ end
 $stdout.puts "Ready to refactor! You can make file changes now"
 
 def run_command(input:, program:)
-  case input
+  program.clear_terminal
+  case input.strip
   when /^file changed:\s(.*)$/
     puts "File changed: #{$1}"
     program.run($1)
@@ -77,17 +77,21 @@ def run_command(input:, program:)
     puts "Program has been resumed\n"
   when 'e', 'exit'
     Process.kill("INT", 0)
+  when 'r', 'reset'
+    program.reset_selection
+    puts "command reset to '#{program.runner.command.to_s}'"
   when 'f', 'force'
     require 'tty-prompt'
     prompt = TTY::Prompt.new
-    program.run_selected prompt.multi_select(
+    program.force_selection prompt.multi_select(
       "What test files do you want to run when saving a file?",
       program.repository.test_files,
       filter: true, min: 1
     )
-  when ''
-    puts "Running last command\n"
     program.run(nil, force_run: true)
+  when ''
+    puts "Running last command: '#{program.last_command}'\n"
+    program.run_last_command
   when 'ra', 'run all'
     puts "Running all tests\n"
     program.run_all
@@ -96,13 +100,15 @@ def run_command(input:, program:)
   when 'h', 'help'
     puts <<~HELP
 
-      * 'h', 'help'              # Prints help
-      * 'p', 'pause'             # Pauses Retest. Tests aren't run until unpaused.
-      * 'u', 'unpause'           # Unpauses Retest
-      * <ENTER>                  # Runs last changed triggered command
-      * 'ra, 'run all'           # Runs all tests
-      * 'd', 'diff' [GIT BRANCH] # Run matching specs that changed from a target branch
-      * 'e', 'exit'              # Exits Retest
+      * 'h', 'help'              # Prints help.
+      * 'p', 'pause'             # Pauses Retest. Tests aren't run on file change events until unpaused.
+      * 'u', 'unpause'           # Unpauses Retest.
+      * <ENTER>                  # Runs last changed triggered command.
+      * 'ra, 'run all'           # Runs all tests.
+      * 'f', 'force'             # Forces a selection of test to run on every file change.
+      * 'r', 'reset'             # Disables forced selection.
+      * 'd', 'diff' [GIT BRANCH] # Runs matching specs that changed from a target branch.
+      * 'e', 'exit'              # Exits Retest.
     HELP
   else
     puts "Unknown interactive command #{input}\n"
@@ -111,7 +117,7 @@ end
 
 connections = [$stdin, listen_rd]
 loop do
-  puts "\nType interactive command and press enter"
+  puts "\nType interactive command and press enter. Enter 'h' for help."
   print(">\s")
 
   ready = IO.select(connections)

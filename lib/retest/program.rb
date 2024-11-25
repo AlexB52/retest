@@ -1,22 +1,40 @@
 require_relative 'program/pausable'
+require_relative 'program/forced_selection'
 
 module Retest
   class Program
+    extend Forwardable
     include Pausable
+    include ForcedSelection
 
-    attr_accessor :runner, :repository, :command, :stdout
-    def initialize(runner: nil, repository: nil, command: nil, clear_window: true, stdout: $stdout)
+    attr_accessor :runner, :repository, :stdout
+
+    def_delegators :runner,
+      :run_last_command, :last_command
+
+    def initialize(runner: nil, repository: nil, clear_window: true, stdout: $stdout)
       @runner = runner
       @repository = repository
-      @command = command
       @clear_window = clear_window
       @stdout = stdout
       initialize_pause(false)
+      initialize_forced_selection([])
     end
 
     def run(file, force_run: false)
       if paused? && !force_run
         @stdout.puts "Main program paused. Please resume program first."
+        return
+      end
+
+      if forced_selection?
+        @stdout.puts <<~HINT
+          Forced selection enabled.
+          Reset to default settings by typing 'r' in the interactive console.
+
+        HINT
+
+        runner.run(test_files: selected_test_files)
         return
       end
 
@@ -29,6 +47,7 @@ module Retest
 
     def diff(branch)
       raise "Git not installed" unless VersionControl::Git.installed?
+
       test_files = repository.find_tests VersionControl::Git.diff_files(branch)
       run_selected(test_files)
     end

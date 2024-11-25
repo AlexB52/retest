@@ -1,3 +1,6 @@
+# Can be updated to all feature repositories with
+# $ bin/test/reset_helpers
+
 require_relative 'output_file'
 
 module FileHelper
