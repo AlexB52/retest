@@ -4,11 +4,10 @@ module Retest
   class Program
     include Pausable
 
-    attr_accessor :runner, :repository, :command, :stdout
-    def initialize(runner: nil, repository: nil, command: nil, clear_window: true, stdout: $stdout)
+    attr_accessor :runner, :repository, :stdout
+    def initialize(runner: nil, repository: nil, clear_window: true, stdout: $stdout)
       @runner = runner
       @repository = repository
-      @command = command
       @clear_window = clear_window
       @stdout = stdout
       initialize_pause(false)

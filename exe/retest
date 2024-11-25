@@ -35,7 +35,6 @@ prompt.add_observer(sounds)
 
 program = Retest::Program.new(
   repository: repository,
-  command: command,
   runner: runner
 )
 
