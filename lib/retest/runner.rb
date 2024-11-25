@@ -29,7 +29,7 @@ module Retest
     end
 
     def format_instruction(changed_files: [], test_files: [])
-      if changed_files.size == 0 && test_files.size >= 1
+      if changed_files.empty? && test_files.size >= 1
         instruction = command.clone(all: false).to_s
         tests_string = command.format_batch(*test_files)
         log("Tests selected:")
