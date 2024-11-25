@@ -90,8 +90,8 @@ def run_command(input:, program:)
     )
     program.run(nil, force_run: true)
   when ''
-    puts "Running last command\n"
-    program.run(nil, force_run: true)
+    puts "Running last command: '#{program.last_command}'\n"
+    program.run_last_command
   when 'ra', 'run all'
     puts "Running all tests\n"
     program.run_all

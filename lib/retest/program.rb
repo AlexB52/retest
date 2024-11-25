@@ -3,10 +3,15 @@ require_relative 'program/forced_selection'
 
 module Retest
   class Program
+    extend Forwardable
     include Pausable
     include ForcedSelection
 
     attr_accessor :runner, :repository, :stdout
+
+    def_delegators :runner,
+      :run_last_command, :last_command
+
     def initialize(runner: nil, repository: nil, clear_window: true, stdout: $stdout)
       @runner = runner
       @repository = repository

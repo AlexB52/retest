@@ -10,14 +10,19 @@ module Retest
       :has_changed?, :has_test?,
       :changed_type?, :test_type?, :variable_type?, :harcoded_type?
 
-    attr_accessor :command, :stdout
+    attr_accessor :command, :stdout, :last_command
     def initialize(command, stdout: $stdout)
       @stdout  = stdout
       @command = command
     end
 
+    def run_last_command
+      system_run last_command
+    end
+
     def run(changed_files: [], test_files: [])
-      system_run format_instruction(changed_files: changed_files, test_files: test_files)
+      self.last_command = format_instruction(changed_files: changed_files, test_files: test_files)
+      system_run last_command
     rescue FileNotFound => e
       log("FileNotFound - #{e.message}")
     rescue Command::MultipleTestsNotSupported => e
