@@ -9,21 +9,23 @@ Arguments:
            
 
 Options:
-      --all              Run all the specs of a specificied ruby setup
-      --diff=git-branch  Pipes all matching tests from diffed branch to test
-                         command
-      --ext=regex        Regex of file extensions to listen to (default
-                         "\\.rb$")
-  -h, --help             Print usage
-      --notify           Play a sound when specs pass or fail (macOS only)
-      --polling          Use polling method when listening to file changes
-                         Some filesystems won't work without it
-                         VM/Vagrant Shared folders, NFS, Samba, sshfs...
-      --rails            Shortcut for a standard Rails setup
-      --rake             Shortcut for a standard Rake setup
-      --rspec            Shortcut for a standard RSpec setup
-      --ruby             Shortcut for a Ruby project
-  -v, --version          Print retest version
+      --all                Run all the specs of a specificied ruby setup
+      --diff=git-branch    Pipes all matching tests from diffed branch to test
+                           command
+      --exts=<EXTENSIONS>  Comma separated of filenames extensions to filter
+                           to (default "rb")
+  -h, --help               Print usage
+      --notify             Play a sound when specs pass or fail (macOS only)
+      --polling            Use polling method when listening to file changes
+                           Some filesystems won't work without it
+                           VM/Vagrant Shared folders, NFS, Samba, sshfs...
+      --rails              Shortcut for a standard Rails setup
+      --rake               Shortcut for a standard Rake setup
+      --rspec              Shortcut for a standard RSpec setup
+      --ruby               Shortcut for a Ruby project
+  -v, --version            Print retest version
+  -w, --watcher=<WATCHER>  Tool used to watch file events (permitted: listen,
+                           watchexec)
 
 Examples:
   Runs a matching rails test after a file change

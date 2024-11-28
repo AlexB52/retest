@@ -5,7 +5,7 @@ require 'retest'
 $stdout.sync = true
 listen_rd, listen_wr = IO.pipe
 Signal.trap(:INT) do
-  $stdout.puts "Goodbye"
+  puts "Goodbye"
   listen_rd.close
   listen_wr.close
   exit
@@ -14,12 +14,12 @@ end
 options = Retest::Options.new(ARGV)
 
 if options.help?
-  $stdout.puts options.help
+  puts options.help
   return
 end
 
 if options.version?
-  $stdout.puts Retest::VERSION
+  puts Retest::VERSION
   return
 end
 
@@ -28,6 +28,7 @@ repository = Retest::Repository.new(files: Retest::VersionControl.files, prompt:
 command    = Retest::Command.for_options(options)
 runner     = Retest::Runner.new(command)
 sounds     = Retest::Sounds.for(options)
+watcher    = Retest::Watcher.for(options.watcher)
 
 sounds.play(:start)
 runner.add_observer(sounds)
@@ -43,6 +44,12 @@ if options.params[:diff]
   return
 end
 
+if watcher == Retest::Watcher::Watchexec
+  puts "Watcher: [WATCHEXEC]"
+else Retest::Watcher::Default
+  puts "Watcher: [LISTEN]"
+end
+
 launching_message = "Launching Retest..."
 if options.force_polling?
   launching_message = "Launching Retest with polling method..."
@@ -50,18 +57,18 @@ end
 
 # Main action
 
-$stdout.puts launching_message
-Retest.listen(options) do |modified, added, removed|
+puts launching_message
+Retest.listen(options, listener: watcher) do |modified, added, removed|
   begin
     repository.sync(added: added, removed: removed)
     runner.sync(added: added, removed: removed)
 
     listen_wr.puts "file changed: #{(modified + added).first}"
   rescue => e
-    $stdout.puts "Something went wrong: #{e.message}"
+    puts "Something went wrong: #{e.message}"
   end
 end
-$stdout.puts "Ready to refactor! You can make file changes now"
+puts "Ready to refactor! You can make file changes now"
 
 def run_command(input:, program:)
   program.clear_terminal

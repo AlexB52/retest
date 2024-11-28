@@ -1,6 +1,6 @@
 class CustomExtensionTest < Minitest::Test
   def setup
-    @command = %Q{retest "echo 'I captured a change'" --ext="\\.txt$"}
+    @command = %Q{retest "echo 'I captured a change'" --exts="txt"}
   end
 
   def teardown
