@@ -6,8 +6,8 @@ module Retest
 
     module_function
 
-    def files
-      [Git, NoVersionControl].find(&:installed?).files
+    def files(extensions: [])
+      [Git, NoVersionControl].find(&:installed?).files(extensions: extensions)
     end
   end
 end

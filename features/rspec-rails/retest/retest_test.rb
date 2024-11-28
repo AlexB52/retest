@@ -71,6 +71,7 @@ class AutoFlagTest < Minitest::Test
 
     assert_match <<~OUTPUT, @output.read
       Setup identified: [RSPEC]. Using command: 'bundle exec rspec <test>'
+      Watcher: [LISTEN]
       Launching Retest...
       Ready to refactor! You can make file changes now
     OUTPUT
@@ -81,6 +82,7 @@ class AutoFlagTest < Minitest::Test
 
     assert_match <<~OUTPUT, @output.read
       Setup identified: [RSPEC]. Using command: 'bundle exec rspec'
+      Watcher: [LISTEN]
       Launching Retest...
       Ready to refactor! You can make file changes now
     OUTPUT

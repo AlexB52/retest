@@ -41,3 +41,10 @@ def wait_until(max_attempts: 10)
   end
 end
 
+module Retest
+  # Remove Watchexec when not installed
+  if defined?(Watcher::Watchexec) && !Watcher::Watchexec.installed?
+    Watcher.send(:remove_const, :Watchexec)
+    Watcher::Watchexec = Watcher::Default
+  end
+end

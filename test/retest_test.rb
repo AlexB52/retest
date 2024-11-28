@@ -13,9 +13,9 @@ class ListenTests < MiniTest::Test
 
   def test_listen_default_behaviour
     listener = MiniTest::Mock.new
-    expected_options = {relative: true, only: Regexp.new('\\.rb$'), force_polling: false}
+    expected_options = { dir: '.', extensions: ['rb'], polling: false }
 
-    listener.expect(:to, Struct.new(:start).new, ['.', expected_options])
+    listener.expect(:watch, true, [expected_options])
 
     Retest.listen(Options.new, listener: listener)
 
@@ -24,9 +24,9 @@ class ListenTests < MiniTest::Test
 
   def test_listen_when_polling
     listener = MiniTest::Mock.new
-    expected_options = {relative: true, only: Regexp.new('\\.rb$'), force_polling: true}
+    expected_options = { dir: '.', extensions: ['rb'], polling: true }
 
-    listener.expect(:to, Struct.new(:start).new, ['.', expected_options])
+    listener.expect(:watch, true, [expected_options])
 
     Retest.listen(Options.new(["--polling"]), listener: listener)
 

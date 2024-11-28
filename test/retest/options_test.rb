@@ -49,6 +49,16 @@ module Retest
       assert @subject.notify?
     end
 
+    def test_extensions
+      @subject.args = ["--exts rb"]
+
+      assert_equal %w[rb], @subject.extensions
+
+      @subject.args = ["--exts rb,js, html,css ,ts"]
+
+      assert_equal %w[rb js html css ts], @subject.extensions
+    end
+
     def test_all_version_copy
       @subject.args = %w[--notify --rake]
 
@@ -56,6 +66,26 @@ module Retest
 
       assert_equal %w[--notify --rake --all], copy.args
       refute_equal copy.object_id, @subject.object_id
+    end
+
+    def test_listener
+      @subject.args = %w[--watcher=watchexec]
+      assert_equal :watchexec, @subject.watcher
+
+      @subject.args = %w[-w watchexec]
+      assert_equal :watchexec, @subject.watcher
+
+      @subject.args = %w[--watcher=listen]
+      assert_equal :listen, @subject.watcher
+
+      @subject.args = %w[-w listen]
+      assert_equal :listen, @subject.watcher
+
+      @subject.args = %w[-w hello]
+      assert_equal :installed, @subject.watcher
+
+      @subject.args = %w[] # default when no listeners are install by default
+      assert_equal :installed, @subject.watcher
     end
   end
 end

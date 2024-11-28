@@ -11,6 +11,7 @@ class FlagTest < Minitest::Test
 
     assert_match <<~OUTPUT, @output.read
       Setup identified: [RUBY]. Using command: 'bundle exec ruby <test>'
+      Watcher: [LISTEN]
       Launching Retest...
       Ready to refactor! You can make file changes now
     OUTPUT
