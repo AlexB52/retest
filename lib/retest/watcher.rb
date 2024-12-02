@@ -63,7 +63,7 @@ module Retest
                 data = conn.readpartial(4096)
                 change = /^(?:create|remove|rename|modify):(?<path>.*)/.match(data.strip)
                 if change
-                  added, modified, removed = result = [[], [], []]
+                  modified, added, removed = result = [[], [], []]
                   path = Pathname(change[:path]).relative_path_from(Dir.pwd).to_s
                   file_exist = File.exist?(path)
                   file_cached = files.key?(path)
