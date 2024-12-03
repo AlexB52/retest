@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+bundle install
+bundle exec rake build
+# cp -R features/support features/watchexec-ruby-app/retest
+ls -t pkg | head -n1 | xargs -I {} mv pkg/{} features/watchexec-ruby-app/retest.gem
+docker compose -f features/watchexec-ruby-app/docker-compose.yml up --build --exit-code-from retest
+# docker compose -f features/watchexec-ruby-app/docker-compose.yml up --exit-code-from retest
