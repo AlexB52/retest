@@ -55,7 +55,6 @@ jobs:
           - rspec-rails
           - rspec-ruby
           - bundler-app
-          - watchexec-ruby-app
     steps:
       - uses: actions/checkout@v4
       - name: Set up Ruby
