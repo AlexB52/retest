@@ -1,11 +1,15 @@
-FROM ruby:2.5.9-alpine3.13
+FROM ruby:2.7-slim-bullseye
 
-ARG BUILD_PACKAGES="build-base git"
+# Install necessary dependencies
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y build-essential git && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN apk update && \
-    apk upgrade && \
-    apk add --update --no-cache $BUILD_PACKAGES && \
-    rm -rf /var/cache/apk/*
+# Copy watchexec from the Rust stage
+COPY --from=ghcr.io/alexb52/slim-bullseye-watchexec:latest /usr/local/cargo/bin/watchexec /usr/local/bin/watchexec
+
+# Verify watchexec installation in the final image
+RUN watchexec --version
 
 # throw errors if Gemfile has been modified since Gemfile.lock
 RUN bundle config --global frozen 1
@@ -14,7 +18,6 @@ WORKDIR /usr/src/app
 
 ENV LANG C.UTF-8
 ENV BUNDLER_VERSION 2.1
-
 ENV GEM_HOME="/usr/local/bundle"
 ENV PATH $GEM_HOME/bin:$GEM_HOME/gems/bin:$PATH
 
