@@ -1,4 +1,22 @@
-require_relative 'output_file'
+# Can be updated to all feature repositories with
+# $ bin/test/reset_helpers
+
+module OutputHelper
+  def read_output(output = @output)
+    result = ""
+    loop do
+      result += output.read_nonblock(1024)
+    rescue IO::WaitReadable
+      break
+    end
+
+    if block_given?
+      yield result
+    else
+      result
+    end
+  end
+end
 
 module FileHelper
   def default_sleep_seconds
@@ -41,19 +59,21 @@ module FileHelper
   end
 end
 
-def launch_retest(command, sleep_seconds: launch_sleep_seconds)
-  @rd, @input = IO.pipe
-  @output = OutputFile.new
-  @pid = Process.spawn command, out: @output.path, in: @rd
-  sleep sleep_seconds
-end
+module CommandHelper
+  def launch_retest(command, sleep_seconds: Float(ENV.fetch('LAUNCH_SLEEP_SECONDS', 1.5)))
+    require 'open3'
+    @input, @output, @stderr, @wait_thr = Open3.popen3(command)
+    @pid = @wait_thr[:pid]
+    sleep sleep_seconds
+  end
 
-def end_retest(file = nil, pid = nil)
-  @output&.delete
-  @rd&.close
-  @input&.close
-  if @pid
-    Process.kill('SIGHUP', @pid)
-    Process.detach(@pid)
+  def end_retest
+    @input&.close
+    @stderr&.close
+    @output&.close
+    if @pid
+      Process.kill('SIGHUP', @pid)
+      Process.detach(@pid)
+    end
   end
 end
