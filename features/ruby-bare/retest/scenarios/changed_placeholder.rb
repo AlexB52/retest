@@ -1,4 +1,6 @@
 class ChangedPlaceholder < Minitest::Test
+  include RetestHelper
+
   def setup
     @command = %Q{retest 'echo file modified: <changed>'}
   end
@@ -10,14 +12,14 @@ class ChangedPlaceholder < Minitest::Test
   def test_file_modification
     launch_retest @command
 
-    assert_match <<~OUTPUT, @output.read
+    assert_output_matches <<~OUTPUT
       Launching Retest...
       Ready to refactor! You can make file changes now
     OUTPUT
 
     modify_file('program.rb')
 
-    assert_match <<~EXPECTED, @output.read
+    assert_output_matches <<~EXPECTED
       Changed file: program.rb
 
       file modified: program.rb
