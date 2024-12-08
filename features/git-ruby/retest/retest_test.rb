@@ -4,9 +4,9 @@ require 'minitest/autorun'
 
 $stdout.sync = true
 
-include FileHelper
-
 class FileChangesTest < Minitest::Test
+  include RetestHelper
+
   def setup
     @command = 'retest --ruby'
   end
@@ -18,7 +18,7 @@ class FileChangesTest < Minitest::Test
   def test_start_retest
     launch_retest @command
 
-    assert_match <<~EXPECTED, @output.read
+    assert_output_matches <<~EXPECTED
       Launching Retest...
       Ready to refactor! You can make file changes now
     EXPECTED
@@ -26,6 +26,8 @@ class FileChangesTest < Minitest::Test
 end
 
 class GitChangesTest < Minitest::Test
+  include RetestHelper
+
   def setup
     `git config --global init.defaultBranch main`
     `git config --global --add safe.directory /usr/src/app`
@@ -45,25 +47,25 @@ class GitChangesTest < Minitest::Test
   end
 
   def test_diffs_from_other_branch
-    delete_file('lib/to_be_deleted.rb')
-    rename_file('lib/to_be_renamed.rb', 'lib/renamed.rb')
-    rename_file('lib/to_be_renamed_with_test_file.rb', 'lib/renamed_with_test_file.rb')
-    rename_file('test/to_be_renamed_with_test_file_test.rb', 'test/renamed_with_test_file_test.rb')
-    create_file('lib/created.rb', should_sleep: false)
-    create_file('lib/created_with_test_file.rb', should_sleep: false)
-    create_file('test/created_with_test_file_test.rb', should_sleep: false)
+    delete_file('lib/to_be_deleted.rb', sleep_for: 0)
+    rename_file('lib/to_be_renamed.rb', 'lib/renamed.rb', sleep_for: 0)
+    rename_file('lib/to_be_renamed_with_test_file.rb', 'lib/renamed_with_test_file.rb', sleep_for: 0)
+    rename_file('test/to_be_renamed_with_test_file_test.rb', 'test/renamed_with_test_file_test.rb', sleep_for: 0)
+    create_file('lib/created.rb', sleep_for: 0)
+    create_file('lib/created_with_test_file.rb', sleep_for: 0)
+    create_file('test/created_with_test_file_test.rb', sleep_for: 0)
 
     `git add .`
     `git commit -m "Rename, Add and Remove files"`
 
     launch_retest 'retest --diff=main --ruby'
-    sleep 2
 
-    assert_match <<~EXPECTED, @output.read
-    Tests selected:
-      - test/created_with_test_file_test.rb
-      - test/renamed_with_test_file_test.rb
-      - test/to_be_renamed_test.rb
+    require "byebug";byebug
+    assert_output_matches <<~EXPECTED
+      Tests selected:
+        - test/created_with_test_file_test.rb
+        - test/renamed_with_test_file_test.rb
+        - test/to_be_renamed_test.rb
     EXPECTED
   end
 end
