@@ -2,6 +2,6 @@
 
 bundle install
 bundle exec rake build
-# cp -R features/support features/rspec-rails/retest
+cp -R features/support features/bundler-app/retest features/rspec-rails/retest
 ls -t pkg | head -n1 | xargs -I {} mv pkg/{} features/rspec-rails/retest.gem
 docker compose -f features/rspec-rails/docker-compose.yml up --build --exit-code-from retest
