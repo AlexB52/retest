@@ -4,15 +4,15 @@ module ExplicitMatching
   end
 
   def test_displaying_options_on_matching_command
-    create_file('test/other_bottles_test.rb', should_sleep: false)
+    create_file('test/other_bottles_test.rb', sleep_for: 0)
 
     launch_retest(@command)
 
     create_file 'foo_test.rb'
-    assert_match "Test file: foo_test.rb", read_output
+    assert_output_matches "Test file: foo_test.rb"
 
     modify_file('lib/bottles.rb')
-    assert_match <<~EXPECTED.chomp, read_output
+    assert_output_matches <<~EXPECTED.chomp
       We found few tests matching: lib/bottles.rb
 
       [0] - test/bottles_test.rb
@@ -24,10 +24,8 @@ module ExplicitMatching
       >
     EXPECTED
 
-    @input.write "2\n"
-    wait
-
-    assert_match "Test file: foo_test.rb", read_output
+    write_input("2\n")
+    assert_output_matches "Test file: foo_test.rb"
 
   ensure
     delete_file 'foo_test.rb'

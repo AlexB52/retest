@@ -9,15 +9,7 @@ require_relative 'shared/explicit_matching'
 $stdout.sync = true
 
 class TestListenWatcher <  Minitest::Test
-  # Helpers
-  include FileHelper
-  include OutputHelper
-  include CommandHelper
-
-  # Assertions
-  include Setup
-  include FileChanges
-  include ExplicitMatching
+  include RetestHelper
 
   def setup
     @command = 'retest -w listen'
@@ -26,7 +18,7 @@ class TestListenWatcher <  Minitest::Test
   def test_start_retest
     launch_retest(@command)
 
-    assert_match <<~EXPECTED, read_output
+    assert_output_matches <<~EXPECTED
       Setup identified: [RUBY]. Using command: 'bundle exec ruby <test>'
       Watcher: [LISTEN]
       Launching Retest...
@@ -36,15 +28,7 @@ class TestListenWatcher <  Minitest::Test
 end
 
 class TestWatchexecWatcher <  Minitest::Test
-  # Helpers
-  include FileHelper
-  include OutputHelper
-  include CommandHelper
-
-  # Assertions
-  include Setup
-  include FileChanges
-  include ExplicitMatching
+  include RetestHelper
 
   def setup
     @command = 'retest -w watchexec'
@@ -53,7 +37,7 @@ class TestWatchexecWatcher <  Minitest::Test
   def test_start_retest
     launch_retest(@command)
 
-    assert_match <<~EXPECTED, read_output
+    assert_output_matches <<~EXPECTED
       Setup identified: [RUBY]. Using command: 'bundle exec ruby <test>'
       Watcher: [WATCHEXEC]
       Launching Retest...
@@ -63,8 +47,7 @@ class TestWatchexecWatcher <  Minitest::Test
 end
 
 class TestDefaultWatcher <  Minitest::Test
-  include OutputHelper
-  include CommandHelper
+  include RetestHelper
 
   def setup
     @command = 'retest'
@@ -73,7 +56,7 @@ class TestDefaultWatcher <  Minitest::Test
   def test_uses_watchexec_when_installed
     launch_retest(@command)
 
-    assert_match <<~EXPECTED, read_output
+    assert_output_matches <<~EXPECTED
       Setup identified: [RUBY]. Using command: 'bundle exec ruby <test>'
       Watcher: [WATCHEXEC]
       Launching Retest...

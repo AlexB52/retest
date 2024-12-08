@@ -4,7 +4,7 @@ FOLDER="features/bundler-app"
 
 bundle install
 bundle exec rake build
-# cp -R features/support features/bundler-app/retest
+cp -R features/support features/bundler-app/retest
 ls -t pkg | head -n1 | xargs -I {} mv pkg/{} "$FOLDER/retest.gem"
 
 if [[ "$1" == "--no-build" ]]; then

@@ -1,4 +1,6 @@
 module FileChanges
+  include RetestHelper
+
   def teardown
     end_retest
   end
@@ -8,10 +10,9 @@ module FileChanges
 
     modify_file('lib/bottles.rb')
 
-    read_output do |output|
-      assert_match "Test file: test/bottles_test.rb", output
-      assert_match "12 runs, 12 assertions, 0 failures, 0 errors, 0 skips", output
-    end
+    assert_output_matches(
+      "Test file: test/bottles_test.rb",
+      "12 runs, 12 assertions, 0 failures, 0 errors, 0 skips")
   end
 
   def test_modifying_existing_test_file
@@ -19,10 +20,9 @@ module FileChanges
 
     modify_file('test/bottles_test.rb')
 
-    read_output do |output|
-      assert_match "Test file: test/bottles_test.rb", output
-      assert_match "12 runs, 12 assertions, 0 failures, 0 errors, 0 skips", output
-    end
+    assert_output_matches(
+      "Test file: test/bottles_test.rb",
+      "12 runs, 12 assertions, 0 failures, 0 errors, 0 skips")
   end
 
   def test_creating_a_new_test_file
@@ -30,7 +30,7 @@ module FileChanges
 
     create_file 'foo_test.rb'
 
-    assert_match "Test file: foo_test.rb", read_output
+    assert_output_matches "Test file: foo_test.rb"
 
   ensure
     delete_file 'foo_test.rb'
@@ -40,18 +40,18 @@ module FileChanges
     launch_retest(@command)
 
     create_file 'foo.rb'
-    assert_match <<~EXPECTED, read_output
+    assert_output_matches <<~EXPECTED
       FileNotFound - Retest could not find a matching test file to run.
     EXPECTED
 
     create_file 'foo_test.rb'
-    assert_match "Test file: foo_test.rb", read_output
+    assert_output_matches "Test file: foo_test.rb"
 
     modify_file('lib/bottles.rb')
-    assert_match "Test file: test/bottles_test.rb", read_output
+    assert_output_matches "Test file: test/bottles_test.rb"
 
     modify_file('foo.rb')
-    assert_match "Test file: foo_test.rb", read_output
+    assert_output_matches "Test file: foo_test.rb"
 
   ensure
     delete_file 'foo.rb'
@@ -59,13 +59,13 @@ module FileChanges
   end
 
   def test_untracked_file
-    create_file 'foo.rb', should_sleep: false
-    create_file 'foo_test.rb', should_sleep: false
+    create_file 'foo.rb', sleep_for: 0
+    create_file 'foo_test.rb', sleep_for: 0
 
     launch_retest(@command)
 
     modify_file 'foo.rb'
-    assert_match "Test file: foo_test.rb", read_output
+    assert_output_matches "Test file: foo_test.rb"
 
   ensure
     delete_file 'foo.rb'

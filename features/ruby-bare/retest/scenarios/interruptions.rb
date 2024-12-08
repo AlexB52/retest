@@ -1,4 +1,6 @@
 class GracefulExitWhenInterrupting < Minitest::Test
+  include RetestHelper
+
   def teardown
     end_retest
   end
@@ -6,16 +8,13 @@ class GracefulExitWhenInterrupting < Minitest::Test
   def test_interruption
     launch_retest 'retest --ruby'
 
-    assert_match <<~EXPECTED, @output.read
+    assert_output_matches <<~EXPECTED
       Launching Retest...
       Ready to refactor! You can make file changes now
     EXPECTED
 
-    Process.kill("INT", @pid)
-    wait
+    Process.kill("INT", @pid) if @pid
 
-    assert_match <<~EXPECTED, @output.read
-      Goodbye
-    EXPECTED
+    assert_output_matches "Goodbye"
   end
 end

@@ -7,5 +7,3 @@ require_relative 'retest_test/setup_test'
 
 $stdout.sync = true
 
-include FileHelper
-
