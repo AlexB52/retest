@@ -14,10 +14,7 @@ module RetestHelper
     @input&.close
     @stderr&.close
     @output&.close
-    if @pid
-      Process.kill('SIGHUP', @pid)
-      Process.detach(@pid)
-    end
+    @wait_thr.exit
   end
 
   # ASSERTIONS

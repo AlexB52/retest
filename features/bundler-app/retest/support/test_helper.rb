@@ -3,21 +3,18 @@
 
 module RetestHelper
   # COMMAND
-  def launch_retest(command, sleep_seconds: Float(ENV.fetch('LAUNCH_SLEEP_SECONDS', 1.5)))
+  def launch_retest(command, sleep_for: Float(ENV.fetch('LAUNCH_SLEEP_SECONDS', 1.5)))
     require 'open3'
     @input, @output, @stderr, @wait_thr = Open3.popen3(command)
     @pid = @wait_thr[:pid]
-    sleep sleep_seconds
+    sleep sleep_for
   end
 
   def end_retest
     @input&.close
     @stderr&.close
     @output&.close
-    if @pid
-      Process.kill('SIGHUP', @pid)
-      Process.detach(@pid)
-    end
+    @wait_thr.exit
   end
 
   # ASSERTIONS
@@ -42,7 +39,7 @@ module RetestHelper
     result = ""
     loop do
       result += output.read_nonblock(1024)
-    rescue IO::WaitReadable
+    rescue IO::WaitReadable, EOFError
       break
     end
 
