@@ -60,7 +60,6 @@ class GitChangesTest < Minitest::Test
 
     launch_retest 'retest --diff=main --ruby'
 
-    require "byebug";byebug
     assert_output_matches <<~EXPECTED
       Tests selected:
         - test/created_with_test_file_test.rb
