@@ -30,7 +30,8 @@ module Retest
     end
 
     def run_all
-      system_run command.clone(all: true).to_s
+      self.last_command = command.clone(all: true).to_s
+      system_run last_command
     end
 
     def format_instruction(changed_files: [], test_files: [])
