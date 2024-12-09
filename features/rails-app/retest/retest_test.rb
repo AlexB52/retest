@@ -131,14 +131,12 @@ class DiffOptionTest < Minitest::Test
 
     launch_retest 'retest --diff=main'
 
-    assert_output_matches <<~EXPECTED
+    assert_output_matches <<~EXPECTED, "7 runs, 9 assertions, 0 failures, 0 errors, 0 skips"
       Setup identified: [RAILS]. Using command: 'bin/rails test <test>'
       Tests selected:
         - test/controllers/books_controller_test.rb
         - test/models/book_test.rb
         - test/system/books_test.rb
     EXPECTED
-
-    assert_output_matches "7 runs, 9 assertions, 0 failures, 0 errors, 0 skips"
   end
 end
