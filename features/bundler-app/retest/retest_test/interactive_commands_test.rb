@@ -33,6 +33,7 @@ class InteractiveCommandTest < Minitest::Test
       * 'f', 'force'             # Forces a selection of test to run on every file change.
       * 'r', 'reset'             # Disables forced selection.
       * 'd', 'diff' [GIT BRANCH] # Runs matching specs that changed from a target branch.
+      * 'c'                      # Clears window.
       * 'e', 'exit'              # Exits Retest.
 
       Type interactive command and press enter. Enter 'h' for help.
