@@ -9,27 +9,21 @@ module Retest
       @question_asked = false
     end
 
-    def question_asked?
-      @question_asked
-    end
-
     def ask_which_test_to_use(path, files)
-      ask_question do
-        changed
-        notify_observers(:question)
-        options = options(files)
+      changed
+      notify_observers(:question)
+      options = options(files)
 
-        output.puts(<<~QUESTION)
-          We found few tests matching: #{path}
+      output.puts(<<~QUESTION)
+        We found few tests matching: #{path}
 
-          #{list_options(options.keys)}
+        #{list_options(options.keys)}
 
-          Which file do you want to use?
-          Enter the file number now:
-        QUESTION
-        output.print("> ")
-        options.values[input.gets.to_s.chomp.to_i]
-      end
+        Which file do you want to use?
+        Enter the file number now:
+      QUESTION
+      output.print("> ")
+      options.values[input.gets.to_s.chomp.to_i]
     end
 
     def puts(*args)
@@ -38,14 +32,6 @@ module Retest
 
     def read_output
       output.tap(&:rewind).read
-    end
-
-    def ask_question
-      old_question_asked = @question_asked
-      @question_asked = true
-      yield
-    ensure
-      @question_asked = old_question_asked
     end
 
     private
