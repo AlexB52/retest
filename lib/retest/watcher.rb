@@ -5,7 +5,7 @@ module Retest
         when 'listen'        then Default
         when 'watchexec'     then Watchexec
         when '', 'installed' then installed
-        else                  raise ArgumentError, "Unknown #{watcher}"
+        else                 raise ArgumentError, "Unknown #{watcher}"
         end
 
       unless tool.installed?
