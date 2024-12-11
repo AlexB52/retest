@@ -4,9 +4,9 @@ require 'minitest/autorun'
 
 $stdout.sync = true
 
-include FileHelper
-
 class MatchingTestsCommandTest < Minitest::Test
+  include RetestHelper
+
   def setup
     @command = 'retest --rspec'
   end
@@ -18,7 +18,7 @@ class MatchingTestsCommandTest < Minitest::Test
   def test_start_retest
     launch_retest @command
 
-    assert_match <<~EXPECTED, @output.read
+    assert_output_matches <<~EXPECTED
       Launching Retest...
       Ready to refactor! You can make file changes now
     EXPECTED
@@ -29,12 +29,15 @@ class MatchingTestsCommandTest < Minitest::Test
 
     modify_file 'app/models/post.rb'
 
-    assert_match "Test File Selected: spec/models/post_spec.rb", @output.read
-    assert_match "2 examples, 0 failures", @output.read
+    assert_output_matches(
+      "Test file: spec/models/post_spec.rb",
+      "2 examples, 0 failures")
   end
 end
 
 class AllTestsCommandTest < Minitest::Test
+  include RetestHelper
+
   def setup
     @command = 'retest --rspec --all'
   end
@@ -46,7 +49,7 @@ class AllTestsCommandTest < Minitest::Test
   def test_start_retest
     launch_retest @command
 
-    assert_match <<~EXPECTED, @output.read
+    assert_output_matches <<~EXPECTED
       Launching Retest...
       Ready to refactor! You can make file changes now
     EXPECTED
@@ -55,13 +58,15 @@ class AllTestsCommandTest < Minitest::Test
   def test_modify_a_file
     launch_retest @command
 
-    modify_file 'app/models/post.rb', sleep_seconds: 15
+    modify_file 'app/models/post.rb'
 
-    assert_match "9 examples, 0 failures", @output.read
+    assert_output_matches "9 examples, 0 failures"
   end
 end
 
 class AutoFlagTest < Minitest::Test
+  include RetestHelper
+
   def teardown
     end_retest
   end
@@ -69,8 +74,9 @@ class AutoFlagTest < Minitest::Test
   def test_with_no_command
     launch_retest 'retest'
 
-    assert_match <<~OUTPUT, @output.read
+    assert_output_matches <<~OUTPUT
       Setup identified: [RSPEC]. Using command: 'bundle exec rspec <test>'
+      Watcher: [LISTEN]
       Launching Retest...
       Ready to refactor! You can make file changes now
     OUTPUT
@@ -79,8 +85,9 @@ class AutoFlagTest < Minitest::Test
   def test_with_no_command_all
     launch_retest 'retest --all'
 
-    assert_match <<~OUTPUT, @output.read
+    assert_output_matches <<~OUTPUT
       Setup identified: [RSPEC]. Using command: 'bundle exec rspec'
+      Watcher: [LISTEN]
       Launching Retest...
       Ready to refactor! You can make file changes now
     OUTPUT

@@ -1,16 +1,12 @@
 module Retest
   class Command
-    class Rspec
-      attr_reader :all, :file_system
-
-      def initialize(all:, file_system: FileSystem)
-        @file_system = file_system
-        @all = all
-      end
-
+    class Rspec < Base
       def to_s
-        return "#{root_command} <test>" unless all
-        root_command
+        if all
+          root_command
+        else
+          "#{root_command} <test>"
+        end
       end
 
       def format_batch(*files)
@@ -20,9 +16,11 @@ module Retest
       private
 
       def root_command
-        return 'bin/rspec' if file_system.exist? 'bin/rspec'
-
-        'bundle exec rspec'
+        if file_system.exist? 'bin/rspec'
+          'bin/rspec'
+        else
+          'bundle exec rspec'
+        end
       end
     end
   end

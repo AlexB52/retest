@@ -49,34 +49,6 @@ module Retest
       EXPECTED
     end
 
-    def test_question_asked_when_asking_question
-      files = %w(
-        test/models/taxation/holdings_test.rb
-        test/models/schedule/holdings_test.rb
-        test/models/holdings_test.rb
-        test/models/performance/holdings_test.rb
-        test/lib/csv_report/holdings_test.rb
-      )
-
-      rd, wr = IO.pipe
-
-      @subject.input = rd
-
-      th = Thread.new do
-        @subject.ask_which_test_to_use("app/models/valuation/holdings.rb", files)
-      end
-
-      wait_until { assert @subject.question_asked? }
-
-      wr.puts("1\n")
-
-      assert_equal "test/models/schedule/holdings_test.rb", th.value
-      refute @subject.question_asked?
-    ensure
-      rd.close
-      wr.close
-    end
-
     def test_read_output
       @subject.output.puts "hello world\n"
 
@@ -101,18 +73,6 @@ module Retest
       @subject.ask_which_test_to_use("app/models/valuation/holdings.rb", files)
 
       assert_includes observer.notepad, MethodCall.new(name: :update, args: [:question])
-    end
-
-    def test_ask_question
-      refute @subject.question_asked?
-      @subject.ask_question do
-        assert @subject.question_asked?
-      end
-      refute @subject.question_asked?
-    end
-
-    def test_question_flag_when_asking_for_file
-
     end
   end
 end

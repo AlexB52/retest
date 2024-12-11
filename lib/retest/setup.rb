@@ -4,7 +4,7 @@ module Retest
       @type ||= begin
         return :ruby unless has_lock_file?
 
-        if rspec?    then :rspec
+        if    rspec? then :rspec
         elsif rails? then :rails
         elsif rake?  then :rake
         else              :ruby

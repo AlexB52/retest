@@ -1,3 +1,5 @@
+require_relative 'command/base'
+require_relative 'command/hardcoded'
 require_relative 'command/rails'
 require_relative 'command/rake'
 require_relative 'command/rspec'
@@ -7,12 +9,8 @@ module Retest
   class Command
     extend Forwardable
 
-    def self.for_options(options)
-      new(options: options).command
-    end
-
-    def self.for_setup(setup)
-      new(setup: setup).command
+    def self.for_options(options, stdout: $stdout)
+      new(options: options, stdout: stdout).command
     end
 
     def_delegator :setup, :type
@@ -29,15 +27,20 @@ module Retest
       options_command || default_command
     end
 
-    def options_command
-      return params[:command] if params[:command]
+    private
 
-      if    params[:rspec] then rspec_command
-      elsif params[:rails] then rails_command
-      elsif params[:ruby]  then ruby_command
-      elsif params[:rake]  then rake_command
-      else
+    def options_command
+      if    params[:command] then hardcoded_command(params[:command])
+      elsif params[:rspec]   then rspec_command
+      elsif params[:rails]   then rails_command
+      elsif params[:ruby]    then ruby_command
+      elsif params[:rake]    then rake_command
       end
+    end
+
+    def default_command
+      log "Setup identified: [#{type.upcase}]. Using command: '#{setup_command}'"
+      setup_command
     end
 
     def setup_command
@@ -50,12 +53,13 @@ module Retest
       end
     end
 
-    def default_command
-      @stdout.puts "Setup identified: [#{type.upcase}]. Using command: '#{setup_command}'"
-      setup_command
+    def log(message)
+      @stdout&.puts(message)
     end
 
-    private
+    def hardcoded_command(command)
+      Hardcoded.new(command: command)
+    end
 
     def rspec_command
       Rspec.new(all: full_suite?)

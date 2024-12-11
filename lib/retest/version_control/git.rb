@@ -12,8 +12,12 @@ module Retest
         'git'
       end
 
-      def files
-        (untracked_files + tracked_files).sort
+      def files(extensions: [])
+        result = (untracked_files + tracked_files).sort
+        unless extensions.empty?
+          result.select! { |file| /\.(?:#{extensions.join('|')})$/.match?(file) }
+        end
+        result
       end
 
       def diff_files(branch)

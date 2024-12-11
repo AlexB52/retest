@@ -63,10 +63,19 @@ module Retest
       long "--diff=git-branch"
     end
 
-    option :ext do
-      desc "Regex of file extensions to listen to"
-      long "--ext=regex"
-      default "\\.rb$"
+    option :exts do
+      desc "Comma separated of filenames extensions to filter to"
+      long "--exts=<EXTENSIONS>"
+      default "rb"
+      convert :list
+    end
+
+    option :watcher do
+      desc "Tool used to watch file events"
+      permit %i[listen watchexec]
+      long "--watcher=<WATCHER>"
+      short "-w"
+      convert :sym
     end
 
     flag :all do
@@ -155,8 +164,16 @@ module Retest
       params[:polling]
     end
 
-    def extension
-      Regexp.new(params[:ext])
+    def extensions
+      params[:exts]
+    end
+
+    def watcher
+      params[:watcher] || :installed
+    end
+
+    def merge(options = [])
+      self.class.new(@args.dup.concat(options))
     end
   end
 end

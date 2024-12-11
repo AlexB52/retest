@@ -4,7 +4,7 @@ require 'string/similarity'
 require 'observer'
 
 require "retest/version"
-require "retest/runners"
+require "retest/runner"
 require "retest/repository"
 require "retest/matching_options"
 require "retest/options"
@@ -15,15 +15,17 @@ require "retest/file_system"
 require "retest/program"
 require "retest/prompt"
 require "retest/sounds"
+require "retest/watcher"
 
 Listen.adapter_warn_behavior = :log
 
 module Retest
   class Error < StandardError; end
+  class FileNotFound < StandardError; end
 
-  def self.listen(options, listener: Listen)
-    listener.to('.', only: options.extension, relative: true, force_polling: options.force_polling?) do |modified, added, removed|
+  def self.listen(options, listener: Watcher::Default)
+    listener.watch(dir: '.', extensions: options.extensions, polling: options.force_polling?) do |modified, added, removed|
       yield modified, added, removed
-    end.start
+    end
   end
 end

@@ -16,6 +16,20 @@ FakeFS = Struct.new(:files) do
   end
 end
 
+class RaisingRunner
+  class MethodCallError < StandardError; end
+
+  def initialize
+  end
+
+  def sync(added:, removed:)
+  end
+
+  def run(file, repository:)
+    raise MethodCallError, "#{__method__} should not be called"
+  end
+end
+
 def wait_until(max_attempts: 10)
   attempts = 0
   begin
@@ -27,3 +41,10 @@ def wait_until(max_attempts: 10)
   end
 end
 
+module Retest
+  # Remove Watchexec when not installed
+  if defined?(Watcher::Watchexec) && !Watcher::Watchexec.installed?
+    Watcher.send(:remove_const, :Watchexec)
+    Watcher::Watchexec = Watcher::Default
+  end
+end

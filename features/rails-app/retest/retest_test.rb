@@ -4,9 +4,9 @@ require 'minitest/autorun'
 
 $stdout.sync = true
 
-include FileHelper
-
 class MatchingTestsCommandTest < Minitest::Test
+  include RetestHelper
+
   def setup
     @command = 'retest --rails'
   end
@@ -18,7 +18,7 @@ class MatchingTestsCommandTest < Minitest::Test
   def test_start_retest
     launch_retest @command
 
-    assert_match <<~EXPECTED, @output.read
+    assert_output_matches <<~EXPECTED
       Launching Retest...
       Ready to refactor! You can make file changes now
     EXPECTED
@@ -29,12 +29,15 @@ class MatchingTestsCommandTest < Minitest::Test
 
     modify_file 'app/models/post.rb'
 
-    assert_match "Test File Selected: test/models/post_test.rb", @output.read
-    assert_match "1 runs, 1 assertions, 0 failures, 0 errors, 0 skips", @output.read
+    assert_output_matches(
+      "Test file: test/models/post_test.rb",
+      "1 runs, 1 assertions, 0 failures, 0 errors, 0 skips")
   end
 end
 
 class AllTestsCommandTest < Minitest::Test
+  include RetestHelper
+
   def setup
     @command = 'retest --rails --all'
   end
@@ -46,7 +49,7 @@ class AllTestsCommandTest < Minitest::Test
   def test_start_retest
     launch_retest @command
 
-    assert_match <<~EXPECTED, @output.read
+    assert_output_matches <<~EXPECTED
       Launching Retest...
       Ready to refactor! You can make file changes now
     EXPECTED
@@ -57,11 +60,13 @@ class AllTestsCommandTest < Minitest::Test
 
     modify_file 'app/models/post.rb'
 
-    assert_match "8 runs, 10 assertions, 0 failures, 0 errors, 0 skips", @output.read
+    assert_output_matches "8 runs, 10 assertions, 0 failures, 0 errors, 0 skips"
   end
 end
 
 class AutoFlagTest < Minitest::Test
+  include RetestHelper
+
   def teardown
     end_retest
   end
@@ -69,8 +74,9 @@ class AutoFlagTest < Minitest::Test
   def test_with_no_command
     launch_retest 'retest'
 
-    assert_match <<~OUTPUT, @output.read
+    assert_output_matches <<~OUTPUT
       Setup identified: [RAILS]. Using command: 'bin/rails test <test>'
+      Watcher: [LISTEN]
       Launching Retest...
       Ready to refactor! You can make file changes now
     OUTPUT
@@ -79,8 +85,9 @@ class AutoFlagTest < Minitest::Test
   def test_with_no_command_all
     launch_retest 'retest --all'
 
-    assert_match <<~OUTPUT, @output.read
+    assert_output_matches <<~OUTPUT
       Setup identified: [RAILS]. Using command: 'bin/rails test'
+      Watcher: [LISTEN]
       Launching Retest...
       Ready to refactor! You can make file changes now
     OUTPUT
@@ -94,6 +101,8 @@ class SetupTest < Minitest::Test
 end
 
 class DiffOptionTest < Minitest::Test
+  include RetestHelper
+
   def setup
     `git config --global init.defaultBranch main`
     `git config --global user.email "you@example.com"`
@@ -106,7 +115,6 @@ class DiffOptionTest < Minitest::Test
   end
 
   def teardown
-    @output.delete
     `git checkout -`
     `git clean -fd .`
     `git checkout .`
@@ -122,20 +130,13 @@ class DiffOptionTest < Minitest::Test
     `git commit -m "Scaffold books"`
 
     launch_retest 'retest --diff=main'
-    wait
 
-    assert_match <<~EXPECTED, @output.read
+    assert_output_matches <<~EXPECTED, "7 runs, 9 assertions, 0 failures, 0 errors, 0 skips"
       Setup identified: [RAILS]. Using command: 'bin/rails test <test>'
-      Tests found:
+      Tests selected:
         - test/controllers/books_controller_test.rb
         - test/models/book_test.rb
         - test/system/books_test.rb
-      Running tests...
-      Test File Selected: test/controllers/books_controller_test.rb test/models/book_test.rb test/system/books_test.rb
-    EXPECTED
-
-    assert_match <<~EXPECTED, @output.read
-      7 runs, 9 assertions, 0 failures, 0 errors, 0 skips
     EXPECTED
   end
 end

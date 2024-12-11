@@ -3,26 +3,32 @@
 require 'retest'
 
 $stdout.sync = true
-
-Signal.trap(:INT) { $stdout.puts "Goodbye"; exit }
+listen_rd, listen_wr = IO.pipe
+Signal.trap(:INT) do
+  puts "Goodbye"
+  listen_rd.close
+  listen_wr.close
+  exit
+end
 
 options = Retest::Options.new(ARGV)
 
 if options.help?
-  $stdout.puts options.help
+  puts options.help
   return
 end
 
 if options.version?
-  $stdout.puts Retest::VERSION
+  puts Retest::VERSION
   return
 end
 
 prompt     = Retest::Prompt.new
 repository = Retest::Repository.new(files: Retest::VersionControl.files, prompt: prompt)
 command    = Retest::Command.for_options(options)
-runner     = Retest::Runners.runner_for(command.to_s)
+runner     = Retest::Runner.new(command)
 sounds     = Retest::Sounds.for(options)
+watcher    = Retest::Watcher.for(options.watcher)
 
 sounds.play(:start)
 runner.add_observer(sounds)
@@ -30,13 +36,18 @@ prompt.add_observer(sounds)
 
 program = Retest::Program.new(
   repository: repository,
-  command: command,
   runner: runner
 )
 
 if options.params[:diff]
   program.diff(options.params[:diff])
   return
+end
+
+if watcher == Retest::Watcher::Watchexec
+  puts "Watcher: [WATCHEXEC]"
+else
+  puts "Watcher: [LISTEN]"
 end
 
 launching_message = "Launching Retest..."
@@ -46,16 +57,82 @@ end
 
 # Main action
 
-$stdout.puts launching_message
-Retest.listen(options) do |modified, added, removed|
+puts launching_message
+Retest.listen(options, listener: watcher) do |modified, added, removed|
   begin
-    program.run(modified, added, removed)
+    repository.sync(added: added, removed: removed)
+    runner.sync(added: added, removed: removed)
+
+    listen_wr.puts "file changed: #{(modified + added).first}"
   rescue => e
-    $stdout.puts "Something went wrong: #{e.message}"
+    puts "Something went wrong: #{e.message}"
   end
 end
-$stdout.puts "Ready to refactor! You can make file changes now"
+puts "Ready to refactor! You can make file changes now"
 
-# not blocking
+def run_command(input:, program:)
+  case input.strip
+  when /^file changed:\s(.*)$/
+    puts "File changed: #{$1}"
+    program.run($1)
+  when 'p', 'pause'
+    program.pause
+    puts "Program is paused\n"
+  when 'u', 'unpause'
+    program.resume
+    puts "Program has been resumed\n"
+  when 'e', 'exit'
+    Process.kill("INT", 0)
+  when 'r', 'reset'
+    program.reset_selection
+    puts "command reset to '#{program.runner.command.to_s}'"
+  when 'f', 'force'
+    require 'tty-prompt'
+    prompt = TTY::Prompt.new
+    program.force_selection prompt.multi_select(
+      "What test files do you want to run when saving a file?",
+      program.repository.test_files,
+      filter: true, min: 1
+    )
+    program.run(nil, force_run: true)
+  when ''
+    puts "Running last command: '#{program.last_command}'\n"
+    program.run_last_command
+  when 'ra', 'run all'
+    puts "Running all tests\n"
+    program.run_all
+  when /^di?f?f?\s(.*)$/
+    program.diff($1)
+  when 'c'
+    program.clear_terminal
+  when 'h', 'help'
+    puts <<~HELP
 
-sleep
+      * 'h', 'help'              # Prints help.
+      * 'p', 'pause'             # Pauses Retest. Tests aren't run on file change events until unpaused.
+      * 'u', 'unpause'           # Unpauses Retest.
+      * <ENTER>                  # Runs last changed triggered command.
+      * 'ra, 'run all'           # Runs all tests.
+      * 'f', 'force'             # Forces a selection of test to run on every file change.
+      * 'r', 'reset'             # Disables forced selection.
+      * 'd', 'diff' [GIT BRANCH] # Runs matching specs that changed from a target branch.
+      * 'c'                      # Clears window.
+      * 'e', 'exit'              # Exits Retest.
+    HELP
+  else
+    puts "Unknown interactive command #{input}\n"
+  end
+end
+
+connections = [$stdin, listen_rd]
+loop do
+  puts "\nType interactive command and press enter. Enter 'h' for help."
+  print(">\s")
+
+  ready = IO.select(connections)
+  readable_connections = ready[0]
+  readable_connections.each do |conn|
+    data = conn.readpartial(4096)
+    run_command(input: data.to_s.chomp, program: program)
+  end
+end

@@ -1,4 +1,6 @@
 class AutoFlag < Minitest::Test
+  include RetestHelper
+
   def teardown
     end_retest
   end
@@ -6,14 +8,15 @@ class AutoFlag < Minitest::Test
   def test_start_retest
     launch_retest 'retest'
 
-    assert_match <<~OUTPUT, @output.read
+    assert_output_matches <<~OUTPUT
       Setup identified: [RUBY]. Using command: 'ruby <test>'
+      Watcher: [LISTEN]
       Launching Retest...
       Ready to refactor! You can make file changes now
     OUTPUT
 
     modify_file('program.rb')
 
-    assert_match "Test File Selected: program_test.rb", @output.read
+    assert_output_matches "Test file: program_test.rb"
   end
 end

@@ -4,9 +4,9 @@ require 'minitest/autorun'
 
 $stdout.sync = true
 
-include FileHelper
-
 class MatchingTestsCommandTest < Minitest::Test
+  include RetestHelper
+
   def setup
     @command = "retest --rake"
   end
@@ -18,7 +18,7 @@ class MatchingTestsCommandTest < Minitest::Test
   def test_start_retest
     launch_retest @command
 
-    assert_match <<~EXPECTED, @output.read
+    assert_output_matches <<~EXPECTED
       Launching Retest...
       Ready to refactor! You can make file changes now
     EXPECTED
@@ -29,12 +29,15 @@ class MatchingTestsCommandTest < Minitest::Test
 
     modify_file 'apps/web/controllers/books/create.rb'
 
-    assert_match "Test File Selected: spec/web/controllers/books/create_spec.rb", @output.read
-    assert_match "4 runs, 7 assertions, 0 failures, 0 errors, 0 skips", @output.read
+    assert_output_matches(
+      "Test file: spec/web/controllers/books/create_spec.rb",
+      "4 runs, 7 assertions, 0 failures, 0 errors, 0 skips")
   end
 end
 
 class AllTestsCommandTest < Minitest::Test
+  include RetestHelper
+
   def setup
     @command = 'retest --rake --all'
   end
@@ -46,7 +49,7 @@ class AllTestsCommandTest < Minitest::Test
   def test_start_retest
     launch_retest @command
 
-    assert_match <<~EXPECTED, @output.read
+    assert_output_matches <<~EXPECTED
       Launching Retest...
       Ready to refactor! You can make file changes now
     EXPECTED
@@ -57,11 +60,13 @@ class AllTestsCommandTest < Minitest::Test
 
     modify_file 'apps/web/controllers/books/create.rb'
 
-    assert_match "15 runs, 27 assertions, 0 failures, 0 errors, 1 skips", @output.read
+    assert_output_matches "15 runs, 27 assertions, 0 failures, 0 errors, 1 skips"
   end
 end
 
 class AutoFlagTest < Minitest::Test
+  include RetestHelper
+
   def teardown
     end_retest
   end
@@ -69,8 +74,9 @@ class AutoFlagTest < Minitest::Test
   def test_with_no_command
     launch_retest 'retest'
 
-    assert_match <<~OUTPUT, @output.read
+    assert_output_matches <<~OUTPUT
       Setup identified: [RAKE]. Using command: 'bundle exec rake test TEST=<test>'
+      Watcher: [LISTEN]
       Launching Retest...
       Ready to refactor! You can make file changes now
     OUTPUT
@@ -79,8 +85,9 @@ class AutoFlagTest < Minitest::Test
   def test_with_no_command_all
     launch_retest 'retest --all'
 
-    assert_match <<~OUTPUT, @output.read
+    assert_output_matches <<~OUTPUT
       Setup identified: [RAKE]. Using command: 'bundle exec rake test'
+      Watcher: [LISTEN]
       Launching Retest...
       Ready to refactor! You can make file changes now
     OUTPUT

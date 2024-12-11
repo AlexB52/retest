@@ -1,4 +1,6 @@
 class FlagTest < Minitest::Test
+  include RetestHelper
+
   def setup
   end
 
@@ -9,14 +11,15 @@ class FlagTest < Minitest::Test
   def test_with_no_command
     launch_retest 'retest'
 
-    assert_match <<~OUTPUT, @output.read
+    assert_output_matches <<~OUTPUT
       Setup identified: [RSPEC]. Using command: 'bundle exec rspec <test>'
+      Watcher: [LISTEN]
       Launching Retest...
       Ready to refactor! You can make file changes now
     OUTPUT
 
     modify_file('lib/bottles.rb')
 
-    assert_match "Test File Selected: spec/bottles_spec.rb", @output.read
+    assert_output_matches "Test file: spec/bottles_spec.rb"
   end
 end
