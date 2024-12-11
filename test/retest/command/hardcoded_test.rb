@@ -14,40 +14,24 @@ module Retest
         command = Hardcoded.new(command: 'echo "hello world"')
         refute command.has_test?
         refute command.has_changed?
-        refute command.test_type?
-        refute command.changed_type?
-        refute command.variable_type?
-        assert command.hardcoded_type?
       end
 
       def test_a_test_and_changed_command_status
         command = Hardcoded.new(command: 'echo <test> & <changed>')
         assert command.has_test?
         assert command.has_changed?
-        refute command.test_type?
-        refute command.changed_type?
-        assert command.variable_type?
-        refute command.hardcoded_type?
       end
 
       def test_a_test_command_status
         command = Hardcoded.new(command: 'echo <test>')
         assert command.has_test?
         refute command.has_changed?
-        assert command.test_type?
-        refute command.changed_type?
-        refute command.variable_type?
-        refute command.hardcoded_type?
       end
 
       def test_a_changed_command_status
         command = Hardcoded.new(command: 'echo <changed>')
         refute command.has_test?
         assert command.has_changed?
-        refute command.test_type?
-        assert command.changed_type?
-        refute command.variable_type?
-        refute command.hardcoded_type?
       end
 
       def test_to_s

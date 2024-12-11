@@ -10,20 +10,6 @@ module Retest
 
       include CommandInterface
 
-      def test_type
-        all_cmd = Ruby.new(all: true, file_system: FakeFS.new([]))
-        assert all_cmd.test_type?
-        refute all_cmd.variable_type?
-        refute all_cmd.changed_type?
-        refute all_cmd.hardcoded_type?
-
-        cmd = Ruby.new(all: false, file_system: FakeFS.new([]))
-        assert cmd.test_type?
-        refute cmd.variable_type?
-        refute cmd.changed_type?
-        refute cmd.hardcoded_type?
-      end
-
       def test_to_s
         assert_equal 'ruby <test>', Ruby.new(all: true, file_system: FakeFS.new(['bin/ruby'])).to_s
         assert_equal 'ruby <test>', Ruby.new(all: true, file_system: FakeFS.new([])).to_s
