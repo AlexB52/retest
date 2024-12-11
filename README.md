@@ -4,53 +4,46 @@
 
 Feedback is welcome in this [Discussion - Retest V2.0 - Interactive Panel (proof of concept)](https://github.com/AlexB52/retest/discussions/216)
 
-# Retest
+# Retest: Your Go-To Testing Assistant for Ruby Projects
 
-A trusty CLI companion to monitor file changes and automatically run the corresponding Ruby specs. Ready to assist on any Ruby project, no setup needed! Designed to be dev-centric and project independent, it can be used on the fly. No Gemfile updates, no commits to a repo or configuration files required to start refactoring. Works with every Ruby projects (at least that is the end goal)
+Retest is the ultimate CLI tool for Ruby developers, designed to make your testing workflow seamless and efficient. It monitors file changes and automatically runs relevant tests, ensuring that your code remains solid as you refactor and develop.  
 
-## Demo
+With **zero setup required**, Retest works right out of the box on any Ruby project—no changes to your Gemfile, no unnecessary repo clutter, and no configuration headaches. It's lightweight, dev-centric, and ready to integrate into your workflow instantly.  
 
-https://user-images.githubusercontent.com/7149034/153734043-1d136f27-5c24-4676-868b-0fde76016b13.mp4
+## 🚀 **What Makes Retest Awesome?**
 
-## Installation
+- **Plug-and-Play:** Start testing immediately—no installation hassles or setup scripts.
+- **Project Independence:** Works with any Ruby project, no Gemfile modifications required.
+- **Time-Saving Automation:** Automatically identifies and runs relevant tests as you code.
+- **Customizable Workflows:** Tailor commands to your needs with placeholders, options, and interactive features.
+- **Sound Notifications:** Get audible feedback for test results.
 
-Install it on your machine without adding it on a Gemfile:
+## 💡 **Why Use Retest?**
 
-    $ gem install retest
+Testing frequently is the cornerstone of safe refactoring. Retest eliminates the friction of manual test execution by running tests after every file change, helping you stay just one `cmd + z` away from green tests.
 
-## Ruby Support
+## 🔧 **Quick Installation**
 
-Retest supports ruby 2.5 and above.
+Install Retest globally in seconds:  
 
-## Watching tools: Watchexec & Listen
+```bash
+gem install retest
+```
 
-By default retest ships with [Listen](https://github.com/guard/listen) which is used to listen to file changes. 
+No need to add it to your Gemfile—just install and go!
 
-Retest will use [watchexec](https://github.com/watchexec/watchexec) a more performant file watcher when installed on the matchine. watchexec will only work with a version >= 2.2.0
+## 🛠️ **Key Features**
 
-To force the usage of a watcher you can use the `-w` option as `retest -w watchexec`
+### **Flexible Commands**  
+Run tests with your preferred commands, placeholders, or patterns:  
+```bash
+retest 'bin/rails test <test> && rubocop <changed>' # Flexible placeholders
+retest --all                                        # Run all tests on every file change
+retest --diff origin/main                           # Test changes from a branch
+```
 
-## Usage
-
-Retest is used in your terminal after accessing your ruby project folder.
-
-### Help
-
-Find out what retest can do anytime with
-
-    $ retest -h
-
-Here is a quick summary:
-
-  * run a hardcoded command: `retest 'bin/rails test test/models/post_test.rb'`
-  * use placeholders: `retest 'bin/rails test <test> && rubocop <changed>`
-  * play a sound for feedback: `retest --notify`
-  * run all specs when a file change: `retest --all`
-  * run all matching specs from a diffed branch: `retest --diff origin/main`
-
-### Interactive companion
-
-An interactive shell will start when launching retest to help your testing workflow. Enter 'h' to see all the options.
+### **Interactive Companion**  
+Stay in control with an interactive shell for test management. Start Retest and enter `h` to explore available commands.  
 
 ```
 Setup identified: [RAKE]. Using command: 'bundle exec rake test TEST=<test>'
@@ -73,56 +66,40 @@ Type interactive command and press enter. Enter 'h' for help.
 * 'e', 'exit'              # Exits Retest.
 
 ```
-### Running rules
+### **Supports Multiple Watchers**  
+Retest ships with [Listen](https://github.com/guard/listen) for file monitoring but can use the more performant [Watchexec](https://github.com/watchexec/watchexec) if installed.  
 
-When on a forced selection, retest will run the forced selection regardless of the file changed.
-
-Otherwise, the gem works as follows:
-
-* When a **ruby file** is changed, retest will run its matching test.
-* When a **test file** is changed, retest will run the test file.
-* When multiple matching test files are found, retest asks you to confirm the file and save the answer.
-* When a test file is not found, retest runs the last run command or throw a 404.
-
-## Why?
-It is advised to be one `cmd + z` away from green tests when refactoring. This means running tests after every line change. Let Retest rerun your tests after every file change you make.
-
-Retest gem is meant to be simple and follow testing conventions encountered in Ruby projects. Give it a go you can uninstall it easily. If you think the matching pattern could be improved please raise an issue.
-
-For fully fledged solutions, some cli tools already exists: [autotest](https://github.com/grosser/autotest), [guard](https://github.com/guard/guard), [zentest](https://github.com/seattlerb/zentest)
-
-## Docker
-
-Retest works in Docker too. You can install the gem and launch retest in your container while refactoring.
-
+To force a specific watcher:  
 ```bash
-# Enter your container. Ex:
-$ docker-compose run web bash
-
-# Install the gem and run retest in your container shell
-$ gem install retest
-$ retest 'bundle exec rails test <test>'
+retest -w watchexec
 ```
 
-## Disclaimer
-* If an error comes in try using `bundle exec` like so: `$ retest 'bundle exec rake test <test>'`
-* Aliases saved on ~/.bashrc or ~/.zshrc cannot be run that way with the `retest` command
+## 🐳 **Works with Docker**
 
-## Development
+Retest can run inside Docker containers, ensuring your testing workflow stays consistent across environments.  
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+```bash
+# Inside your container shell
+gem install retest
+retest 'bundle exec rails test <test>'
+```
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+## ❤️ **Contributing**
 
-To run integration tests on one setup (ex: hanami-app): `bin/test/hanami-app`
+Got feedback or ideas? Join the discussion for Retest 2.0 and share your thoughts:  
+[Discussion - Retest V2.0 - Interactive Panel](https://github.com/AlexB52/retest/discussions/216)
 
-To access an app container (ex: ruby-app): `docker-compose -f features/ruby-app/docker-compose.yml run retest sh`
+Bug reports and pull requests are welcome at [GitHub](https://github.com/alexb52/retest).  
 
-## Contributing
+## 🛠️ **Development**
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/alexb52/retest.
+Want to contribute to Retest? Follow these steps to set up your environment
 
+1. Clone the repo and install dependencies: `bin/setup`
+2. Run tests to ensure everything is working: `rake test`
+3. Experiment with an interactive console: `bin/console`
+4. To run integration tests (e.g., for a Hanami app): `bin/test/hanami-app`
 
-## License
+## 📜 **License**  
 
-The gem is available as open-source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+Retest is open-source and available under the [MIT License](https://opensource.org/licenses/MIT).
