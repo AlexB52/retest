@@ -11,7 +11,7 @@ module Retest
       end
 
       def setup
-        @subject = Program.new(repository: Repository.new, clear_window: false, stdout: StringIO.new)
+        @subject = Program.new(repository: Repository.new, stdout: StringIO.new)
       end
 
       def test_paused?

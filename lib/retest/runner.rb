@@ -6,9 +6,7 @@ module Retest
     include Observable
     include CachedTestFile
 
-    def_delegators :command,
-      :has_changed?, :has_test?,
-      :changed_type?, :test_type?, :variable_type?, :harcoded_type?
+    def_delegators :command, :has_changed?, :has_test?
 
     attr_accessor :command, :stdout, :last_command
     def initialize(command, stdout: $stdout)

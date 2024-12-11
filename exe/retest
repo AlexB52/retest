@@ -46,7 +46,7 @@ end
 
 if watcher == Retest::Watcher::Watchexec
   puts "Watcher: [WATCHEXEC]"
-else Retest::Watcher::Default
+else
   puts "Watcher: [LISTEN]"
 end
 
@@ -71,7 +71,6 @@ end
 puts "Ready to refactor! You can make file changes now"
 
 def run_command(input:, program:)
-  program.clear_terminal
   case input.strip
   when /^file changed:\s(.*)$/
     puts "File changed: #{$1}"
@@ -104,6 +103,8 @@ def run_command(input:, program:)
     program.run_all
   when /^di?f?f?\s(.*)$/
     program.diff($1)
+  when 'c'
+    program.clear_terminal
   when 'h', 'help'
     puts <<~HELP
 
@@ -115,6 +116,7 @@ def run_command(input:, program:)
       * 'f', 'force'             # Forces a selection of test to run on every file change.
       * 'r', 'reset'             # Disables forced selection.
       * 'd', 'diff' [GIT BRANCH] # Runs matching specs that changed from a target branch.
+      * 'c'                      # Clears window.
       * 'e', 'exit'              # Exits Retest.
     HELP
   else

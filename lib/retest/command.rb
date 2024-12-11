@@ -27,17 +27,20 @@ module Retest
       options_command || default_command
     end
 
-    def options_command
-      if params[:command]
-        return hardcoded_command(params[:command])
-      end
+    private
 
-      if    params[:rspec] then rspec_command
-      elsif params[:rails] then rails_command
-      elsif params[:ruby]  then ruby_command
-      elsif params[:rake]  then rake_command
-      else
+    def options_command
+      if    params[:command] then hardcoded_command(params[:command])
+      elsif params[:rspec]   then rspec_command
+      elsif params[:rails]   then rails_command
+      elsif params[:ruby]    then ruby_command
+      elsif params[:rake]    then rake_command
       end
+    end
+
+    def default_command
+      log "Setup identified: [#{type.upcase}]. Using command: '#{setup_command}'"
+      setup_command
     end
 
     def setup_command
@@ -49,13 +52,6 @@ module Retest
       else             ruby_command
       end
     end
-
-    def default_command
-      log "Setup identified: [#{type.upcase}]. Using command: '#{setup_command}'"
-      setup_command
-    end
-
-    private
 
     def log(message)
       @stdout&.puts(message)

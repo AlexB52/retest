@@ -21,22 +21,6 @@ module Retest
         to_s.include?('<test>')
       end
 
-      def changed_type?
-        !has_test? && has_changed?
-      end
-
-      def test_type?
-        has_test? && !has_changed?
-      end
-
-      def variable_type?
-        has_test? && has_changed?
-      end
-
-      def hardcoded_type?
-        !has_test? && !has_changed?
-      end
-
       def to_s
         @command
       end

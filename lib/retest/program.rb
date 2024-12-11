@@ -12,10 +12,9 @@ module Retest
     def_delegators :runner,
       :run_last_command, :last_command
 
-    def initialize(runner: nil, repository: nil, clear_window: true, stdout: $stdout)
+    def initialize(runner: nil, repository: nil, stdout: $stdout)
       @runner = runner
       @repository = repository
-      @clear_window = clear_window
       @stdout = stdout
       initialize_pause(false)
       initialize_forced_selection([])
@@ -61,8 +60,6 @@ module Retest
     end
 
     def clear_terminal
-      return unless @clear_window
-
       system('clear 2>/dev/null') || system('cls 2>/dev/null')
     end
   end
