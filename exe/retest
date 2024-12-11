@@ -46,7 +46,7 @@ end
 
 if watcher == Retest::Watcher::Watchexec
   puts "Watcher: [WATCHEXEC]"
-else Retest::Watcher::Default
+else
   puts "Watcher: [LISTEN]"
 end
 
