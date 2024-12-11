@@ -1,9 +1,5 @@
 [![Gem Version](https://badge.fury.io/rb/retest.svg)](https://badge.fury.io/rb/retest)
 
-### Retest 2.0 is now available!
-
-Feedback is welcome in this [Discussion - Retest V2.0 - Interactive Panel (proof of concept)](https://github.com/AlexB52/retest/discussions/216)
-
 # Retest: Your Go-To Testing Assistant for Ruby Projects
 
 Retest is the ultimate CLI tool for Ruby developers, designed to make your testing workflow seamless and efficient. It monitors file changes and automatically runs relevant tests, ensuring that your code remains solid as you refactor and develop.  
