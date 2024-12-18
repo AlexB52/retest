@@ -14,6 +14,12 @@ With **zero setup required**, Retest works right out of the box on any Ruby proj
 - **Customizable Workflows:** Tailor commands to your needs with placeholders, options, and interactive features.
 - **Sound Notifications:** Get audible feedback for test results.
 
+## 🎥 Demo
+
+Discover Retest main functionalities in this small presentation
+
+https://github.com/user-attachments/assets/5491bcad-134f-4843-9a6f-a474a1394e87
+
 ## 💡 **Why Use Retest?**
 
 Testing frequently is the cornerstone of safe refactoring. Retest eliminates the friction of manual test execution by running tests after every file change, helping you stay just one `cmd + z` away from green tests.
