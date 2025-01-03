@@ -23,7 +23,11 @@ module Retest
     class RunnerTest < MiniTest::Test
       def setup
         @command = Command::Hardcoded.new(command: "echo 'hello world'")
-        @subject = Runner.new(@command)
+        @subject = Runner.new(@command, stdout: StringIO.new)
+      end
+
+      def output
+        @subject.stdout.string
       end
 
       def test_run
@@ -51,6 +55,15 @@ module Retest
         @subject.cached_test_file = 'file_path_test.rb'
         @subject.sync(added: 'a.rb', removed:'file_path_test.rb')
         assert_nil @subject.cached_test_file
+      end
+
+      def test_initializes_last_command_correctly
+        assert_equal "echo 'hello world'", @subject.last_command
+
+        out, _ = capture_subprocess_io { @subject.run_last_command }
+
+        assert_match "hello world", out
+        assert_equal "\n", output
       end
     end
 
@@ -98,6 +111,17 @@ module Retest
 
         assert_match "another_file_path.rb & file_path_test.rb", out
       end
+
+      def test_initializes_last_command_correctly
+        assert_nil @subject.last_command
+
+        out, _ = capture_subprocess_io { @subject.run_last_command }
+
+        assert_equal '', out
+        assert_equal(<<~EXPECTED, output)
+          Error - Not enough information to trigger a run
+        EXPECTED
+      end
     end
 
     class ChangeRunnerTest < MiniTest::Test
@@ -122,6 +146,17 @@ module Retest
         out, _ = capture_subprocess_io { @subject.run(changed_files: ['file_path.rb']) }
 
         assert_match "file_path.rb", out
+      end
+
+      def test_initializes_last_command_correctly
+        assert_nil @subject.last_command
+
+        out, _ = capture_subprocess_io { @subject.run_last_command }
+
+        assert_equal '', out
+        assert_equal(<<~EXPECTED, output)
+          Error - Not enough information to trigger a run
+        EXPECTED
       end
     end
 
@@ -157,6 +192,17 @@ module Retest
         out, _ = capture_subprocess_io { @subject.run(changed_files: ['some-weird-path.rb'], test_files: ['file_path_test.rb']) }
 
         assert_match "touch file_path_test.rb", out
+      end
+
+      def test_initializes_last_command_correctly
+        assert_nil @subject.last_command
+
+        out, _ = capture_subprocess_io { @subject.run_last_command }
+
+        assert_equal '', out
+        assert_equal(<<~EXPECTED, output)
+          Error - Not enough information to trigger a run
+        EXPECTED
       end
 
       def test_run_multiple_tests
