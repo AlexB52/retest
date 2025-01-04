@@ -22,6 +22,12 @@ class MatchingTestsCommandTest < Minitest::Test
       Launching Retest...
       Ready to refactor! You can make file changes now
     EXPECTED
+
+    write_input("\n") # Trigger last command when no command was run
+
+    assert_output_matches <<~EXPECTED
+      Error - Not enough information to run a command. Please trigger a run first.
+    EXPECTED
   end
 
   def test_modify_a_file
@@ -53,6 +59,10 @@ class AllTestsCommandTest < Minitest::Test
       Launching Retest...
       Ready to refactor! You can make file changes now
     EXPECTED
+
+    write_input("\n") # Trigger all command when no command was run
+
+    assert_output_matches "8 runs, 10 assertions, 0 failures, 0 errors, 0 skips"
   end
 
   def test_modify_a_file

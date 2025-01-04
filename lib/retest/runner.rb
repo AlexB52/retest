@@ -12,15 +12,22 @@ module Retest
     def initialize(command, stdout: $stdout)
       @stdout  = stdout
       @command = command
+      if command.hardcoded?
+        self.last_command = command.to_s
+      end
     end
 
     def run_last_command
+      unless last_command
+        return log('Error - Not enough information to run a command. Please trigger a run first.')
+      end
+
       system_run last_command
     end
 
     def run(changed_files: [], test_files: [])
       self.last_command = format_instruction(changed_files: changed_files, test_files: test_files)
-      system_run last_command
+      run_last_command
     rescue FileNotFound => e
       log("FileNotFound - #{e.message}")
     rescue Command::MultipleTestsNotSupported => e
@@ -29,7 +36,7 @@ module Retest
 
     def run_all
       self.last_command = command.clone(all: true).to_s
-      system_run last_command
+      run_last_command
     end
 
     def format_instruction(changed_files: [], test_files: [])
@@ -76,12 +83,6 @@ module Retest
     end
 
     private
-
-    def print_test_file_not_found
-      log(<<~ERROR)
-        FileNotFound - Retest could not find a matching test file to run.
-      ERROR
-    end
 
     def system_run(command)
       log("\n")
