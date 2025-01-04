@@ -24,6 +24,12 @@ class TestListenWatcher <  Minitest::Test
       Launching Retest...
       Ready to refactor! You can make file changes now
     EXPECTED
+
+    write_input("\n") # Trigger last command when no command was run
+
+    assert_output_matches <<~EXPECTED
+      Error - Not enough information to run a command. Please trigger a run first.
+    EXPECTED
   end
 end
 

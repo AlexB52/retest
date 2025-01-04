@@ -13,6 +13,10 @@ module Retest
         self.class.new(**{ all: all, file_system: file_system, command: command }.merge(params))
       end
 
+      def hardcoded?
+        !has_changed? && !has_test?
+      end
+
       def has_changed?
         to_s.include?('<changed>')
       end
