@@ -19,7 +19,7 @@ module Retest
 
     def run_last_command
       unless last_command
-        return log('Error - Not enough information to trigger a run')
+        return log('Error - Not enough information to run a command. Please trigger a run first.')
       end
 
       system_run last_command

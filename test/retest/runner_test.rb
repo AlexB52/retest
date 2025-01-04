@@ -119,7 +119,7 @@ module Retest
 
         assert_equal '', out
         assert_equal(<<~EXPECTED, output)
-          Error - Not enough information to trigger a run
+          Error - Not enough information to run a command. Please trigger a run first.
         EXPECTED
       end
     end
@@ -155,7 +155,7 @@ module Retest
 
         assert_equal '', out
         assert_equal(<<~EXPECTED, output)
-          Error - Not enough information to trigger a run
+          Error - Not enough information to run a command. Please trigger a run first.
         EXPECTED
       end
     end
@@ -201,7 +201,7 @@ module Retest
 
         assert_equal '', out
         assert_equal(<<~EXPECTED, output)
-          Error - Not enough information to trigger a run
+          Error - Not enough information to run a command. Please trigger a run first.
         EXPECTED
       end
 
