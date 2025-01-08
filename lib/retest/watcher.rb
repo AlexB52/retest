@@ -45,8 +45,10 @@ module Retest
         files = VersionControl.files(extensions: extensions).zip([]).to_h
 
         watch_rd, watch_wr = IO.pipe
-        pid = Process.spawn(command, out: watch_wr)
+        pid = Process.spawn(command, out: watch_wr, pgroup: true)
+        puts "Watcher pid: #{pid}"
         at_exit do
+          puts "#{pid} Killed"
           Process.kill("TERM", pid) if pid
           watch_rd.close
           watch_wr.close
