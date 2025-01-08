@@ -89,7 +89,9 @@ module Retest
 
     def system_run(command)
       log("\n")
-      result = system(command) ? :tests_pass : :tests_fail
+      pid = spawn(command)
+      Process.wait
+      result = $?.exitstatus.zero? ? :tests_pass : :test_fail
       changed
       notify_observers(result)
     end
