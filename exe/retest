@@ -4,12 +4,6 @@ require 'retest'
 
 $stdout.sync = true
 listen_rd, listen_wr = IO.pipe
-Signal.trap(:INT) do
-  puts "Goodbye"
-  listen_rd.close
-  listen_wr.close
-  exit
-end
 
 options = Retest::Options.new(ARGV)
 
@@ -38,6 +32,17 @@ program = Retest::Program.new(
   repository: repository,
   runner: runner
 )
+
+Signal.trap(:QUIT) do
+  runner.interrupt_run
+end
+
+Signal.trap(:INT) do
+  puts "Goodbye"
+  listen_rd.close
+  listen_wr.close
+  exit
+end
 
 if options.params[:diff]
   program.diff(options.params[:diff])

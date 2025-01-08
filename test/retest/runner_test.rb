@@ -41,6 +41,8 @@ module Retest
       end
 
       def test_sync_files
+        sleep 3
+
         @subject.cached_test_file = 'file_path_test.rb'
 
         @subject.sync(added: [], removed:['something.rb'])
