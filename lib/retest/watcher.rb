@@ -29,10 +29,17 @@ module Retest
         # We need the process to still run when trying to stop the current test run
         # Maybe there is another way to prevent killing these but for now a new process groups works
         # Process group created with: Process.setsid
+        watch_rd, watch_wr = IO.pipe
         pid = fork do
           Process.setsid
           Listen.to(dir, only: extensions_regex(extensions), relative: true, polling: polling) do |modified, added, removed|
-            yield modified, added, removed
+            if modified.any?
+              watch_wr.write "modify:#{modified.first}"
+            elsif added.any?
+              watch_wr.write "create:#{added.first}"
+            elsif removed.any?
+              watch_wr.write "remove:#{removed.first}"
+            end
           end.start
           sleep
         end
@@ -41,6 +48,28 @@ module Retest
           Process.kill("TERM", pid) if pid
           watch_rd.close
           watch_wr.close
+        end
+
+        Thread.new do
+          loop do
+            ready = IO.select([watch_rd])
+            readable_connections = ready[0]
+            readable_connections.each do |conn|
+              data = conn.readpartial(4096)
+              change = /^(?<action>create|remove|modify):(?<path>.*)/.match(data.strip)
+
+              next unless change
+
+              modified, added, removed = result = [[], [], []]
+              case change[:action]
+              when 'modify' then modified << change[:path]
+              when 'create' then added << change[:path]
+              when 'remove' then removed << change[:path]
+              end
+
+              yield result
+            end
+          end
         end
       end
 
