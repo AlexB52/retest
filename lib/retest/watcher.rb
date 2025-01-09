@@ -25,6 +25,10 @@ module Retest
       end
 
       def self.watch(dir:, extensions:, polling: false)
+        # Process needs its own process group otherwise the process gets killed on INT signal
+        # We need the process to still run when trying to stop the current test run
+        # Maybe there is another way to prevent killing these but for now a new process groups works
+        # Process group created with: Process.setsid
         pid = fork do
           Process.setsid
           Listen.to(dir, only: extensions_regex(extensions), relative: true, polling: polling) do |modified, added, removed|
@@ -55,6 +59,10 @@ module Retest
         files = VersionControl.files(extensions: extensions).zip([]).to_h
 
         watch_rd, watch_wr = IO.pipe
+        # Process needs its own process group otherwise the process gets killed on INT signal
+        # We need the process to still run when trying to stop the current test run
+        # Maybe there is another way to prevent killing these but for now a new process groups works
+        # Process group created with: pgroup: true
         pid = Process.spawn(command, out: watch_wr, pgroup: true)
 
         at_exit do
