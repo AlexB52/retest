@@ -25,9 +25,19 @@ module Retest
       end
 
       def self.watch(dir:, extensions:, polling: false)
-        Listen.to(dir, only: extensions_regex(extensions), relative: true, polling: polling) do |modified, added, removed|
-          yield modified, added, removed
-        end.start
+        pid = fork do
+          Process.setsid
+          Listen.to(dir, only: extensions_regex(extensions), relative: true, polling: polling) do |modified, added, removed|
+            yield modified, added, removed
+          end.start
+          sleep
+        end
+
+        at_exit do
+          Process.kill("TERM", pid) if pid
+          watch_rd.close
+          watch_wr.close
+        end
       end
 
       def self.extensions_regex(extensions)
@@ -46,9 +56,8 @@ module Retest
 
         watch_rd, watch_wr = IO.pipe
         pid = Process.spawn(command, out: watch_wr, pgroup: true)
-        puts "Watcher pid: #{pid}"
+
         at_exit do
-          puts "#{pid} Killed"
           Process.kill("TERM", pid) if pid
           watch_rd.close
           watch_wr.close

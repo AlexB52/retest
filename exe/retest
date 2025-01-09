@@ -44,18 +44,17 @@ end
 
 puts "Command: '#{command}'"
 
-# === DIFF ACTION ===
-Signal.trap(:QUIT) do
-  runner.interrupt_run
-end
-
+# === TRAP INTERRUPTION ===
 Signal.trap(:INT) do
-  puts "Goodbye"
-  listen_rd.close
-  listen_wr.close
-  exit
+  if !runner.interrupt_run
+    puts "Goodbye"
+    listen_rd.close
+    listen_wr.close
+    exit
+  end
 end
 
+# === DIFF ACTION ===
 if options.params[:diff]
   program.diff(options.params[:diff])
   return
