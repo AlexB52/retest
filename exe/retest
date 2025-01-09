@@ -33,15 +33,17 @@ program = Retest::Program.new(
   runner: runner
 )
 
-Signal.trap(:QUIT) do
-  runner.interrupt_run
-end
+# Signal.trap(:QUIT) do
+#   runner.interrupt_run
+# end
 
 Signal.trap(:INT) do
-  puts "Goodbye"
-  listen_rd.close
-  listen_wr.close
-  exit
+  if !runner.interrupt_run
+    puts "Goodbye"
+    listen_rd.close
+    listen_wr.close
+    exit
+  end
 end
 
 if options.params[:diff]
