@@ -20,9 +20,7 @@ module Retest
     def interrupt_run
       return false unless @pid
 
-      r = Process.kill('INT', @pid)
-      puts "killing: #{r}"
-      r
+      Process.kill('INT', @pid)
     rescue Errno::ESRCH
       false
     end
@@ -100,11 +98,8 @@ module Retest
     def system_run(command)
       log("\n")
       @pid = spawn(command)
-      # @pgid = Process.getpgid(@pid)
-      puts "Runner pid: #{@pid}"
       Process.wait
       @pid = nil
-      # @pgid = nil
       result = $?.exitstatus&.zero? ? :tests_pass : :tests_fail
       changed
       notify_observers(result)
