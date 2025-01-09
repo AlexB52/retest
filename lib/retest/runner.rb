@@ -17,6 +17,14 @@ module Retest
       end
     end
 
+    def interrupt_run
+      return false unless @pid
+
+      Process.kill('INT', @pid)
+    rescue Errno::ESRCH
+      false
+    end
+
     def run_last_command
       unless last_command
         return log('Error - Not enough information to run a command. Please trigger a run first.')
@@ -86,7 +94,10 @@ module Retest
 
     def system_run(command)
       log("\n")
-      result = system(command) ? :tests_pass : :tests_fail
+      @pid = spawn(command)
+      Process.wait
+      @pid = nil
+      result = $?.exitstatus&.zero? ? :tests_pass : :tests_fail
       changed
       notify_observers(result)
     end
