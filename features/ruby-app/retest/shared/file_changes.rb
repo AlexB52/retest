@@ -1,6 +1,4 @@
 module FileChanges
-  include RetestHelper
-
   def teardown
     end_retest
   end

@@ -14,7 +14,7 @@ module RetestHelper
     @input&.close
     @stderr&.close
     @output&.close
-    @wait_thr.exit
+    @wait_thr&.exit
   end
 
   # ASSERTIONS
