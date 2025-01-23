@@ -5,11 +5,16 @@ require_relative 'support/test_helper'
 require_relative 'shared/file_changes'
 require_relative 'shared/setup'
 require_relative 'shared/explicit_matching'
+require_relative 'shared/interactive_commands'
 
 $stdout.sync = true
 
 class TestListenWatcher <  Minitest::Test
   include RetestHelper
+  include Setup
+  include ExplicitMatching
+  include FileChanges
+  include InteractiveCommands
 
   def setup
     @command = 'retest -w listen'
@@ -24,17 +29,15 @@ class TestListenWatcher <  Minitest::Test
       Launching Retest...
       Ready to refactor! You can make file changes now
     EXPECTED
-
-    write_input("\n") # Trigger last command when no command was run
-
-    assert_output_matches <<~EXPECTED
-      Error - Not enough information to run a command. Please trigger a run first.
-    EXPECTED
   end
 end
 
 class TestWatchexecWatcher <  Minitest::Test
   include RetestHelper
+  include Setup
+  include ExplicitMatching
+  include FileChanges
+  include InteractiveCommands
 
   def setup
     @command = 'retest -w watchexec'
@@ -54,6 +57,10 @@ end
 
 class TestDefaultWatcher <  Minitest::Test
   include RetestHelper
+  include Setup
+  include ExplicitMatching
+  include FileChanges
+  include InteractiveCommands
 
   def setup
     @command = 'retest'
