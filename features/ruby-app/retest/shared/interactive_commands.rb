@@ -9,5 +9,9 @@ module InteractiveCommands
     write_input("\n") # Trigger last command when no command was run
 
     assert_output_matches("Error - Not enough information to run a command. Please trigger a run first.")
+
+    write_input("ra\n") # Trigger run all
+
+    assert_output_matches("Command::AllTestsNotSupported - All tests run not supported for 'bundle exec ruby <test>'")
   end
 end

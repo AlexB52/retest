@@ -29,6 +29,17 @@ module Retest
       def test_format_with_multiple_files
         assert_equal %Q{-e "require './a/file/path.rb';require './another/file/path.rb';"}, @subject.format_batch('a/file/path.rb', 'another/file/path.rb')
       end
+
+      def test_switch_to
+        all_command = Ruby.new(all: true, file_system: FakeFS.new([]))
+        one_command = Ruby.new(all: false, file_system: FakeFS.new([]))
+
+        assert_raises(Command::AllTestsNotSupported) { all_command.switch_to(:all) }
+        assert_equal one_command, all_command.switch_to(:one)
+
+        assert_raises(Command::AllTestsNotSupported) { one_command.switch_to(:all) }
+        assert_equal one_command, one_command.switch_to(:one)
+      end
     end
   end
 end

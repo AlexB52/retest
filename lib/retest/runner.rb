@@ -35,13 +35,15 @@ module Retest
     end
 
     def run_all
-      self.last_command = command.clone(all: true).to_s
+      self.last_command = command.switch_to(:all).to_s
       run_last_command
+    rescue Command::AllTestsNotSupported => e
+      log("Command::AllTestsNotSupported - #{e.message}")
     end
 
     def format_instruction(changed_files: [], test_files: [])
       if changed_files.empty? && test_files.size >= 1
-        instruction = command.clone(all: false).to_s
+        instruction = command.switch_to(:one).to_s
         tests_string = command.format_batch(*test_files)
         log("Tests selected:")
         test_files.each { |test_file| log("  - #{test_file}") }

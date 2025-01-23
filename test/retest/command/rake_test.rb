@@ -28,6 +28,16 @@ module Retest
         assert_equal '"{a/file/path.rb,another/file/path.rb}"', @subject.format_batch('a/file/path.rb', 'another/file/path.rb')
       end
 
+      def test_switch_to
+        all_command = Rake.new(all: true, file_system: FakeFS.new([]))
+        one_command = Rake.new(all: false, file_system: FakeFS.new([]))
+
+        assert_equal all_command, all_command.switch_to(:all)
+        assert_equal one_command, all_command.switch_to(:one)
+
+        assert_equal all_command, one_command.switch_to(:all)
+        assert_equal one_command, one_command.switch_to(:one)
+      end
     end
   end
 end

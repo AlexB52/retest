@@ -7,7 +7,7 @@ module Retest
       include CommandInterface
 
       def setup
-        @subject = Hardcoded.new(command: 'echo "hello world"')
+        @subject = Hardcoded.new(all: false, command: 'echo "hello world"')
       end
 
       def test_a_hardcoded_command_status
@@ -48,6 +48,17 @@ module Retest
         assert_raises(Command::MultipleTestsNotSupported) do
           @subject.format_batch('a/file/path.rb', 'another/file/path.rb')
         end
+      end
+
+      def test_switch_to
+        all_command = Hardcoded.new(all: true, command: 'echo "hello world"')
+        one_command = Hardcoded.new(all: false, command: 'echo "hello world"')
+
+        assert_raises(Command::AllTestsNotSupported) { all_command.switch_to(:all) }
+        assert_equal one_command, all_command.switch_to(:one)
+
+        assert_raises(Command::AllTestsNotSupported) { one_command.switch_to(:all) }
+        assert_equal one_command, one_command.switch_to(:one)
       end
     end
   end
