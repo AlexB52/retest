@@ -1,16 +1,32 @@
 module Retest
   class Command
     class MultipleTestsNotSupported < StandardError; end
+    class AllTestsNotSupported < StandardError; end
 
     class Base
+      attr_reader :all, :file_system, :command
+
       def initialize(all: false, file_system: FileSystem, command: nil)
         @file_system = file_system
         @all = all
         @command = command
       end
 
-      def clone(params = {})
-        self.class.new(**{ all: all, file_system: file_system, command: command }.merge(params))
+      def eql?(other)
+        hash == other.hash
+      end
+      alias == eql?
+
+      def hash
+        [all, file_system, command].hash
+      end
+
+      def switch_to(type)
+        case type.to_s
+        when 'all' then clone(all: true)
+        when 'one' then clone(all: false)
+        else raise ArgumentError, "unknown type to switch to: #{type}"
+        end
       end
 
       def hardcoded?
@@ -35,7 +51,9 @@ module Retest
 
       private
 
-      attr_reader :all, :file_system, :command
+      def clone(params = {})
+        self.class.new(**{ all: all, file_system: file_system, command: command }.merge(params))
+      end
     end
   end
 end
