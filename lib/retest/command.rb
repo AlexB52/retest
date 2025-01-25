@@ -1,8 +1,8 @@
 require_relative 'command/base'
 require_relative 'command/hardcoded'
+require_relative 'command/rspec'
 require_relative 'command/rails'
 require_relative 'command/rake'
-require_relative 'command/rspec'
 require_relative 'command/ruby'
 
 module Retest

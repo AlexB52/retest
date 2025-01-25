@@ -59,12 +59,8 @@ class TestWatchexecWatcher <  Minitest::Test
   end
 end
 
-class TestDefaultWatcher <  Minitest::Test
+class TestDefaultWatcher <  Minitest::Test # only test the correct watcher is set
   include RetestHelper
-  include Setup
-  include ExplicitMatching
-  include FileChanges
-  include InteractiveCommands
 
   def setup
     @command = 'retest'

@@ -1,26 +1,17 @@
 module Retest
   class Command
-    class Rails < Base
-      def to_s
-        if all
-          root_command
-        else
-          "#{root_command} <test>"
-        end
-      end
-
-      def format_batch(*files)
-        files.join(' ')
-      end
+    class Rails < Rspec
 
       private
 
-      def root_command
-        if file_system.exist? 'bin/rails'
+      def default_command(all:)
+        command = if file_system&.exist? 'bin/rails'
           'bin/rails test'
         else
           'bundle exec rails test'
         end
+
+        all ? command : "#{command} <test>"
       end
     end
   end

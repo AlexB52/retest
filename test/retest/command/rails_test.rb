@@ -39,5 +39,40 @@ module Retest
         assert_equal one_command, one_command.switch_to(:one)
       end
     end
+
+    class RailsWithACommandTest < MiniTest::Test
+      def setup
+        @subject = Rails.new(command: 'bin/test', file_system: nil)
+      end
+
+      include CommandInterface
+
+      def test_to_s
+        assert_equal 'bin/test',        Rails.new(command: 'bin/test', file_system: FakeFS.new(['bin/rails'])).to_s
+        assert_equal 'bin/test',        Rails.new(command: 'bin/test', file_system: FakeFS.new([])).to_s
+
+        assert_equal 'bin/test <test>', Rails.new(command: 'bin/test <test>', file_system: FakeFS.new(['bin/rails'])).to_s
+        assert_equal 'bin/test <test>', Rails.new(command: 'bin/test <test>', file_system: FakeFS.new([])).to_s
+      end
+
+      def test_format_with_one_file
+        assert_equal 'a/file/path.rb', @subject.format_batch('a/file/path.rb')
+      end
+
+      def test_format_with_multiple_files
+        assert_equal 'a/file/path.rb another/file/path.rb', @subject.format_batch('a/file/path.rb', 'another/file/path.rb')
+      end
+
+      def test_switch_to
+        one_command = Rails.new(command: 'bin/test <test>')
+        all_command = Rails.new(command: 'bin/test')
+
+        assert_equal all_command, all_command.switch_to(:all)
+        assert_equal one_command, all_command.switch_to(:one)
+
+        assert_equal all_command, one_command.switch_to(:all)
+        assert_equal one_command, one_command.switch_to(:one)
+      end
+    end
   end
 end

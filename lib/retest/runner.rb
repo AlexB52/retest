@@ -43,11 +43,12 @@ module Retest
 
     def format_instruction(changed_files: [], test_files: [])
       if changed_files.empty? && test_files.size >= 1
-        instruction = command.switch_to(:one).to_s
-        tests_string = command.format_batch(*test_files)
+        new_command = command.switch_to(:one)
+
         log("Tests selected:")
         test_files.each { |test_file| log("  - #{test_file}") }
-        return instruction.gsub('<test>', tests_string)
+
+        return new_command.to_s.gsub('<test>', new_command.format_batch(*test_files))
       end
 
       instruction = command.to_s
