@@ -27,6 +27,7 @@ class TestListenWatcher <  Minitest::Test
       Setup: [RUBY]
       Command: 'bundle exec ruby <test>'
       Watcher: [LISTEN]
+
       Launching Retest...
       Ready to refactor! You can make file changes now
     EXPECTED
@@ -51,6 +52,7 @@ class TestWatchexecWatcher <  Minitest::Test
       Setup: [RUBY]
       Command: 'bundle exec ruby <test>'
       Watcher: [WATCHEXEC]
+
       Launching Retest...
       Ready to refactor! You can make file changes now
     EXPECTED
@@ -75,6 +77,7 @@ class TestDefaultWatcher <  Minitest::Test
       Setup: [RUBY]
       Command: 'bundle exec ruby <test>'
       Watcher: [WATCHEXEC]
+
       Launching Retest...
       Ready to refactor! You can make file changes now
     EXPECTED

@@ -12,6 +12,7 @@ class AutoFlag < Minitest::Test
       Setup: [RUBY]
       Command: 'ruby <test>'
       Watcher: [LISTEN]
+
       Launching Retest...
       Ready to refactor! You can make file changes now
     OUTPUT

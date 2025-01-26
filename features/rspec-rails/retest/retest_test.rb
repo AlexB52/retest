@@ -88,6 +88,7 @@ class AutoFlagTest < Minitest::Test
       Setup: [RSPEC]
       Command: 'bundle exec rspec <test>'
       Watcher: [LISTEN]
+
       Launching Retest...
       Ready to refactor! You can make file changes now
     OUTPUT
@@ -100,6 +101,7 @@ class AutoFlagTest < Minitest::Test
       Setup: [RSPEC]
       Command: 'bundle exec rspec'
       Watcher: [LISTEN]
+
       Launching Retest...
       Ready to refactor! You can make file changes now
     OUTPUT

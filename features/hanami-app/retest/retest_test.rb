@@ -78,6 +78,7 @@ class AutoFlagTest < Minitest::Test
       Setup: [RAKE]
       Command: 'bundle exec rake test TEST=<test>'
       Watcher: [LISTEN]
+
       Launching Retest...
       Ready to refactor! You can make file changes now
     OUTPUT
@@ -90,6 +91,7 @@ class AutoFlagTest < Minitest::Test
       Setup: [RAKE]
       Command: 'bundle exec rake test'
       Watcher: [LISTEN]
+
       Launching Retest...
       Ready to refactor! You can make file changes now
     OUTPUT
