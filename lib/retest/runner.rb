@@ -43,7 +43,7 @@ module Retest
 
     def format_instruction(changed_files: [], test_files: [])
       if changed_files.empty? && test_files.size >= 1
-        new_command = command.switch_to(:one)
+        new_command = command.switch_to(:batched)
 
         log("Tests selected:")
         test_files.each { |test_file| log("  - #{test_file}") }

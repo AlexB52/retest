@@ -7,7 +7,7 @@ module Retest
         command
       end
 
-      def one_command
+      def batched_command
         command
       end
 

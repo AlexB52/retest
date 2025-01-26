@@ -32,26 +32,26 @@ module Retest
 
       def test_switch_to
         all_command = Ruby.new(all: true, file_system: FakeFS.new([]))
-        one_command = Ruby.new(all: false, file_system: FakeFS.new([]))
+        batched_command = Ruby.new(all: false, file_system: FakeFS.new([]))
 
         exception = assert_raises(Command::AllTestsNotSupported) { all_command.switch_to(:all) }
         assert_equal "All tests run not supported for Ruby command: 'ruby <test>'", exception.message
-        assert_equal one_command, all_command.switch_to(:one)
+        assert_equal batched_command, all_command.switch_to(:batched)
 
-        exception = assert_raises(Command::AllTestsNotSupported) { one_command.switch_to(:all) }
+        exception = assert_raises(Command::AllTestsNotSupported) { batched_command.switch_to(:all) }
         assert_equal "All tests run not supported for Ruby command: 'ruby <test>'", exception.message
-        assert_equal one_command, one_command.switch_to(:one)
+        assert_equal batched_command, batched_command.switch_to(:batched)
 
         all_command = Ruby.new(all: true, file_system: FakeFS.new(['Gemfile.lock']))
-        one_command = Ruby.new(all: false, file_system: FakeFS.new(['Gemfile.lock']))
+        batched_command = Ruby.new(all: false, file_system: FakeFS.new(['Gemfile.lock']))
 
         exception = assert_raises(Command::AllTestsNotSupported) { all_command.switch_to(:all) }
         assert_equal "All tests run not supported for Ruby command: 'bundle exec ruby <test>'", exception.message
-        assert_equal one_command, all_command.switch_to(:one)
+        assert_equal batched_command, all_command.switch_to(:batched)
 
-        exception = assert_raises(Command::AllTestsNotSupported) { one_command.switch_to(:all) }
+        exception = assert_raises(Command::AllTestsNotSupported) { batched_command.switch_to(:all) }
         assert_equal "All tests run not supported for Ruby command: 'bundle exec ruby <test>'", exception.message
-        assert_equal one_command, one_command.switch_to(:one)
+        assert_equal batched_command, batched_command.switch_to(:batched)
       end
     end
 
@@ -78,10 +78,10 @@ module Retest
       end
 
       def test_switch_to
-        one_command = Ruby.new(command: 'bin/test <test>', file_system: FakeFS.new([]))
+        batched_command = Ruby.new(command: 'bin/test <test>', file_system: FakeFS.new([]))
 
-        assert_raises(Command::AllTestsNotSupported) { one_command.switch_to(:all) }
-        assert_equal one_command, one_command.switch_to(:one)
+        assert_raises(Command::AllTestsNotSupported) { batched_command.switch_to(:all) }
+        assert_equal batched_command, batched_command.switch_to(:batched)
       end
     end
   end

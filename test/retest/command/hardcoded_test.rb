@@ -52,13 +52,13 @@ module Retest
 
       def test_switch_to
         all_command = Hardcoded.new(all: true, command: 'echo "hello world"')
-        one_command = Hardcoded.new(all: false, command: 'echo "hello world"')
+        batched_command = Hardcoded.new(all: false, command: 'echo "hello world"')
 
         assert_equal all_command, all_command.switch_to(:all)
-        assert_equal all_command, one_command.switch_to(:all)
+        assert_equal all_command, batched_command.switch_to(:all)
 
-        assert_equal one_command, all_command.switch_to(:one)
-        assert_equal one_command, one_command.switch_to(:one)
+        assert_equal batched_command, all_command.switch_to(:batched)
+        assert_equal batched_command, batched_command.switch_to(:batched)
       end
     end
   end

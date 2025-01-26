@@ -30,13 +30,13 @@ module Retest
 
       def test_switch_to
         all_command = Rspec.new(all: true, file_system: FakeFS.new([]))
-        one_command = Rspec.new(all: false, file_system: FakeFS.new([]))
+        batched_command = Rspec.new(all: false, file_system: FakeFS.new([]))
 
         assert_equal all_command, all_command.switch_to(:all)
-        assert_equal all_command, one_command.switch_to(:all)
+        assert_equal all_command, batched_command.switch_to(:all)
 
-        assert_equal one_command, all_command.switch_to(:one)
-        assert_equal one_command, one_command.switch_to(:one)
+        assert_equal batched_command, all_command.switch_to(:batched)
+        assert_equal batched_command, batched_command.switch_to(:batched)
       end
     end
 
@@ -64,14 +64,14 @@ module Retest
       end
 
       def test_switch_to
-        one_command = Rspec.new(command: 'bin/test <test>')
+        batched_command = Rspec.new(command: 'bin/test <test>')
         all_command = Rspec.new(command: 'bin/test')
 
         assert_equal all_command, all_command.switch_to(:all)
-        assert_equal one_command, all_command.switch_to(:one)
+        assert_equal batched_command, all_command.switch_to(:batched)
 
-        assert_equal all_command, one_command.switch_to(:all)
-        assert_equal one_command, one_command.switch_to(:one)
+        assert_equal all_command, batched_command.switch_to(:all)
+        assert_equal batched_command, batched_command.switch_to(:batched)
       end
     end
   end

@@ -19,7 +19,7 @@ module Retest
         raise AllTestsNotSupported, "All tests run not supported for Ruby command: '#{to_s}'"
       end
 
-      def one_command
+      def batched_command
         command
       end
     end

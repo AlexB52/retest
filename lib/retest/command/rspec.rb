@@ -13,7 +13,7 @@ module Retest
         command.gsub('<test>', '').strip
       end
 
-      def one_command
+      def batched_command
         return command unless all
 
         "#{command} <test>"

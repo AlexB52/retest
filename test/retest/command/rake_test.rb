@@ -27,13 +27,13 @@ module Retest
 
       def test_switch_to
         all_command = Rake.new(all: true, file_system: FakeFS.new([]))
-        one_command = Rake.new(all: false, file_system: FakeFS.new([]))
+        batched_command = Rake.new(all: false, file_system: FakeFS.new([]))
 
         assert_equal all_command, all_command.switch_to(:all)
-        assert_equal one_command, all_command.switch_to(:one)
+        assert_equal batched_command, all_command.switch_to(:batched)
 
-        assert_equal all_command, one_command.switch_to(:all)
-        assert_equal one_command, one_command.switch_to(:one)
+        assert_equal all_command, batched_command.switch_to(:all)
+        assert_equal batched_command, batched_command.switch_to(:batched)
       end
     end
 
@@ -61,13 +61,13 @@ module Retest
 
       def test_switch_to
         all_command = Rake.new(command: 'bin/test', file_system: nil)
-        one_command = Rake.new(command: 'bin/test TEST=<test>', file_system: nil)
+        batched_command = Rake.new(command: 'bin/test TEST=<test>', file_system: nil)
 
         assert_equal all_command, all_command.switch_to(:all)
-        assert_equal one_command, all_command.switch_to(:one)
+        assert_equal batched_command, all_command.switch_to(:batched)
 
-        assert_equal all_command, one_command.switch_to(:all)
-        assert_equal one_command, one_command.switch_to(:one)
+        assert_equal all_command, batched_command.switch_to(:all)
+        assert_equal batched_command, batched_command.switch_to(:batched)
       end
     end
   end
