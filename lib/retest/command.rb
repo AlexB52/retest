@@ -9,22 +9,21 @@ module Retest
   class Command
     extend Forwardable
 
-    def self.for_options(options, stdout: $stdout)
-      new(options: options, stdout: stdout).command
+    def self.for_options(options)
+      new(options: options).command
     end
 
-    def_delegator :setup, :type
     def_delegators :options, :params, :full_suite?, :auto?
 
-    attr_accessor :options, :setup
-    def initialize(options: Options.new, setup: Setup.new, stdout: $stdout)
+    attr_accessor :options, :setup, :setup_identified
+    def initialize(options: Options.new, setup: Setup.new)
       @options = options
       @setup = setup
-      @stdout = stdout
+      @setup_identified = nil
     end
 
     def command
-      options_command || default_command
+      options_command || setup_command
     end
 
     private
@@ -38,27 +37,14 @@ module Retest
       end
     end
 
-    def default_command
-      log <<~LOG
-        Setup: [#{type.upcase}]
-        Command: '#{setup_command}'
-      LOG
-
-      setup_command
-    end
-
     def setup_command
-      case type
+      case setup.type
       when :rake  then rake_command
       when :rspec then rspec_command
       when :rails then rails_command
       when :ruby  then ruby_command
       else             ruby_command
       end
-    end
-
-    def log(message)
-      @stdout&.puts(message)
     end
 
     def hardcoded_command(command)
