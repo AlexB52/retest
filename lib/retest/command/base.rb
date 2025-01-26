@@ -21,7 +21,7 @@ module Retest
       alias == eql?
 
       def hash
-        [file_system, command].hash
+        [self.class, file_system, command].hash
       end
 
       def switch_to(type)

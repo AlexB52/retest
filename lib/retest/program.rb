@@ -30,7 +30,6 @@ module Retest
         @stdout.puts <<~HINT
           Forced selection enabled.
           Reset to default settings by typing 'r' in the interactive console.
-
         HINT
 
         runner.run(test_files: selected_test_files)

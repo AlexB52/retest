@@ -45,7 +45,7 @@ module Retest
       if changed_files.empty? && test_files.size >= 1
         new_command = command.switch_to(:batched)
 
-        log("Tests selected:")
+        log("\nTests selected:")
         test_files.each { |test_file| log("  - #{test_file}") }
 
         return new_command.to_s.gsub('<test>', new_command.format_batch(*test_files))

@@ -41,8 +41,8 @@ program = Retest::Program.new(
 
 # === LOGGING ===
 case command
-when Retest::Command::Rspec then puts "Setup: [RSPEC]"
 when Retest::Command::Rails then puts "Setup: [RAILS]"
+when Retest::Command::Rspec then puts "Setup: [RSPEC]"
 when Retest::Command::Rake  then puts "Setup: [RAKE]"
 when Retest::Command::Ruby  then puts "Setup: [RUBY]"
 else                             puts "Setup: [UNKNOWN]"
@@ -52,7 +52,6 @@ puts "Command: '#{command}'"
 
 # === DIFF ACTION ===
 if options.params[:diff]
-  puts
   program.diff(options.params[:diff])
   return
 end
