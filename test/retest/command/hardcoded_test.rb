@@ -54,10 +54,10 @@ module Retest
         all_command = Hardcoded.new(all: true, command: 'echo "hello world"')
         one_command = Hardcoded.new(all: false, command: 'echo "hello world"')
 
-        assert_raises(Command::AllTestsNotSupported) { all_command.switch_to(:all) }
-        assert_equal one_command, all_command.switch_to(:one)
+        assert_equal all_command, all_command.switch_to(:all)
+        assert_equal all_command, one_command.switch_to(:all)
 
-        assert_raises(Command::AllTestsNotSupported) { one_command.switch_to(:all) }
+        assert_equal one_command, all_command.switch_to(:one)
         assert_equal one_command, one_command.switch_to(:one)
       end
     end
