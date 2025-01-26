@@ -4,10 +4,10 @@ FOLDER="features/bundler-app"
 
 bundle install
 bundle exec rake build
-cp -R features/support features/bundler-app/retest
-ls -t pkg | head -n1 | xargs -I {} mv pkg/{} "$FOLDER/retest.gem"
+cp -R features/support $FOLDER/retest
+ls -t pkg | head -n1 | xargs -I {} mv pkg/{} $FOLDER/retest.gem
 
-if [[ "$1" == "--no-build" ]]; then
+if [[ "$1" == "--nobuild" ]]; then
 	docker compose -f "$FOLDER/docker-compose.yml" up --exit-code-from retest
 else
 	docker compose -f "$FOLDER/docker-compose.yml" up --build --exit-code-from retest
