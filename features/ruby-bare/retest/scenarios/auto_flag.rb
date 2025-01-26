@@ -9,7 +9,8 @@ class AutoFlag < Minitest::Test
     launch_retest 'retest'
 
     assert_output_matches <<~OUTPUT
-      Setup identified: [RUBY]. Using command: 'ruby <test>'
+      Setup: [RUBY]
+      Command: 'ruby <test>'
       Watcher: [LISTEN]
       Launching Retest...
       Ready to refactor! You can make file changes now

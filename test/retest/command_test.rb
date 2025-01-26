@@ -70,25 +70,37 @@ module Retest
     def test_setup_command_with_rake
       @subject.setup = FakeSetup.new(:rake)
       assert_equal 'bundle exec rake test TEST=<test>', @subject.command.to_s
-      assert_equal %Q{Setup identified: [RAKE]. Using command: 'bundle exec rake test TEST=<test>'\n}, read_output
+      assert_equal <<~EXPECTED, read_output
+        Setup: [RAKE]
+        Command: 'bundle exec rake test TEST=<test>'
+      EXPECTED
     end
 
     def test_setup_command_with_rails
       @subject.setup = FakeSetup.new(:rails)
       assert_equal 'bundle exec rails test <test>', @subject.command.to_s
-      assert_equal %Q{Setup identified: [RAILS]. Using command: 'bundle exec rails test <test>'\n}, read_output
+      assert_equal <<~EXPECTED, read_output
+        Setup: [RAILS]
+        Command: 'bundle exec rails test <test>'
+      EXPECTED
     end
 
     def test_setup_command_with_rspec
       @subject.setup = FakeSetup.new(:rspec)
       assert_equal 'bundle exec rspec <test>', @subject.command.to_s
-      assert_equal %Q{Setup identified: [RSPEC]. Using command: 'bundle exec rspec <test>'\n}, read_output
+      assert_equal <<~EXPECTED, read_output
+        Setup: [RSPEC]
+        Command: 'bundle exec rspec <test>'
+      EXPECTED
     end
 
     def test_setup_command_with_ruby
       @subject.setup = FakeSetup.new(:ruby)
       assert_equal 'bundle exec ruby <test>', @subject.command.to_s
-      assert_equal %Q{Setup identified: [RUBY]. Using command: 'bundle exec ruby <test>'\n}, read_output
+      assert_equal <<~EXPECTED, read_output
+        Setup: [RUBY]
+        Command: 'bundle exec ruby <test>'
+      EXPECTED
     end
   end
 end

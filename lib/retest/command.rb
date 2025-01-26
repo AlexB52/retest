@@ -39,7 +39,11 @@ module Retest
     end
 
     def default_command
-      log "Setup identified: [#{type.upcase}]. Using command: '#{setup_command}'"
+      log <<~LOG
+        Setup: [#{type.upcase}]
+        Command: '#{setup_command}'
+      LOG
+
       setup_command
     end
 

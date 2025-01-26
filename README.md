@@ -48,8 +48,10 @@ retest --diff origin/main                           # Test changes from a branch
 Stay in control with an interactive shell for test management. Start Retest and enter `h` to explore available commands.  
 
 ```
-Setup identified: [RAKE]. Using command: 'bundle exec rake test TEST=<test>'
+Setup: [RAKE]
+Command: 'bundle exec rake test TEST=<test>'
 Watcher: [WATCHEXEC]
+
 Launching Retest...
 Ready to refactor! You can make file changes now
 
