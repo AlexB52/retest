@@ -24,8 +24,10 @@ class TestListenWatcher <  Minitest::Test
     launch_retest(@command)
 
     assert_output_matches <<~EXPECTED
-      Setup identified: [RUBY]. Using command: 'bundle exec ruby <test>'
+      Setup: [RUBY]
+      Command: 'bundle exec ruby <test>'
       Watcher: [LISTEN]
+
       Launching Retest...
       Ready to refactor! You can make file changes now
     EXPECTED
@@ -47,8 +49,10 @@ class TestWatchexecWatcher <  Minitest::Test
     launch_retest(@command)
 
     assert_output_matches <<~EXPECTED
-      Setup identified: [RUBY]. Using command: 'bundle exec ruby <test>'
+      Setup: [RUBY]
+      Command: 'bundle exec ruby <test>'
       Watcher: [WATCHEXEC]
+
       Launching Retest...
       Ready to refactor! You can make file changes now
     EXPECTED
@@ -70,8 +74,10 @@ class TestDefaultWatcher <  Minitest::Test
     launch_retest(@command)
 
     assert_output_matches <<~EXPECTED
-      Setup identified: [RUBY]. Using command: 'bundle exec ruby <test>'
+      Setup: [RUBY]
+      Command: 'bundle exec ruby <test>'
       Watcher: [WATCHEXEC]
+
       Launching Retest...
       Ready to refactor! You can make file changes now
     EXPECTED

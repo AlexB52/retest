@@ -85,8 +85,10 @@ class AutoFlagTest < Minitest::Test
     launch_retest 'retest'
 
     assert_output_matches <<~OUTPUT
-      Setup identified: [RAILS]. Using command: 'bin/rails test <test>'
+      Setup: [RAILS]
+      Command: 'bin/rails test <test>'
       Watcher: [LISTEN]
+
       Launching Retest...
       Ready to refactor! You can make file changes now
     OUTPUT
@@ -96,8 +98,10 @@ class AutoFlagTest < Minitest::Test
     launch_retest 'retest --all'
 
     assert_output_matches <<~OUTPUT
-      Setup identified: [RAILS]. Using command: 'bin/rails test'
+      Setup: [RAILS]
+      Command: 'bin/rails test'
       Watcher: [LISTEN]
+
       Launching Retest...
       Ready to refactor! You can make file changes now
     OUTPUT
@@ -142,7 +146,9 @@ class DiffOptionTest < Minitest::Test
     launch_retest 'retest --diff=main'
 
     assert_output_matches <<~EXPECTED, "7 runs, 9 assertions, 0 failures, 0 errors, 0 skips"
-      Setup identified: [RAILS]. Using command: 'bin/rails test <test>'
+      Setup: [RAILS]
+      Command: 'bin/rails test <test>'
+
       Tests selected:
         - test/controllers/books_controller_test.rb
         - test/models/book_test.rb

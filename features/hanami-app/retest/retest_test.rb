@@ -75,8 +75,10 @@ class AutoFlagTest < Minitest::Test
     launch_retest 'retest'
 
     assert_output_matches <<~OUTPUT
-      Setup identified: [RAKE]. Using command: 'bundle exec rake test TEST=<test>'
+      Setup: [RAKE]
+      Command: 'bundle exec rake test TEST=<test>'
       Watcher: [LISTEN]
+
       Launching Retest...
       Ready to refactor! You can make file changes now
     OUTPUT
@@ -86,8 +88,10 @@ class AutoFlagTest < Minitest::Test
     launch_retest 'retest --all'
 
     assert_output_matches <<~OUTPUT
-      Setup identified: [RAKE]. Using command: 'bundle exec rake test'
+      Setup: [RAKE]
+      Command: 'bundle exec rake test'
       Watcher: [LISTEN]
+
       Launching Retest...
       Ready to refactor! You can make file changes now
     OUTPUT

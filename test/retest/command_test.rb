@@ -4,7 +4,7 @@ require_relative 'command/auto_flag'
 module Retest
   class OptionsCommandTest < MiniTest::Test
     def setup
-      @subject = Command.new stdout: StringIO.new
+      @subject = Command.new
     end
 
     def test_hardcoded_command
@@ -58,37 +58,28 @@ module Retest
   class SetupCommandTest < MiniTest::Test
     FakeSetup = Struct.new(:type)
 
-    def read_output
-      @output.tap(&:rewind).read
-    end
-
     def setup
-      @output = StringIO.new
-      @subject = Command.new stdout: @output
+      @subject = Command.new
     end
 
     def test_setup_command_with_rake
       @subject.setup = FakeSetup.new(:rake)
       assert_equal 'bundle exec rake test TEST=<test>', @subject.command.to_s
-      assert_equal %Q{Setup identified: [RAKE]. Using command: 'bundle exec rake test TEST=<test>'\n}, read_output
     end
 
     def test_setup_command_with_rails
       @subject.setup = FakeSetup.new(:rails)
       assert_equal 'bundle exec rails test <test>', @subject.command.to_s
-      assert_equal %Q{Setup identified: [RAILS]. Using command: 'bundle exec rails test <test>'\n}, read_output
     end
 
     def test_setup_command_with_rspec
       @subject.setup = FakeSetup.new(:rspec)
       assert_equal 'bundle exec rspec <test>', @subject.command.to_s
-      assert_equal %Q{Setup identified: [RSPEC]. Using command: 'bundle exec rspec <test>'\n}, read_output
     end
 
     def test_setup_command_with_ruby
       @subject.setup = FakeSetup.new(:ruby)
       assert_equal 'bundle exec ruby <test>', @subject.command.to_s
-      assert_equal %Q{Setup identified: [RUBY]. Using command: 'bundle exec ruby <test>'\n}, read_output
     end
   end
 end
