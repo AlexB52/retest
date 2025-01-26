@@ -1,22 +1,8 @@
-class FileChangesTest < Minitest::Test
-  include RetestHelper
-
-  def setup
-    @command = 'retest --rspec'
-  end
-
-  def teardown
-    end_retest
-  end
-
-  def test_start_retest
-    launch_retest @command
-
-    assert_output_matches <<~EXPECTED
-      Launching Retest...
-      Ready to refactor! You can make file changes now
-    EXPECTED
-  end
+module FileChanges
+  # Don't forget to end_retest in the class
+  # def teardown
+  #   end_retest
+  # end
 
   def test_modifying_existing_file
     launch_retest @command
