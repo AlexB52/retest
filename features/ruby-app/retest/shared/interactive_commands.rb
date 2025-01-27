@@ -12,6 +12,6 @@ module InteractiveCommands
 
     write_input("ra\n") # Trigger run all
 
-    assert_output_matches("Command::AllTestsNotSupported - All tests run not supported for 'bundle exec ruby <test>'")
+    assert_output_matches("Command::AllTestsNotSupported - All tests run not supported for Ruby command: 'bundle exec ruby <test>'")
   end
 end

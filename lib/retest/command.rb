@@ -1,8 +1,8 @@
 require_relative 'command/base'
 require_relative 'command/hardcoded'
+require_relative 'command/rspec'
 require_relative 'command/rails'
 require_relative 'command/rake'
-require_relative 'command/rspec'
 require_relative 'command/ruby'
 
 module Retest
@@ -29,11 +29,13 @@ module Retest
     private
 
     def options_command
-      if    params[:command] then hardcoded_command(params[:command])
-      elsif params[:rspec]   then rspec_command
-      elsif params[:rails]   then rails_command
-      elsif params[:ruby]    then ruby_command
-      elsif params[:rake]    then rake_command
+      command_input = params[:command]
+
+      if    params[:rspec] then rspec_command(command: command_input)
+      elsif params[:rails] then rails_command(command: command_input)
+      elsif params[:ruby]  then ruby_command(command: command_input)
+      elsif params[:rake]  then rake_command(command: command_input)
+      elsif command_input  then hardcoded_command(command: command_input)
       end
     end
 
@@ -47,24 +49,24 @@ module Retest
       end
     end
 
-    def hardcoded_command(command)
+    def hardcoded_command(command:)
       Hardcoded.new(command: command)
     end
 
-    def rspec_command
-      Rspec.new(all: full_suite?)
+    def rspec_command(command: nil)
+      Rspec.new(all: full_suite?, command: command)
     end
 
-    def rails_command
-      Rails.new(all: full_suite?)
+    def rails_command(command: nil)
+      Rails.new(all: full_suite?, command: command)
     end
 
-    def rake_command
-      Rake.new(all: full_suite?)
+    def rake_command(command: nil)
+      Rake.new(all: full_suite?, command: command)
     end
 
-    def ruby_command
-      Ruby.new(all: full_suite?)
+    def ruby_command(command: nil)
+      Ruby.new(all: full_suite?, command: command)
     end
   end
 end

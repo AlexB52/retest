@@ -1,26 +1,32 @@
 module Retest
   class Command
     class Rspec < Base
-      def to_s
-        if all
-          root_command
-        else
-          "#{root_command} <test>"
-        end
-      end
-
       def format_batch(*files)
         files.join(' ')
       end
 
       private
 
-      def root_command
-        if file_system.exist? 'bin/rspec'
+      def all_command
+        return command if all
+
+        command.gsub('<test>', '').strip
+      end
+
+      def batched_command
+        return command unless all
+
+        "#{command} <test>"
+      end
+
+      def default_command(all:)
+        command = if file_system&.exist? 'bin/rspec'
           'bin/rspec'
         else
           'bundle exec rspec'
         end
+
+        all ? command : "#{command} <test>"
       end
     end
   end

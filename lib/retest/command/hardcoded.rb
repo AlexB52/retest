@@ -1,12 +1,17 @@
 module Retest
   class Command
     class Hardcoded < Base
-      def switch_to(type)
-        if type.to_s == 'all'
-          raise AllTestsNotSupported, "All tests run not supported for '#{to_s}'"
-        end
+      private
 
-        super
+      def all_command
+        command
+      end
+
+      def batched_command
+        command
+      end
+
+      def default_command(all: false)
       end
     end
   end

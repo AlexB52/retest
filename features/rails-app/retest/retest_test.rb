@@ -4,7 +4,13 @@ require 'minitest/autorun'
 
 $stdout.sync = true
 
-class MatchingTestsCommandTest < Minitest::Test
+class SetupTest < Minitest::Test
+  def test_repository_setup
+    assert_equal :rails, Retest::Setup.new.type
+  end
+end
+
+class TestRailsOption < Minitest::Test
   include RetestHelper
 
   def setup
@@ -18,16 +24,39 @@ class MatchingTestsCommandTest < Minitest::Test
   def test_start_retest
     launch_retest @command
 
-    assert_output_matches <<~EXPECTED
+    assert_output_matches <<~OUTPUT
+      Setup: [RAILS]
+      Command: 'bin/rails test <test>'
+      Watcher: [LISTEN]
+
       Launching Retest...
       Ready to refactor! You can make file changes now
-    EXPECTED
+    OUTPUT
+  end
+end
 
-    write_input("\n") # Trigger last command when no command was run
+class TestDefaultCommand < Minitest::Test
+  include RetestHelper
 
-    assert_output_matches <<~EXPECTED
-      Error - Not enough information to run a command. Please trigger a run first.
-    EXPECTED
+  def setup
+    @command = 'retest'
+  end
+
+  def teardown
+    end_retest
+  end
+
+  def test_start_retest
+    launch_retest @command
+
+    assert_output_matches <<~OUTPUT
+      Setup: [RAILS]
+      Command: 'bin/rails test <test>'
+      Watcher: [LISTEN]
+
+      Launching Retest...
+      Ready to refactor! You can make file changes now
+    OUTPUT
   end
 
   def test_modify_a_file
@@ -39,13 +68,25 @@ class MatchingTestsCommandTest < Minitest::Test
       "Test file: test/models/post_test.rb",
       "1 runs, 1 assertions, 0 failures, 0 errors, 0 skips")
   end
+
+  def test_interactive_commands
+    launch_retest @command
+
+    assert_output_matches("Ready to refactor! You can make file changes now")
+
+    write_input("\n") # Trigger last command when no command was run
+
+    assert_output_matches <<~EXPECTED
+      Error - Not enough information to run a command. Please trigger a run first.
+    EXPECTED
+  end
 end
 
-class AllTestsCommandTest < Minitest::Test
+class TestAllRailsCommand < Minitest::Test
   include RetestHelper
 
   def setup
-    @command = 'retest --rails --all'
+    @command = 'retest --all'
   end
 
   def teardown
@@ -55,10 +96,20 @@ class AllTestsCommandTest < Minitest::Test
   def test_start_retest
     launch_retest @command
 
-    assert_output_matches <<~EXPECTED
+    assert_output_matches <<~OUTPUT
+      Setup: [RAILS]
+      Command: 'bin/rails test'
+      Watcher: [LISTEN]
+
       Launching Retest...
       Ready to refactor! You can make file changes now
-    EXPECTED
+    OUTPUT
+  end
+
+  def test_interactive_commands
+    launch_retest @command
+
+    assert_output_matches("Ready to refactor! You can make file changes now")
 
     write_input("\n") # Trigger all command when no command was run
 
@@ -74,47 +125,59 @@ class AllTestsCommandTest < Minitest::Test
   end
 end
 
-class AutoFlagTest < Minitest::Test
+class TestRailsAliasCommand < Minitest::Test
   include RetestHelper
 
   def teardown
     end_retest
   end
 
-  def test_with_no_command
-    launch_retest 'retest'
+  def test_start_retest_with_placeholder
+    launch_retest "retest 'bin/retest <test>' --rails"
 
     assert_output_matches <<~OUTPUT
       Setup: [RAILS]
-      Command: 'bin/rails test <test>'
+      Command: 'bin/retest <test>'
       Watcher: [LISTEN]
 
       Launching Retest...
       Ready to refactor! You can make file changes now
     OUTPUT
+
+    write_input("\n") # Trigger last command when no command was run
+
+    assert_output_matches("Error - Not enough information to run a command. Please trigger a run first.")
+
+    modify_file 'app/models/post.rb'
+
+    assert_output_matches(
+      "Test file: test/models/post_test.rb",
+      "1 runs, 1 assertions, 0 failures, 0 errors, 0 skips")
   end
 
-  def test_with_no_command_all
-    launch_retest 'retest --all'
+  def test_start_retest_without_placeholder
+    launch_retest "retest --rails 'bin/retest'"
 
     assert_output_matches <<~OUTPUT
       Setup: [RAILS]
-      Command: 'bin/rails test'
+      Command: 'bin/retest'
       Watcher: [LISTEN]
 
       Launching Retest...
       Ready to refactor! You can make file changes now
     OUTPUT
+
+    write_input("\n") # Trigger last command when no command was run
+
+    assert_output_matches "8 runs, 10 assertions, 0 failures, 0 errors, 0 skips"
+
+    modify_file 'app/models/post.rb'
+
+    assert_output_matches "8 runs, 10 assertions, 0 failures, 0 errors, 0 skips"
   end
 end
 
-class SetupTest < Minitest::Test
-  def test_repository_setup
-    assert_equal :rails, Retest::Setup.new.type
-  end
-end
-
-class DiffOptionTest < Minitest::Test
+class TestDiffOption < Minitest::Test
   include RetestHelper
 
   def setup
