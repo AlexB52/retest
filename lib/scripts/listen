@@ -1,0 +1,57 @@
+#!/usr/bin/env ruby
+
+$stdout.sync = true
+
+require 'listen'
+require 'optparse'
+
+options = {}
+OptionParser.new do |opts|
+  opts.banner = "Usage: scripts/listen.rb [options]"
+
+  opts.on("--exts rb,js,ts", Array, "Extensions to watch for") do |list|
+    options[:extensions] = list
+  end
+
+  opts.on("--polling BOOLEAN", "Force Listen to use polling") do |value|
+    options[:polling] = value
+  end
+
+  opts.on("-w", "--watch .", "Directory to listen to") do |value|
+    options[:dir] = value
+  end
+
+  opts.on("-h", "--help", "Prints help") do
+    puts opts
+    exit
+  end
+end.parse!
+
+unless options.key?(:extensions)
+  raise ArgumentError, 'must provide the files extensions to watch for'
+end
+
+unless options.key?(:polling)
+  raise ArgumentError, 'must provide the polling option'
+end
+
+unless options.key?(:dir)
+  raise ArgumentError, 'must provide the directory path to watch'
+end
+
+def extensions_regex(extensions)
+  Regexp.new("\\.(?:#{extensions.join("|")})$")
+end
+
+Listen.adapter_warn_behavior = :log
+
+Listen.to(options[:dir], only: extensions_regex(options[:extensions]), relative: true, polling: options[:polling]) do |modified, added, removed|
+  if modified.any?
+    $stdout.puts "modify:#{modified.first}"
+  elsif added.any?
+    $stdout.puts "create:#{added.first}"
+  elsif removed.any?
+    $stdout.puts "remove:#{removed.first}"
+  end
+end.start
+sleep

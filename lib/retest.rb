@@ -1,5 +1,3 @@
-require 'listen'
-
 require 'string/similarity'
 require 'observer'
 
@@ -16,8 +14,6 @@ require "retest/program"
 require "retest/prompt"
 require "retest/sounds"
 require "retest/watcher"
-
-Listen.adapter_warn_behavior = :log
 
 module Retest
   class Error < StandardError; end

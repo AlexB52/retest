@@ -1,3 +1,4 @@
+require 'forwardable'
 require_relative "runner/cached_test_file"
 
 module Retest
@@ -97,7 +98,7 @@ module Retest
 
     def system_run(command)
       log("\n")
-      @pid = spawn(command)
+      @pid = spawn(command, err: File::NULL)
       Process.wait
       @pid = nil
       result = $?.exitstatus&.zero? ? :tests_pass : :tests_fail
