@@ -98,7 +98,7 @@ module Retest
 
     def system_run(command)
       log("\n")
-      @pid = spawn(command, err: File::NULL)
+      @pid = spawn(command)
       Process.wait
       @pid = nil
       result = $?.exitstatus&.zero? ? :tests_pass : :tests_fail
