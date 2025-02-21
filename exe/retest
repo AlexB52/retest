@@ -4,12 +4,6 @@ require 'retest'
 
 $stdout.sync = true
 listen_rd, listen_wr = IO.pipe
-Signal.trap(:INT) do
-  puts "Goodbye"
-  listen_rd.close
-  listen_wr.close
-  exit
-end
 
 options = Retest::Options.new(ARGV)
 
@@ -49,6 +43,16 @@ else                             puts "Setup: [UNKNOWN]"
 end
 
 puts "Command: '#{command}'"
+
+# === TRAP INTERRUPTION ===
+Signal.trap(:INT) do
+  if !runner.interrupt_run
+    puts "Goodbye"
+    listen_rd.close
+    listen_wr.close
+    exit
+  end
+end
 
 # === DIFF ACTION ===
 if options.params[:diff]
@@ -98,7 +102,7 @@ def run_command(input:, program:)
     Process.kill("INT", 0)
   when 'r', 'reset'
     program.reset_selection
-    puts "command reset to '#{program.runner.command.to_s}'"
+    puts "command reset to '#{program.runner.command}'"
   when 'f', 'force'
     require 'tty-prompt'
     prompt = TTY::Prompt.new

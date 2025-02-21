@@ -1,3 +1,4 @@
+require 'forwardable'
 require_relative "runner/cached_test_file"
 
 module Retest
@@ -15,6 +16,14 @@ module Retest
       if command.hardcoded?
         self.last_command = command.to_s
       end
+    end
+
+    def interrupt_run
+      return false unless @pid
+
+      Process.kill('INT', @pid)
+    rescue Errno::ESRCH
+      false
     end
 
     def run_last_command
@@ -89,7 +98,10 @@ module Retest
 
     def system_run(command)
       log("\n")
-      result = system(command) ? :tests_pass : :tests_fail
+      @pid = spawn(command)
+      Process.wait
+      @pid = nil
+      result = $?.exitstatus&.zero? ? :tests_pass : :tests_fail
       changed
       notify_observers(result)
     end
