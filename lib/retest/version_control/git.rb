@@ -21,7 +21,7 @@ module Retest
       end
 
       def diff_files(branch)
-        `git diff #{branch} --name-only --diff-filter=ACMRT -z`.split("\x0")
+        `git diff #{branch}...HEAD --name-only --diff-filter=ACMRT -z`.split("\x0")
       end
 
       def untracked_files
