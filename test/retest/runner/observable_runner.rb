@@ -2,7 +2,7 @@ module Retest
   class Runner
     module OversableRunnerTests
       def test_publishes_event_after_running_command
-        observer = MiniTest::Mock.new
+        observer = Minitest::Mock.new
         observer.expect :update, true, [:tests_pass]
         observer.expect :hash, 1111
 

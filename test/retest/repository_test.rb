@@ -3,7 +3,7 @@ require 'test_helper'
 require_relative 'repository/multiple_test_files_with_user_input.rb'
 
 module Retest
-  class RepositoryTest < MiniTest::Test
+  class RepositoryTest < Minitest::Test
     def setup
       @subject = Repository.new
     end
@@ -182,7 +182,7 @@ module Retest
       assert_equal({}, mock_cache)
     end
 
-    class TestFileChanged < MiniTest::Test
+    class TestFileChanged < Minitest::Test
       def setup
         @subject = Repository.new
       end

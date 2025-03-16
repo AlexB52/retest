@@ -8,11 +8,11 @@ class RetestTest < Minitest::Test
   end
 end
 
-class ListenTests < MiniTest::Test
+class ListenTests < Minitest::Test
   include Retest
 
   def test_listen_default_behaviour
-    listener = MiniTest::Mock.new
+    listener = Minitest::Mock.new
     expected_options = { dir: '.', extensions: ['rb'], polling: false }
 
     listener.expect(:watch, true, [expected_options])
@@ -23,7 +23,7 @@ class ListenTests < MiniTest::Test
   end
 
   def test_listen_when_polling
-    listener = MiniTest::Mock.new
+    listener = Minitest::Mock.new
     expected_options = { dir: '.', extensions: ['rb'], polling: true }
 
     listener.expect(:watch, true, [expected_options])

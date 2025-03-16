@@ -1,6 +1,6 @@
 require 'minitest/autorun'
 
-class SomeTest < MiniTest::Test
+class SomeTest < Minitest::Test
   def test_the_truth
     assert true
   end

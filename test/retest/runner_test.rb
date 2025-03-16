@@ -4,7 +4,7 @@ require_relative 'runner/observable_runner'
 
 module Retest
   class Runner
-    class RunnerInterfaceTests < MiniTest::Test
+    class RunnerInterfaceTests < Minitest::Test
       def setup
         @command = Command::Hardcoded.new(command: "echo 'hello world'")
         @subject = Runner.new(@command)
@@ -20,7 +20,7 @@ module Retest
       end
     end
 
-    class RunnerTest < MiniTest::Test
+    class RunnerTest < Minitest::Test
       def setup
         @command = Command::Hardcoded.new(command: "echo 'hello world'")
         @subject = Runner.new(@command, stdout: StringIO.new)
@@ -67,7 +67,7 @@ module Retest
       end
     end
 
-    class VariableRunnerTest < MiniTest::Test
+    class VariableRunnerTest < Minitest::Test
       def setup
         @command = Command::Hardcoded.new(command: "echo '<changed> & <test>'")
         @subject = Runner.new(@command, stdout: StringIO.new)
@@ -124,7 +124,7 @@ module Retest
       end
     end
 
-    class ChangeRunnerTest < MiniTest::Test
+    class ChangeRunnerTest < Minitest::Test
       def setup
         @command = Command::Hardcoded.new(command: "echo '<changed>'")
         @subject = Runner.new(@command, stdout: StringIO.new)
@@ -160,7 +160,7 @@ module Retest
       end
     end
 
-    class TestRunnerTest < MiniTest::Test
+    class TestRunnerTest < Minitest::Test
       def setup
         @command = Command::Hardcoded.new(command: "echo 'touch <test>'")
         @subject = Runner.new(@command, stdout: StringIO.new)
