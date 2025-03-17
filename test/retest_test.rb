@@ -15,7 +15,11 @@ class ListenTests < Minitest::Test
     listener = Minitest::Mock.new
     expected_options = { dir: '.', extensions: ['rb'], polling: false }
 
-    listener.expect(:watch, true, [expected_options])
+    if Gem::Version.new(Minitest::VERSION) > Gem::Version.new("5.15")
+      listener.expect(:watch, true, **expected_options)
+    else
+      listener.expect(:watch, true, [expected_options])
+    end
 
     Retest.listen(Options.new, listener: listener)
 
@@ -26,7 +30,11 @@ class ListenTests < Minitest::Test
     listener = Minitest::Mock.new
     expected_options = { dir: '.', extensions: ['rb'], polling: true }
 
-    listener.expect(:watch, true, [expected_options])
+    if Gem::Version.new(Minitest::VERSION) > Gem::Version.new("5.15")
+      listener.expect(:watch, true, **expected_options)
+    else
+      listener.expect(:watch, true, [expected_options])
+    end
 
     Retest.listen(Options.new(["--polling"]), listener: listener)
 
