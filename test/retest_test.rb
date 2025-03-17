@@ -8,14 +8,18 @@ class RetestTest < Minitest::Test
   end
 end
 
-class ListenTests < MiniTest::Test
+class ListenTests < Minitest::Test
   include Retest
 
   def test_listen_default_behaviour
-    listener = MiniTest::Mock.new
+    listener = Minitest::Mock.new
     expected_options = { dir: '.', extensions: ['rb'], polling: false }
 
-    listener.expect(:watch, true, [expected_options])
+    if Gem::Version.new(Minitest::VERSION) > Gem::Version.new("5.15")
+      listener.expect(:watch, true, **expected_options)
+    else
+      listener.expect(:watch, true, [expected_options])
+    end
 
     Retest.listen(Options.new, listener: listener)
 
@@ -23,10 +27,14 @@ class ListenTests < MiniTest::Test
   end
 
   def test_listen_when_polling
-    listener = MiniTest::Mock.new
+    listener = Minitest::Mock.new
     expected_options = { dir: '.', extensions: ['rb'], polling: true }
 
-    listener.expect(:watch, true, [expected_options])
+    if Gem::Version.new(Minitest::VERSION) > Gem::Version.new("5.15")
+      listener.expect(:watch, true, **expected_options)
+    else
+      listener.expect(:watch, true, [expected_options])
+    end
 
     Retest.listen(Options.new(["--polling"]), listener: listener)
 

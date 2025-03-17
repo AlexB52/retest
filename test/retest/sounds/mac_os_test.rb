@@ -3,7 +3,7 @@ require_relative './sounds_interface'
 
 module Retest
   module Sounds
-    class MacOSTests < MiniTest::Test
+    class MacOSTests < Minitest::Test
       include SoundsInterfaceTests
 
       def setup
@@ -17,7 +17,7 @@ module Retest
       end
 
       def test_play_tests_pass
-        kernel = MiniTest::Mock.new
+        kernel = Minitest::Mock.new
         kernel.expect(:system, true, ['afplay', '/System/Library/Sounds/Funk.aiff'])
 
         MacOS.new(kernel: kernel, thread: FakeThread).play(:tests_pass)
@@ -26,7 +26,7 @@ module Retest
       end
 
       def test_play_tests_fail
-        kernel = MiniTest::Mock.new
+        kernel = Minitest::Mock.new
         kernel.expect(:system, true, ['afplay', '/System/Library/Sounds/Sosumi.aiff'])
 
         MacOS.new(kernel: kernel, thread: FakeThread).play(:tests_fail)
@@ -35,7 +35,7 @@ module Retest
       end
 
       def test_play_question
-        kernel = MiniTest::Mock.new
+        kernel = Minitest::Mock.new
         kernel.expect(:system, true, ['afplay', '/System/Library/Sounds/Glass.aiff'])
 
         MacOS.new(kernel: kernel, thread: FakeThread).play(:question)
@@ -44,7 +44,7 @@ module Retest
       end
 
       def test_play_start
-        kernel = MiniTest::Mock.new
+        kernel = Minitest::Mock.new
         kernel.expect(:system, true, ['afplay', '/System/Library/Sounds/Blow.aiff'])
 
         MacOS.new(kernel: kernel, thread: FakeThread).play(:start)

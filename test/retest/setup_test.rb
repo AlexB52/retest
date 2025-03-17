@@ -1,7 +1,7 @@
 require 'test_helper'
 
 module Retest
-  class SetupTest < MiniTest::Test
+  class SetupTest < Minitest::Test
     def setup
       @subject = Setup.new
     end

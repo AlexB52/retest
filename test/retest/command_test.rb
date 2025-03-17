@@ -2,7 +2,7 @@ require 'test_helper'
 require_relative 'command/auto_flag'
 
 module Retest
-  class OptionsCommandTest < MiniTest::Test
+  class OptionsCommandTest < Minitest::Test
     def setup
       @subject = Command.new
     end
@@ -68,7 +68,7 @@ module Retest
     end
   end
 
-  class SetupCommandTest < MiniTest::Test
+  class SetupCommandTest < Minitest::Test
     FakeSetup = Struct.new(:type)
 
     def setup

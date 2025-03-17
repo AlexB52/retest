@@ -1,7 +1,7 @@
 require 'test_helper'
 
 module Retest
-  class MultipleTestFilesWithUserInputTest < MiniTest::Test
+  class MultipleTestFilesWithUserInputTest < Minitest::Test
     def setup
       files = %w(
         core/app/controllers/admin/billing_agent_customers_controller.rb

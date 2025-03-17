@@ -3,7 +3,7 @@ require_relative 'command_interface'
 
 module Retest
   class Command
-    class HardcodedTest < MiniTest::Test
+    class HardcodedTest < Minitest::Test
       include CommandInterface
 
       def setup

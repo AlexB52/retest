@@ -20,23 +20,24 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         ruby:
-          - '2.5'
-          - '2.6'
-          - '2.7'
-          - '3.0'
-          - '3.1'
-          - '3.2'
-          - '3.3'
-        include:
-          - os: macos-13
-            ruby: 2.5
-    name: Ruby ${{ matrix.ruby }} test (${{ matrix.os }})
+          - version: '2.5'
+          - version: '2.6'
+          - version: '2.7'
+          - version: '3.0'
+          - version: '3.1'
+          - version: '3.2'
+          - version: '3.3'
+          - version: '3.4'
+            gemfile: Gemfile-3.4
+    name: Ruby ${{ matrix.ruby.version }} test (${{ matrix.os }})
+    env:
+      BUNDLE_GEMFILE: ${{ matrix.ruby.gemfile || 'Gemfile' }}
     steps:
     - uses: actions/checkout@v4
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: ${{ matrix.ruby }}
+        ruby-version: ${{ matrix.ruby.version }}
         bundler-cache: true
     - run: bundle install
     - run: bundle exec rake

@@ -1,7 +1,7 @@
 require 'test_helper'
 
 module Retest
-  class OptionsTest < MiniTest::Test
+  class OptionsTest < Minitest::Test
     def setup
       @subject = Options.new
     end

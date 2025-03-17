@@ -1,7 +1,7 @@
 require 'test_helper'
 
 module Retest
-  class ProgramTest < MiniTest::Test
+  class ProgramTest < Minitest::Test
     class PauseTest < Minitest::Test
       class RaisingRepository
         class NotToBeCalledError < StandardError; end
