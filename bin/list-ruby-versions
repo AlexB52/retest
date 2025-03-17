@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+
+require "rubygems"
+
+`brew upgrade ruby-build`
+
+ruby_list = `rbenv install --list-all`
+
+puts ruby_list
+  .split("\n")
+  .select { |version| version =~ /^\d+\.\d+\.\d+$/ }
+  .select { |version| Gem::Version.new(version) >= Gem::Version.new("2.5") }
+  .group_by { |version| version[0..2] }
+  .transform_values { |version| version.max_by { |number| Gem::Version.new(number) } }
+  .values
