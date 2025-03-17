@@ -3,13 +3,6 @@ require 'test_helper'
 module Retest
   class ProgramTest < Minitest::Test
     class PauseTest < Minitest::Test
-      class RaisingRepository
-        class NotToBeCalledError < StandardError; end
-        def find_test(_)
-          raise NotToBeCalledError
-        end
-      end
-
       def setup
         @subject = Program.new(repository: Repository.new, stdout: StringIO.new)
       end
