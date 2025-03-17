@@ -41,13 +41,7 @@ module Retest
         # Process group created with: pgroup: true
         pid = Process.spawn(command, out: watch_wr, pgroup: true)
 
-        at_exit do
-          Process.kill("TERM", pid) if pid
-          watch_rd.close
-          watch_wr.close
-        end
-
-        Thread.new do
+        thread = Thread.new do
           loop do
             ready = IO.select([watch_rd])
             readable_connections = ready[0]
@@ -68,6 +62,13 @@ module Retest
             end
           end
         end
+
+        at_exit do
+          thread.exit
+          Process.kill("TERM", pid) if pid
+          watch_rd.close
+          watch_wr.close
+        end
       end
     end
 
@@ -86,13 +87,7 @@ module Retest
         # Process group created with: pgroup: true
         pid = Process.spawn(command, out: watch_wr, pgroup: true)
 
-        at_exit do
-          Process.kill("TERM", pid) if pid
-          watch_rd.close
-          watch_wr.close
-        end
-
-        Thread.new do
+        thread = Thread.new do
           files = VersionControl.files(extensions: extensions).zip([]).to_h
 
           loop do
@@ -124,6 +119,13 @@ module Retest
               yield result
             end
           end
+        end
+
+        at_exit do
+          thread.exit
+          Process.kill("TERM", pid) if pid
+          watch_rd.close
+          watch_wr.close
         end
       end
     end
