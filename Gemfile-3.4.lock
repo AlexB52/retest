@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    retest (2.2.0)
+    retest (2.2.1)
       listen (~> 3.9)
       observer (~> 0.1)
       string-similarity (~> 2.1)
