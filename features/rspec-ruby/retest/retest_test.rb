@@ -2,12 +2,14 @@ require 'retest'
 require_relative 'support/test_helper'
 require 'minitest/autorun'
 require_relative 'retest_test/file_changes'
+require_relative 'retest_test/interruptions'
 
 $stdout.sync = true
 
 class TestDefaultCommand < Minitest::Test
   include RetestHelper
   include FileChanges
+  include Interruptions
 
   def setup
     @command = "retest"
@@ -42,6 +44,7 @@ end
 class TestAliasCommand < Minitest::Test
   include RetestHelper
   include FileChanges
+  include Interruptions
 
   def setup
     @command = "retest --rspec 'bin/retest <test>'"
