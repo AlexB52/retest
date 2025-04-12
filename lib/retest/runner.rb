@@ -21,7 +21,7 @@ module Retest
     def interrupt_run
       return false unless @pid
 
-      Process.kill('INT', @pid)
+      Process.kill('TERM', @pid)
     rescue Errno::ESRCH
       false
     end
