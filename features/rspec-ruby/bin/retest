@@ -1,3 +1,13 @@
 #!/usr/bin/env sh
 
-bundle exec rspec $@
+# Use `exec` to replace this shell script process with the RSpec process.
+# This ensures that any signals (like SIGINT from pressing Ctrl+C) are sent directly to RSpec,
+# rather than being intercepted by this wrapper script.
+#
+# Without `exec`, the shell script would receive the signal first, and we'd have to manually
+# forward it to RSpec, which can interfere with RSpec's built-in signal handling —
+# for example, its graceful shutdown message on the first interrupt, and forced exit on the second.
+#
+# By using `exec`, we preserve RSpec's native behavior and avoid issues with signal forwarding.
+
+exec bundle exec rspec "$@"
