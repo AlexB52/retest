@@ -160,7 +160,7 @@ module Retest
       )
 
       @subject.cache = mock_cache
-      @subject.prompt = Prompt.new(input: StringIO.new("5\n"), output: StringIO.new)
+      @subject.prompt = Prompt.new(input: StringIO.new("6\n"), output: StringIO.new)
 
       @subject.find_test('app/models/valuation/holdings.rb')
 

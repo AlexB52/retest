@@ -28,7 +28,7 @@ module Retest
         test/lib/csv_report/holdings_test.rb
       )
 
-      @subject.input = StringIO.new("1\n")
+      @subject.input = StringIO.new("2\n")
 
       result = @subject.ask_which_test_to_use("app/models/valuation/holdings.rb", files)
 
