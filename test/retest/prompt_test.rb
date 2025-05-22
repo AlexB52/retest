@@ -36,12 +36,12 @@ module Retest
       assert_equal <<~EXPECTED.chomp, @subject.read_output
         We found few tests matching: app/models/valuation/holdings.rb
 
-        [0] - test/models/taxation/holdings_test.rb
-        [1] - test/models/schedule/holdings_test.rb
-        [2] - test/models/holdings_test.rb
-        [3] - test/models/performance/holdings_test.rb
-        [4] - test/lib/csv_report/holdings_test.rb
-        [5] - none
+        [0] - none
+        [1] - test/models/taxation/holdings_test.rb
+        [2] - test/models/schedule/holdings_test.rb
+        [3] - test/models/holdings_test.rb
+        [4] - test/models/performance/holdings_test.rb
+        [5] - test/lib/csv_report/holdings_test.rb
 
         Which file do you want to use?
         Enter the file number now:
