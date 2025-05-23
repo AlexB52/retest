@@ -24,7 +24,9 @@ module ExplicitMatching
       >
     EXPECTED
 
-    write_input("2\n")
+    # In this scenario, selecting 'none' on multiple matches will rerun the
+    # previous testing command every time lib/bottles.rb gets changed.
+    write_input("0\n")
     assert_output_matches "Test file: foo_test.rb"
 
   ensure
