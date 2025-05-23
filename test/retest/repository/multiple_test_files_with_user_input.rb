@@ -21,9 +21,9 @@ module Retest
       assert_equal <<~EXPECTED.chomp, @subject.prompt.read_output
         We found few tests matching: app/models/billing_agent_customer.rb
 
-        [0] - spec/models/billing_agent_customer_spec.rb
-        [1] - core/spec/models/billing_agent_customer_spec.rb
-        [2] - none
+        [0] - none
+        [1] - spec/models/billing_agent_customer_spec.rb
+        [2] - core/spec/models/billing_agent_customer_spec.rb
 
         Which file do you want to use?
         Enter the file number now:

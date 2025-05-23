@@ -37,9 +37,8 @@ module Retest
     private
 
     def options(files, blank_option: 'none')
-      result = {}
+      result = { blank_option => nil } # blank option first
       files.each { |file| result[file] = file }
-      result[blank_option] = nil # blank option last
       result
     end
 

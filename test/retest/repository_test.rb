@@ -135,12 +135,12 @@ module Retest
       assert_match <<~EXPECTED.chomp, out
         We found few tests matching: app/models/valuation/holdings.rb
 
-        [0] - test/models/taxation/holdings_test.rb
-        [1] - test/models/schedule/holdings_test.rb
-        [2] - test/models/holdings_test.rb
-        [3] - test/models/performance/holdings_test.rb
-        [4] - test/lib/csv_report/holdings_test.rb
-        [5] - none
+        [0] - none
+        [1] - test/models/taxation/holdings_test.rb
+        [2] - test/models/schedule/holdings_test.rb
+        [3] - test/models/holdings_test.rb
+        [4] - test/models/performance/holdings_test.rb
+        [5] - test/lib/csv_report/holdings_test.rb
 
         Which file do you want to use?
         Enter the file number now:
@@ -160,7 +160,7 @@ module Retest
       )
 
       @subject.cache = mock_cache
-      @subject.prompt = Prompt.new(input: StringIO.new("5\n"), output: StringIO.new)
+      @subject.prompt = Prompt.new(input: StringIO.new("0\n"), output: StringIO.new)
 
       @subject.find_test('app/models/valuation/holdings.rb')
 
