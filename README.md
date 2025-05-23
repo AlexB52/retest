@@ -100,9 +100,27 @@ Bug reports and pull requests are welcome at [GitHub](https://github.com/alexb52
 Want to contribute to Retest? Follow these steps to set up your environment
 
 1. Clone the repo and install dependencies: `bin/setup`
-2. Run tests to ensure everything is working: `rake test`
-3. Experiment with an interactive console: `bin/console`
-4. To run integration tests (e.g., for a Hanami app): `bin/test/hanami-app`
+2. Experiment with an interactive console: `bin/console`
+3. Run retest with local changes applied: `bin/debug`
+4. Run tests to ensure everything is working: `rake test`
+5. To run integration tests:
+	* bundler-app: `bin/test/bundler-app`
+	* git-ruby: `bin/test/git-ruby`
+	* hanami-app: `bin/test/hanami-app`
+	* rails-app: `bin/test/rails-app`
+	* rspec-rails: `bin/test/rspec-rails`
+	* rspec-ruby: `bin/test/rspec-ruby`
+	* ruby-app: `bin/test/ruby-app`
+	* ruby-bare: `bin/test/ruby-bare`
+
+Note, we squash all PRs and may edit commit messages for clarity or consistency.
+
+## 🏁 Release
+
+Ruby 3.4 requires to be bundled with Gemfile-3.4. 
+When creating a new version make sure to also bundle with 3.4
+
+	BUNDLE_GEMFILE=Gemfile-3.4 bundle install
 
 ## 📜 **License**  
 
