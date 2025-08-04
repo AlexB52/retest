@@ -90,10 +90,8 @@ retest 'bundle exec rails test <test>'
 
 ## ❤️ **Contributing**
 
-Got feedback or ideas? Join the discussion for Retest 2.0 and share your thoughts:  
-[Discussion - Retest V2.0 - Interactive Panel](https://github.com/AlexB52/retest/discussions/216)
-
-Bug reports and pull requests are welcome at [GitHub](https://github.com/alexb52/retest).  
+Got feedback or ideas? [Create a new discussion](https://github.com/AlexB52/retest/discussions)
+Bug reports and pull requests are welcome.
 
 ## 🛠️ **Development**
 
@@ -117,8 +115,8 @@ Note, we squash all PRs and may edit commit messages for clarity or consistency.
 
 ## 🏁 Release
 
-Ruby 3.4 requires to be bundled with Gemfile-3.4. 
-When creating a new version make sure to also bundle with 3.4
+Ruby 3.4 requires being bundled with Gemfile-3.4. 
+When creating a new version, make sure to also bundle with 3.4
 
 	BUNDLE_GEMFILE=Gemfile-3.4 bundle install
 
