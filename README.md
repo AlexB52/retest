@@ -90,7 +90,8 @@ retest 'bundle exec rails test <test>'
 
 ## ❤️ **Contributing**
 
-Got feedback or ideas? [Create a new discussion](https://github.com/AlexB52/retest/discussions)
+Got feedback or ideas? [Start a new discussion](https://github.com/AlexB52/retest/discussions).
+
 Bug reports and pull requests are welcome.
 
 ## 🛠️ **Development**
