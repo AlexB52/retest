@@ -126,6 +126,29 @@ class InteractiveCommandTest < Minitest::Test
       "12 runs, 12 assertions, 0 failures, 0 errors, 0 skips")
   end
 
+  def test_force_batch
+    launch_retest @command
+
+    write_input("fb\n")
+
+    assert_output_matches "Enter list of test files to run"
+
+    write_input("test/test_bundler_app.rb\s\n")
+    write_input("test/bundler_app/test_fibonacci.rb")
+    write_input("\C-d")
+
+    assert_output_matches <<~EXPECTED
+      Forced selection enabled.
+      Reset to default settings by typing 'r' in the interactive console.
+
+      Tests selected:
+        - test/test_bundler_app.rb
+        - test/bundler_app/test_fibonacci.rb
+    EXPECTED
+
+    assert_output_matches "9 runs, 10 assertions, 0 failures, 0 errors, 0 skips"
+  end
+
   def test_run_all
     launch_retest @command
 
