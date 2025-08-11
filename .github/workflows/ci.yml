@@ -28,7 +28,6 @@ jobs:
           - version: '3.2'
           - version: '3.3'
           - version: '3.4'
-            gemfile: Gemfile-3.4
     name: Ruby ${{ matrix.ruby.version }} test (${{ matrix.os }})
     env:
       BUNDLE_GEMFILE: ${{ matrix.ruby.gemfile || 'Gemfile' }}
@@ -39,6 +38,7 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby.version }}
         bundler-cache: true
+    - run: rm Gemfile.lock
     - run: bundle install
     - run: bundle exec rake
 
