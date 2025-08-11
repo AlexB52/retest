@@ -9,3 +9,4 @@
 /tmp/
 .ruby-version
 *.DS_Store
+Gemfile.lock
