@@ -114,13 +114,6 @@ Want to contribute to Retest? Follow these steps to set up your environment
 
 Note, we squash all PRs and may edit commit messages for clarity or consistency.
 
-## 🏁 Release
-
-Ruby 3.4 requires being bundled with Gemfile-3.4. 
-When creating a new version, make sure to also bundle with 3.4
-
-	BUNDLE_GEMFILE=Gemfile-3.4 bundle install
-
 ## 📜 **License**  
 
 Retest is open-source and available under the [MIT License](https://opensource.org/licenses/MIT).
