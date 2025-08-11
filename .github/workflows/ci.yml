@@ -38,7 +38,7 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby.version }}
         bundler-cache: true
-    - run: rm Gemfile.lock
+    - run: rm -f Gemfile.lock
     - run: bundle config set deployment false
     - run: bundle config
     - run: bundle install
