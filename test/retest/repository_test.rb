@@ -3,7 +3,7 @@ require 'test_helper'
 require_relative 'repository/multiple_test_files_with_user_input.rb'
 
 module Retest
-  class RepositoryTest < Minitest::Test
+  class TestRepoFiles < Minitest::Test
     def setup
       @subject = Repository.new
     end
@@ -64,27 +64,11 @@ module Retest
 
       assert_equal ['c.txt'], @subject.files
     end
+  end
 
-    def test_find_tests
-      @subject.files = %w(
-        exe/retest
-        lib/retest.rb
-        lib/bottles.rb
-        lib/glasses.rb
-        lib/pints.rb
-        test/bottles_test.rb
-        test/glasses_test.rb
-        test/plates_test.rb
-        program.rb
-        README.md
-        Gemfile
-        Gemfile.lock
-      )
-
-      assert_equal [
-        'test/bottles_test.rb',
-        'test/glasses_test.rb',
-      ], @subject.find_tests(['exe/retest', 'lib/glasses.rb', '99bottles_ruby/lib/bottles.rb',])
+  class TestRepoFindTest < Minitest::Test
+    def setup
+      @subject = Repository.new
     end
 
     def test_find_test
@@ -109,14 +93,6 @@ module Retest
       @subject.files = []
 
       assert_nil @subject.find_test ''
-    end
-
-    def test_cache
-      mock_cache = {}
-
-      Repository.new(files: ['file_path_test.rb'], cache: mock_cache).find_test('file_path.rb')
-
-      assert_equal({ "file_path.rb" => "file_path_test.rb" }, mock_cache)
     end
 
     def test_find_test_similar_files_but_no_exact_match
@@ -148,9 +124,55 @@ module Retest
       EXPECTED
     end
 
-    def test_no_matches_with_multiple_possible_tests
-      mock_cache = {}
+    def test_find_test_called_with_test_file
+      file_changed = expected = 'test/models/schedule/holdings_test.rb'
 
+      assert_equal expected, @subject.find_test(file_changed)
+    end
+  end
+
+  class TestRepoFindTests < Minitest::Test
+    def setup
+      @subject = Repository.new
+    end
+
+    def test_find_tests
+      @subject.files = %w(
+        exe/retest
+        lib/retest.rb
+        lib/bottles.rb
+        lib/glasses.rb
+        lib/pints.rb
+        test/bottles_test.rb
+        test/glasses_test.rb
+        test/plates_test.rb
+        program.rb
+        README.md
+        Gemfile
+        Gemfile.lock
+      )
+
+      assert_equal [
+        'test/bottles_test.rb',
+        'test/glasses_test.rb',
+      ], @subject.find_tests(['exe/retest', 'lib/glasses.rb', '99bottles_ruby/lib/bottles.rb',])
+    end
+  end
+
+  class TestRepoCache < Minitest::Test
+    def setup
+      @cache = {}
+      @subject = Repository.new(cache: @cache)
+    end
+
+    def test_cache
+      @subject.files = ['file_path_test.rb']
+      @subject.find_test('file_path.rb')
+
+      assert_equal({ "file_path.rb" => "file_path_test.rb" }, @cache)
+    end
+
+    def test_no_matches_with_multiple_possible_tests
       @subject.files = %w(
         test/models/schedule/holdings_test.rb
         test/models/taxation/holdings_test.rb
@@ -159,92 +181,75 @@ module Retest
         test/lib/csv_report/holdings_test.rb
       )
 
-      @subject.cache = mock_cache
       @subject.prompt = Prompt.new(input: StringIO.new("0\n"), output: StringIO.new)
 
       @subject.find_test('app/models/valuation/holdings.rb')
 
-      assert_equal({ 'app/models/valuation/holdings.rb' => nil }, mock_cache)
+      assert_equal({ 'app/models/valuation/holdings.rb' => nil }, @cache)
     end
 
     def test_no_matches_with_no_match
-      mock_cache = {}
-
       @subject.files = %w(
         bar.rb
         bar_test.rb
       )
 
-      @subject.cache = mock_cache
-
       @subject.find_test('foo.rb')
 
-      assert_equal({}, mock_cache)
+      assert_equal({}, @cache)
+    end
+  end
+
+  class TestRepoTestFiles < Minitest::Test
+    def setup
+      @subject = Repository.new
     end
 
-    class TestFileChanged < Minitest::Test
-      def setup
-        @subject = Repository.new
-      end
+    def test_returns_test_files_only
+      @subject.files = %w(
+        exe/retest
+        lib/retest.rb
+        lib/bottles.rb
+        lib/glasses.rb
+        lib/pints.rb
+        test/bottles_test.rb
+        test/glasses_test.rb
+        test/plates_test.rb
+        test/test_bottles_test.rb
+        test/test_glasses_test.rb
+        test/test_plates_test.rb
+        spec/bottles_spec.rb
+        spec/glasses_spec.rb
+        spec/plates_spec.rb
+        bottles_spec.rb
+        glasses_spec.rb
+        plates_spec.rb
+        bottles_test.rb
+        glasses_test.rb
+        plates_test.rb
+        program.rb
+        README.md
+        Gemfile
+        Gemfile.lock
+      )
 
-      def test_find_test_return_changed_file
-        file_changed = expected = 'test/models/schedule/holdings_test.rb'
-
-        assert_equal expected, @subject.find_test(file_changed)
-      end
-    end
-
-    class TestTestFiles < Minitest::Test
-      def setup
-        @subject = Repository.new
-      end
-
-      def test_returns_test_files_only
-        @subject.files = %w(
-          exe/retest
-          lib/retest.rb
-          lib/bottles.rb
-          lib/glasses.rb
-          lib/pints.rb
-          test/bottles_test.rb
-          test/glasses_test.rb
-          test/plates_test.rb
-          test/test_bottles_test.rb
-          test/test_glasses_test.rb
-          test/test_plates_test.rb
-          spec/bottles_spec.rb
-          spec/glasses_spec.rb
-          spec/plates_spec.rb
-          bottles_spec.rb
-          glasses_spec.rb
-          plates_spec.rb
-          bottles_test.rb
-          glasses_test.rb
-          plates_test.rb
-          program.rb
-          README.md
-          Gemfile
-          Gemfile.lock
-        )
-
-        assert_equal %w[
-          test/bottles_test.rb
-          test/glasses_test.rb
-          test/plates_test.rb
-          test/test_bottles_test.rb
-          test/test_glasses_test.rb
-          test/test_plates_test.rb
-          spec/bottles_spec.rb
-          spec/glasses_spec.rb
-          spec/plates_spec.rb
-          bottles_spec.rb
-          glasses_spec.rb
-          plates_spec.rb
-          bottles_test.rb
-          glasses_test.rb
-          plates_test.rb
-        ], @subject.test_files
-      end
+      assert_equal %w[
+        test/bottles_test.rb
+        test/glasses_test.rb
+        test/plates_test.rb
+        test/test_bottles_test.rb
+        test/test_glasses_test.rb
+        test/test_plates_test.rb
+        spec/bottles_spec.rb
+        spec/glasses_spec.rb
+        spec/plates_spec.rb
+        bottles_spec.rb
+        glasses_spec.rb
+        plates_spec.rb
+        bottles_test.rb
+        glasses_test.rb
+        plates_test.rb
+      ], @subject.test_files
     end
   end
 end
