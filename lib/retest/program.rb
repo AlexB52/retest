@@ -55,12 +55,7 @@ module Retest
     end
 
     def force_batch(multiline_input)
-      files = multiline_input
-        .split("\n")
-        .flat_map { |line| line.split(/\s+/) }
-        .uniq
-
-      files = repository.find_tests(files)
+      files = repository.find_tests multiline_input.split(/\s+/)
 
       force_selection(files)
       run(nil, force_run: true)
