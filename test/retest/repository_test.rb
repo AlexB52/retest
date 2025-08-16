@@ -125,6 +125,40 @@ module Retest
     end
 
     def test_find_test_called_with_test_file
+      @subject.files = %w(
+        test/songs/99bottles.txt
+        test/bottles_test.rb
+        program.rb
+        README.md
+        lib/bottles.rb
+        Gemfile
+        Gemfile.lock
+      )
+
+      assert_equal 'test/bottles_test.rb', @subject.find_test('test/bottles_test.rb')
+    end
+
+    def test_find_test_called_with_test_file
+      @subject.files = []
+
+      file_changed = expected = 'test/bottles_test.rb'
+
+      assert_nil @subject.find_test('test/bottles_test.rb')
+    end
+
+    def test_find_test_with_incomplete_path
+      skip
+
+      @subject.files = %w(
+        test/songs/99bottles.txt
+        test/bottles_test.rb
+        program.rb
+        README.md
+        lib/bottles.rb
+        Gemfile
+        Gemfile.lock
+      )
+
       file_changed = expected = 'test/models/schedule/holdings_test.rb'
 
       @subject.files = [expected]
@@ -135,29 +169,59 @@ module Retest
 
   class TestRepoFindTests < Minitest::Test
     def setup
-      @subject = Repository.new
-    end
-
-    def test_find_tests
-      @subject.files = %w(
+      @subject = Repository.new(files: %w(
         exe/retest
         lib/retest.rb
         lib/bottles.rb
         lib/glasses.rb
         lib/pints.rb
+        test/bottles/cap_test.rb
+        test/bottles/limit_test.rb
         test/bottles_test.rb
         test/glasses_test.rb
         test/plates_test.rb
+        test/program_test.rb
         program.rb
+        program_test.rb
         README.md
         Gemfile
         Gemfile.lock
-      )
+      ))
+    end
 
+    def test_find_tests
       assert_equal [
         'test/bottles_test.rb',
         'test/glasses_test.rb',
-      ], @subject.find_tests(['exe/retest', 'lib/glasses.rb', '99bottles_ruby/lib/bottles.rb',])
+      ], @subject.find_tests(%w[exe/retest lib/glasses.rb 99bottles_ruby/lib/bottles.rb])
+    end
+
+    def test_find_multiple_exact_tests
+      assert_equal [
+        'test/bottles_test.rb',
+        'test/glasses_test.rb',
+      ], @subject.find_tests(%w[exe/retest lib/glasses.rb lib/glasses.rb 99bottles_ruby/lib/bottles.rb ])
+    end
+
+    def test_find_test_files
+      assert_equal [
+        'test/bottles_test.rb',
+        'test/glasses_test.rb',
+      ], @subject.find_tests(%w[test/bottles_test.rb test/glasses_test.rb])
+    end
+
+    def test_find_multipe_same_test_files
+      assert_equal [
+        'test/bottles_test.rb',
+        'test/glasses_test.rb',
+      ], @subject.find_tests(%w[test/bottles_test.rb test/glasses_test.rb test/glasses_test.rb])
+    end
+
+    def test_find_multiple_same_files_with_incomplete_paths
+      skip
+      assert_equal [
+        'test/bottles_test.rb',
+      ], @subject.find_tests(%w[bottles_test.rb])
     end
   end
 
