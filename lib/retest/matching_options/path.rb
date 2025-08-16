@@ -12,6 +12,10 @@ module Retest
         @pathname = Pathname(path)
       end
 
+      def ==(other)
+        pathname == other.pathname
+      end
+
       def reversed_dirnames
         @reversed_dirnames ||= dirnames.reverse
       end
@@ -28,12 +32,21 @@ module Retest
         test_regexs.any? { |regex| regex =~ to_s }
       end
 
-      def possible_test?(file)
-        possible_test_regexs.any? { |regex| regex =~ file }
+      def possible_test?(file, test_directories: nil)
+        if test?(test_directories: test_directories)
+          other = Path.new(file)
+          self == other || test_subset?(other)
+        else
+          possible_test_regexs.any? { |regex| regex =~ file }
+        end
       end
 
       def similarity_score(file)
         String::Similarity.levenshtein(to_s, file)
+      end
+
+      def filename
+        basename(extname)
       end
 
       private
@@ -52,8 +65,15 @@ module Retest
         ]
       end
 
-      def filename
-        basename(extname)
+      # This method checks whether the test file is included in the path of
+      # another test file
+      # Example: fixture_test.rb is included in test/valuation/fixture_test.rb
+      def test_subset?(other)
+        if dirnames == ['.']
+          filename == other.filename
+        else
+          filename == other.filename && Set.new(dirnames).subset?(Set.new(other.dirnames))
+        end
       end
     end
   end

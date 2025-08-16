@@ -36,7 +36,7 @@ module Retest
     def test_return_test_file_when_changed
       file_changed = expected = 'test/models/schedule/test_holdings.rb'
 
-      assert_equal [expected], MatchingOptions.for(file_changed, files: [])
+      assert_equal [expected], MatchingOptions.for(file_changed, files: ['test/models/schedule/test_holdings.rb'])
     end
 
     def test_multiple_matches
@@ -84,7 +84,7 @@ module Retest
     def test_return_test_file_when_changed
       file_changed = expected = 'test/models/schedule/holdings_test.rb'
 
-      assert_equal [expected], MatchingOptions.for(file_changed, files: [])
+      assert_equal [expected], MatchingOptions.for(file_changed, files: ['test/models/schedule/holdings_test.rb'])
     end
 
     def test_multiple_matches_on_hanami_setup
@@ -121,7 +121,7 @@ module Retest
     end
   end
 
-  class MultiplePatternTest < Minitest::Test
+  class TestMultiplePattern < Minitest::Test
     def test_no_default_pattern_match
       files = %w(
         lib/active_record/fixtures.rb
@@ -163,6 +163,49 @@ module Retest
       )
 
       assert_equal files, MatchingOptions.for('lib/holdings.rb', files: files, limit: 8)
+    end
+  end
+
+  class TestMatchingTestInputs < Minitest::Test
+    def test_exact_test_match
+      files = %w(
+        spec_holdings.rb
+        test_holdings.rb
+        holdings_spec.rb
+        holdings_test.rb
+        spec/holdings_spec.rb
+        spec/holdings_test.rb
+        test/holdings_spec.rb
+        test/holdings_test.rb
+      )
+
+      assert_equal ['spec/holdings_test.rb'], MatchingOptions.for('spec/holdings_test.rb', files: files)
+      assert_equal ['holdings_spec.rb'], MatchingOptions.for('holdings_spec.rb', files: files)
+    end
+
+    def test_unknonw_test_paths
+      files = %w(
+        spec_holdings.rb
+        test_holdings.rb
+        holdings_spec.rb
+        holdings_test.rb
+        spec/holdings_spec.rb
+        spec/holdings_test.rb
+        test/holdings_spec.rb
+        test/holdings_test.rb
+      )
+
+      assert_equal [], MatchingOptions.for('spec/repository_test.rb', files: files)
+    end
+
+    def test_multiple_possible_test_matches
+      files = %w(
+        spec/holdings_spec.rb
+        test/holdings_spec.rb
+        test/portfolio/holdings_spec.rb
+      )
+
+      assert_equal files, MatchingOptions.for('holdings_spec.rb', files: files)
     end
   end
 end

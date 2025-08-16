@@ -127,6 +127,8 @@ module Retest
     def test_find_test_called_with_test_file
       file_changed = expected = 'test/models/schedule/holdings_test.rb'
 
+      @subject.files = [expected]
+
       assert_equal expected, @subject.find_test(file_changed)
     end
   end
