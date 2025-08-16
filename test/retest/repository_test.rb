@@ -216,7 +216,6 @@ module Retest
     end
 
     def test_find_multiple_same_files_with_incomplete_paths
-      skip
       assert_equal [
         'test/bottles_test.rb',
       ], @subject.find_tests(%w[bottles_test.rb])
