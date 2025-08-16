@@ -147,8 +147,6 @@ module Retest
     end
 
     def test_find_test_with_incomplete_path
-      skip
-
       @subject.files = %w(
         test/songs/99bottles.txt
         test/bottles_test.rb
