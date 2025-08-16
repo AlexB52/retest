@@ -71,7 +71,7 @@ module Retest
       @subject = Repository.new
     end
 
-    def test_find_test
+    def test_happy_path
       @subject.files = %w(
         test/songs/99bottles.txt
         test/bottles_test.rb
@@ -85,7 +85,7 @@ module Retest
       assert_equal 'test/bottles_test.rb', @subject.find_test('99bottles_ruby/lib/bottles.rb')
     end
 
-    def test_find_test_edge_cases
+    def test_edge_cases
       @subject.files = []
 
       assert_nil @subject.find_test nil
@@ -95,7 +95,7 @@ module Retest
       assert_nil @subject.find_test ''
     end
 
-    def test_find_test_similar_files_but_no_exact_match
+    def test_similar_files_but_no_exact_match
       @subject.files = %w(
         test/models/schedule/holdings_test.rb
         test/models/taxation/holdings_test.rb
@@ -124,7 +124,7 @@ module Retest
       EXPECTED
     end
 
-    def test_find_test_called_with_test_file
+    def test_called_with_test_file
       @subject.files = %w(
         test/songs/99bottles.txt
         test/bottles_test.rb
@@ -138,15 +138,13 @@ module Retest
       assert_equal 'test/bottles_test.rb', @subject.find_test('test/bottles_test.rb')
     end
 
-    def test_find_test_called_with_test_file
+    def test_called_with_test_file_but_no_match
       @subject.files = []
-
-      file_changed = expected = 'test/bottles_test.rb'
 
       assert_nil @subject.find_test('test/bottles_test.rb')
     end
 
-    def test_find_test_with_incomplete_path
+    def test_with_incomplete_path
       @subject.files = %w(
         test/songs/99bottles.txt
         test/bottles_test.rb
