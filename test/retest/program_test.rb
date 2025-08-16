@@ -106,13 +106,45 @@ module Retest
       end
 
       def test_changed_files_identification
-        skip
+        # @repository = Repository.new(files: %w[
+        #   test/retest/command/hardcoded_test.rb
+        #   test/retest/command/rails_test.rb
+        #   test/retest/command/rake_test.rb
+        #   test/retest/command/rspec_test.rb
+        #   test/retest/command/ruby_test.rb
+        #   test/retest/command_test.rb
+        #   test/retest/file_system_test.rb
+        #   test/retest/program_test.rb
+        #   test/retest/prompt_test.rb
+        #   test/retest/repository_test.rb
+        #   test/retest/runner_test.rb
+        #   test/retest/setup_test.rb
+        # ])
+
         # Match normal ruby files and select their matching test files
+        @subject.force_batch(<<~INPUT)
+          command.rb
+          lib/retest/file_system.rb
+          command/rake.rb
+          command/rake_test.rb
+          command/rspec.rb
+          lib/retest/special_unknown_folder/runner.rb
+        INPUT
+
+        expected_test_files = %w[
+          test/retest/command/rake_test.rb
+          test/retest/command/rspec_test.rb
+          test/retest/command_test.rb
+          test/retest/file_system_test.rb
+          test/retest/runner_test.rb
+        ]
+
+        check_runner_runs_files(expected_test_files)
       end
 
       def test_numbered_test_paths
-        skip
         # Check support for numbered test paths
+        skip
       end
     end
 
