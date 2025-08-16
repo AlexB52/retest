@@ -142,8 +142,8 @@ class InteractiveCommandTest < Minitest::Test
       Reset to default settings by typing 'r' in the interactive console.
 
       Tests selected:
-        - test/test_bundler_app.rb
         - test/bundler_app/test_fibonacci.rb
+        - test/test_bundler_app.rb
     EXPECTED
 
     assert_output_matches "9 runs, 10 assertions, 0 failures, 0 errors, 0 skips"
