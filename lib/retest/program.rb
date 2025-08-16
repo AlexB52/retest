@@ -54,6 +54,13 @@ module Retest
       runner.run_all
     end
 
+    def force_batch(multiline_input)
+      files = repository.find_tests multiline_input.split(/\s+/)
+
+      force_selection(files)
+      run(nil, force_run: true)
+    end
+
     def clear_terminal
       system('clear 2>/dev/null') || system('cls 2>/dev/null')
     end
