@@ -31,6 +31,14 @@ module Retest
         .sort
     end
 
+    def search_tests(paths)
+      result = {}
+      paths.each do |path|
+        result[path] = find_test(path)
+      end
+      result
+    end
+
     def test_files
       files.select { |file| MatchingOptions::Path.new(file).test? }
     end

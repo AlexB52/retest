@@ -20,6 +20,14 @@ module Retest
       initialize_forced_selection([])
     end
 
+    def force_batch(input)
+      paths = input.strip.split("\n").map(&:strip).reject(&:empty?)
+      test_results = repository.search_tests(paths)
+      valid_tests = test_results.values.compact.uniq.sort
+      force_selection(valid_tests)
+      runner.run(test_files: valid_tests)
+    end
+
     def run(file, force_run: false)
       if paused? && !force_run
         @stdout.puts "Main program paused. Please resume program first."
