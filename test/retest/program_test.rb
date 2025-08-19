@@ -106,21 +106,6 @@ module Retest
       end
 
       def test_changed_files_identification
-        # @repository = Repository.new(files: %w[
-        #   test/retest/command/hardcoded_test.rb
-        #   test/retest/command/rails_test.rb
-        #   test/retest/command/rake_test.rb
-        #   test/retest/command/rspec_test.rb
-        #   test/retest/command/ruby_test.rb
-        #   test/retest/command_test.rb
-        #   test/retest/file_system_test.rb
-        #   test/retest/program_test.rb
-        #   test/retest/prompt_test.rb
-        #   test/retest/repository_test.rb
-        #   test/retest/runner_test.rb
-        #   test/retest/setup_test.rb
-        # ])
-
         # Match normal ruby files and select their matching test files
         @subject.force_batch(<<~INPUT)
           command.rb
