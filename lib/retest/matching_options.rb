@@ -17,15 +17,7 @@ module Retest
 
     def filtered_results
       if path.test?(test_directories: test_directories)
-        # If input is a test file, find exact or partial matches
-        exact_match = files.find { |file| file == path.to_s }
-        if exact_match
-          [Path.new(exact_match)]
-        else
-          # Find files that end with this test file name
-          partial_matches = files.select { |file| file.end_with?(path.to_s) }
-          partial_matches.empty? ? [] : partial_matches.map { |file| Path.new(file) }
-        end
+        find_test_file_matches
       elsif (screened_tests = screen_namespaces(possible_tests)).any?
         screened_tests
       else
@@ -34,6 +26,22 @@ module Retest
     end
 
     private
+
+    def find_test_file_matches
+      exact_match = find_exact_match
+      return [Path.new(exact_match)] if exact_match
+      
+      find_partial_matches
+    end
+
+    def find_exact_match
+      files.find { |file| file == path.to_s }
+    end
+
+    def find_partial_matches
+      partial_matches = files.select { |file| file.end_with?(path.to_s) }
+      partial_matches.empty? ? [] : partial_matches.map { |file| Path.new(file) }
+    end
 
     def possible_tests
       @possible_tests ||= files

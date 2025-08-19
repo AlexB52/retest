@@ -21,11 +21,9 @@ module Retest
     end
 
     def force_batch(input)
-      paths = input.strip.split("\n").map(&:strip).reject(&:empty?)
-      test_results = repository.search_tests(paths)
-      valid_tests = test_results.values.compact.uniq.sort
-      force_selection(valid_tests)
-      runner.run(test_files: valid_tests)
+      paths = parse_batch_input(input)
+      test_files = find_test_files_for_paths(paths)
+      execute_batch_selection(test_files)
     end
 
     def run(file, force_run: false)
@@ -64,6 +62,21 @@ module Retest
 
     def clear_terminal
       system('clear 2>/dev/null') || system('cls 2>/dev/null')
+    end
+
+    private
+
+    def parse_batch_input(input)
+      input.strip.split("\n").map(&:strip).reject(&:empty?)
+    end
+
+    def find_test_files_for_paths(paths)
+      repository.search_tests(paths).values.compact.uniq.sort
+    end
+
+    def execute_batch_selection(test_files)
+      force_selection(test_files)
+      runner.run(test_files: test_files)
     end
   end
 end

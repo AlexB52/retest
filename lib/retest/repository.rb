@@ -32,11 +32,7 @@ module Retest
     end
 
     def search_tests(paths)
-      result = {}
-      paths.each do |path|
-        result[path] = find_test(path)
-      end
-      result
+      paths.to_h { |path| [path, find_test(path)] }
     end
 
     def test_files

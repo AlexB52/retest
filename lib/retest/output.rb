@@ -1,20 +1,31 @@
 module Retest
   class Output
     def self.force_batch_failures(failed_paths, out: nil)
-      return nil if failed_paths.nil? || failed_paths.empty?
+      return nil if no_failures?(failed_paths)
       
-      output = <<~OUTPUT
+      output = format_failures_message(failed_paths)
+      deliver_output(output, out)
+    end
+
+    private_class_method def self.no_failures?(failed_paths)
+      failed_paths.nil? || failed_paths.empty?
+    end
+
+    private_class_method def self.format_failures_message(failed_paths)
+      <<~OUTPUT
 
 Retest could not find matching tests for these inputs:
-#{failed_paths.map { |path| "  - #{path}" }.join("\n")}
+#{format_failed_paths(failed_paths)}
 
       OUTPUT
-      
-      if out
-        out.write(output)
-      else
-        output
-      end
+    end
+
+    private_class_method def self.format_failed_paths(failed_paths)
+      failed_paths.map { |path| "  - #{path}" }.join("\n")
+    end
+
+    private_class_method def self.deliver_output(output, out)
+      out ? out.write(output) : output
     end
   end
 end
