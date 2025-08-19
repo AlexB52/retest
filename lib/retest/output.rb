@@ -8,7 +8,8 @@ module Retest
     def force_batch_failures(paths, out: nil)
       return unless paths&.any?
 
-      output = "\nWe couldn't find the test for these inputs:\n"
+      output = "\n"
+      output += "Retest could not find matching tests for these inputs:\n"
       paths.each do |invalid_path|
         output += "  - #{invalid_path}\n"
       end

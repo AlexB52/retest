@@ -5,7 +5,7 @@ module Retest
     def test_without_stdout
       assert_equal <<~OUTPUT, Output.force_batch_failures(%w[hello.rb test/unknown.rb lib.rb Gemfile])
 
-        We couldn't find the test for these inputs:
+        Retest could not find matching tests for these inputs:
           - hello.rb
           - test/unknown.rb
           - lib.rb
@@ -25,7 +25,7 @@ module Retest
 
       assert_equal <<~OUTPUT, stdout.tap(&:rewind).read
 
-        We couldn't find the test for these inputs:
+        Retest could not find matching tests for these inputs:
           - hello.rb
           - test/unknown.rb
           - lib.rb
