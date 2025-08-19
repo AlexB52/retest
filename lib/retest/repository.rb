@@ -23,13 +23,24 @@ module Retest
     end
 
     def find_tests(paths)
-      paths
-        .select { |path| Regexp.new("\.rb$") =~ path }
-        .map    { |path| find_test(path) }
+      search_tests(paths)
+        .values
         .compact
         .uniq
         .sort
     end
+
+    def search_tests(paths)
+      result = {}
+      ruby_files = paths.select { |path| path.end_with?('.rb') }
+
+      ruby_files.each do |path|
+        result[path] ||= find_test(path)
+      end
+
+      result
+    end
+
 
     def test_files
       files.select { |file| MatchingOptions::Path.new(file).test? }

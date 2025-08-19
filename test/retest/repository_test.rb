@@ -220,6 +220,48 @@ module Retest
     end
   end
 
+  class TestRepoSearchTests < Minitest::Test
+    def setup
+      @subject = Repository.new(files: %w(
+        exe/retest
+        lib/retest.rb
+        lib/bottles.rb
+        lib/glasses.rb
+        lib/pints.rb
+        test/bottles/cap_test.rb
+        test/bottles/limit_test.rb
+        test/bottles_test.rb
+        test/glasses_test.rb
+        test/plates_test.rb
+        test/program_test.rb
+        program.rb
+        program_test.rb
+        README.md
+        Gemfile
+        Gemfile.lock
+      ))
+    end
+
+    def test_search_results
+      assert_equal({
+        "test/bottles_test.rb" => "test/bottles_test.rb",
+        "lib/bottles.rb"       => "test/bottles_test.rb",
+        "test/plates_test.rb"  => "test/plates_test.rb",
+        "test/unknown_test.rb" => nil,
+        "lib/unknown.rb"       => nil,
+        "lib/glasses.rb"       => "test/glasses_test.rb",
+      }, @subject.search_tests(%w[
+        test/bottles_test.rb
+        lib/bottles.rb
+        test/bottles_test.rb
+        test/plates_test.rb
+        test/unknown_test.rb
+        lib/unknown.rb
+        lib/glasses.rb
+      ]))
+    end
+  end
+
   class TestRepoCache < Minitest::Test
     def setup
       @cache = {}
