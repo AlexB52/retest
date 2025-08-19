@@ -71,7 +71,7 @@ module Retest
       @subject = Repository.new
     end
 
-    def test_find_test
+    def test_happy_path
       @subject.files = %w(
         test/songs/99bottles.txt
         test/bottles_test.rb
@@ -85,7 +85,7 @@ module Retest
       assert_equal 'test/bottles_test.rb', @subject.find_test('99bottles_ruby/lib/bottles.rb')
     end
 
-    def test_find_test_edge_cases
+    def test_edge_cases
       @subject.files = []
 
       assert_nil @subject.find_test nil
@@ -95,7 +95,7 @@ module Retest
       assert_nil @subject.find_test ''
     end
 
-    def test_find_test_similar_files_but_no_exact_match
+    def test_similar_files_but_no_exact_match
       @subject.files = %w(
         test/models/schedule/holdings_test.rb
         test/models/taxation/holdings_test.rb
@@ -124,8 +124,40 @@ module Retest
       EXPECTED
     end
 
-    def test_find_test_called_with_test_file
+    def test_called_with_test_file
+      @subject.files = %w(
+        test/songs/99bottles.txt
+        test/bottles_test.rb
+        program.rb
+        README.md
+        lib/bottles.rb
+        Gemfile
+        Gemfile.lock
+      )
+
+      assert_equal 'test/bottles_test.rb', @subject.find_test('test/bottles_test.rb')
+    end
+
+    def test_called_with_test_file_but_no_match
+      @subject.files = []
+
+      assert_nil @subject.find_test('test/bottles_test.rb')
+    end
+
+    def test_with_incomplete_path
+      @subject.files = %w(
+        test/songs/99bottles.txt
+        test/bottles_test.rb
+        program.rb
+        README.md
+        lib/bottles.rb
+        Gemfile
+        Gemfile.lock
+      )
+
       file_changed = expected = 'test/models/schedule/holdings_test.rb'
+
+      @subject.files = [expected]
 
       assert_equal expected, @subject.find_test(file_changed)
     end
@@ -133,29 +165,100 @@ module Retest
 
   class TestRepoFindTests < Minitest::Test
     def setup
-      @subject = Repository.new
-    end
-
-    def test_find_tests
-      @subject.files = %w(
+      @subject = Repository.new(files: %w(
         exe/retest
         lib/retest.rb
         lib/bottles.rb
         lib/glasses.rb
         lib/pints.rb
+        test/bottles/cap_test.rb
+        test/bottles/limit_test.rb
         test/bottles_test.rb
         test/glasses_test.rb
         test/plates_test.rb
+        test/program_test.rb
         program.rb
+        program_test.rb
         README.md
         Gemfile
         Gemfile.lock
-      )
+      ))
+    end
 
+    def test_find_tests
       assert_equal [
         'test/bottles_test.rb',
         'test/glasses_test.rb',
-      ], @subject.find_tests(['exe/retest', 'lib/glasses.rb', '99bottles_ruby/lib/bottles.rb',])
+      ], @subject.find_tests(%w[exe/retest lib/glasses.rb 99bottles_ruby/lib/bottles.rb])
+    end
+
+    def test_find_multiple_exact_tests
+      assert_equal [
+        'test/bottles_test.rb',
+        'test/glasses_test.rb',
+      ], @subject.find_tests(%w[exe/retest lib/glasses.rb lib/glasses.rb 99bottles_ruby/lib/bottles.rb ])
+    end
+
+    def test_find_test_files
+      assert_equal [
+        'test/bottles_test.rb',
+        'test/glasses_test.rb',
+      ], @subject.find_tests(%w[test/bottles_test.rb test/glasses_test.rb])
+    end
+
+    def test_find_multipe_same_test_files
+      assert_equal [
+        'test/bottles_test.rb',
+        'test/glasses_test.rb',
+      ], @subject.find_tests(%w[test/bottles_test.rb test/glasses_test.rb test/glasses_test.rb])
+    end
+
+    def test_find_multiple_same_files_with_incomplete_paths
+      assert_equal [
+        'test/bottles_test.rb',
+      ], @subject.find_tests(%w[bottles_test.rb])
+    end
+  end
+
+  class TestRepoSearchTests < Minitest::Test
+    def setup
+      @subject = Repository.new(files: %w(
+        exe/retest
+        lib/retest.rb
+        lib/bottles.rb
+        lib/glasses.rb
+        lib/pints.rb
+        test/bottles/cap_test.rb
+        test/bottles/limit_test.rb
+        test/bottles_test.rb
+        test/glasses_test.rb
+        test/plates_test.rb
+        test/program_test.rb
+        program.rb
+        program_test.rb
+        README.md
+        Gemfile
+        Gemfile.lock
+      ))
+    end
+
+    def test_search_results
+      assert_equal({
+        "test/bottles_test.rb" => "test/bottles_test.rb",
+        "lib/bottles.rb"       => "test/bottles_test.rb",
+        "test/plates_test.rb"  => "test/plates_test.rb",
+        "test/unknown_test.rb" => nil,
+        "lib/unknown.rb"       => nil,
+        "lib/glasses.rb"       => "test/glasses_test.rb",
+      }, @subject.search_tests(%w[
+        test/bottles_test.rb
+        lib/bottles.rb
+        test/bottles_test.rb
+        test/plates_test.rb
+        test/unknown_test.rb
+        lib/unknown.rb
+        lib/glasses.rb
+      ]))
     end
   end
 
