@@ -14,6 +14,7 @@ require "retest/program"
 require "retest/prompt"
 require "retest/sounds"
 require "retest/watcher"
+require "retest/output"
 
 module Retest
   class Error < StandardError; end

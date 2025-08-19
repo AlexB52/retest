@@ -55,10 +55,18 @@ module Retest
     end
 
     def force_batch(multiline_input)
-      files = repository.find_tests multiline_input.split(/\s+/)
+      failures, successes = repository
+        .search_tests(multiline_input.split(/\s+/))
+        .partition { |k,v| v.nil? }
 
-      force_selection(files)
-      run(nil, force_run: true)
+      Output.force_batch_failures(failures.map(&:first), out: @stdout)
+
+      if (successes = successes.to_h).empty?
+        @stdout.puts "No test files found"
+      else
+        force_selection(successes.values.uniq.compact.sort)
+        run(nil, force_run: true)
+      end
     end
 
     def clear_terminal
