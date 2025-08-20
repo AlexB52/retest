@@ -124,21 +124,22 @@ def run_command(input:, program:)
     program.run_all
   when /^di?f?f?\s(.*)$/
     program.diff($1)
-  when 'c'
+  when 'c', 'clear'
     program.clear_terminal
   when 'h', 'help'
     puts <<~HELP
 
-      * 'h', 'help'              # Prints help.
-      * 'p', 'pause'             # Pauses Retest. Tests aren't run on file change events until unpaused.
-      * 'u', 'unpause'           # Unpauses Retest.
-      * <ENTER>                  # Runs last changed triggered command.
-      * 'ra, 'run all'           # Runs all tests.
-      * 'f', 'force'             # Forces a selection of test to run on every file change.
-      * 'r', 'reset'             # Disables forced selection.
-      * 'd', 'diff' [GIT BRANCH] # Runs matching specs that changed from a target branch.
-      * 'c'                      # Clears window.
-      * 'e', 'exit'              # Exits Retest.
+      * <ENTER>                   # Runs last changed triggered command.
+      * 'h',  'help'              # Prints help.
+      * 'p',  'pause'             # Pauses Retest. Tests aren't run on file change events until unpaused.
+      * 'u',  'unpause'           # Unpauses Retest.
+      * 'ra', 'run all'           # Runs all tests.
+      * 'f',  'force'             # Forces a selection of test to run on every file change.
+      * 'fb', 'force batch'       # Paste a list of files and force a selection of their matching tests.
+      * 'r',  'reset'             # Disables forced selection.
+      * 'd',  'diff' [GIT BRANCH] # Runs matching specs that changed from a target branch.
+      * 'c',  'clear'             # Clears window.
+      * 'e',  'exit'              # Exits Retest.
     HELP
   else
     puts "Unknown interactive command #{input}\n"
