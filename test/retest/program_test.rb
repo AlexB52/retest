@@ -126,11 +126,6 @@ module Retest
 
         check_runner_runs_files(expected_test_files)
       end
-
-      def test_numbered_test_paths
-        # Check support for numbered test paths
-        skip
-      end
     end
 
     class PauseTest < Minitest::Test
