@@ -132,7 +132,7 @@ def run_command(input:, program:)
       Commands:
         <ENTER>                Run last changed triggered command
         h, help                Show help
-        p, pause               Pause Retest (tests won’t run on file changes)
+        p, pause               Pause Retest (tests won't run on file changes)
         u, unpause             Unpause Retest
         ra, run all            Run all tests
         f, force               Force a selection of tests to run on every file change

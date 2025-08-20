@@ -27,16 +27,18 @@ class InteractiveCommandTest < Minitest::Test
     write_input("h\n")
 
     assert_output_matches <<~EXPECTED.chomp
-      * 'h', 'help'              # Prints help.
-      * 'p', 'pause'             # Pauses Retest. Tests aren't run on file change events until unpaused.
-      * 'u', 'unpause'           # Unpauses Retest.
-      * <ENTER>                  # Runs last changed triggered command.
-      * 'ra, 'run all'           # Runs all tests.
-      * 'f', 'force'             # Forces a selection of test to run on every file change.
-      * 'r', 'reset'             # Disables forced selection.
-      * 'd', 'diff' [GIT BRANCH] # Runs matching specs that changed from a target branch.
-      * 'c'                      # Clears window.
-      * 'e', 'exit'              # Exits Retest.
+      Commands:
+        <ENTER>                Run last changed triggered command
+        h, help                Show help
+        p, pause               Pause Retest (tests won't run on file changes)
+        u, unpause             Unpause Retest
+        ra, run all            Run all tests
+        f, force               Force a selection of tests to run on every file change
+        fb, force batch        Force a selection of tests based on raw data list
+        r, reset               Reset forced selection
+        d, diff [BRANCH]       Run specs changed relative to a Git branch
+        c, clear               Clear the window
+        e, exit                Exit Retest
 
       Type interactive command and press enter. Enter 'h' for help.
       >\s
