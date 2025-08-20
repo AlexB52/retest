@@ -16,8 +16,8 @@ module Retest
     end
 
     def filtered_results
-      if path.test?(test_directories: test_directories)
-        [path]
+      if (test_file = possible_tests.find { |file| file == path.to_s })
+        [test_file]
       elsif (screened_tests = screen_namespaces(possible_tests)).any?
         screened_tests
       else
@@ -29,7 +29,7 @@ module Retest
 
     def possible_tests
       @possible_tests ||= files
-        .select  { |file| path.possible_test?(file) }
+        .select  { |file| path.possible_test?(file, test_directories: test_directories) }
         .sort_by { |file| [-path.similarity_score(file), file] }
         .first(@limit)
     end

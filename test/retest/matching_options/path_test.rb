@@ -35,6 +35,8 @@ module Retest
         refute Path.new("lib/active_record/fixtures.rb").test?
         assert Path.new("lib/active_record/test_fixtures.rb").test?
         assert Path.new("test/cases/test_fixtures_test.rb").test?
+        assert Path.new("test/cases/test_fixtures_test_test.rb").test?
+        assert Path.new("test/cases/test_fixtures_test_spec.rb").test?
         assert Path.new("test/cases/fixtures_test.rb").test?
 
         refute Path.new("lib/active_record/fixtures.rb").test?(test_directories: %w[test])
@@ -50,12 +52,73 @@ module Retest
         refute Path.new("foo.rb").test?
       end
 
-      def test_possible_test?
+      def test_possible_test_with_a_normal_file?
         path = Path.new('lib/active_record/fixtures.rb')
 
         assert path.possible_test?('lib/active_record/test_fixtures.rb')
         assert path.possible_test?('test/cases/test_fixtures_test.rb')
         assert path.possible_test?('test/cases/fixtures_test.rb')
+        refute path.possible_test?('test/cases/something_else_test.rb')
+
+        path = Path.new('fixtures.rb')
+
+        assert path.possible_test?('lib/active_record/test_fixtures.rb')
+        assert path.possible_test?('test/cases/test_fixtures_test.rb')
+        assert path.possible_test?('test/cases/fixtures_test.rb')
+        refute path.possible_test?('test/cases/something_else_test.rb')
+      end
+
+      def test_possible_test_with_exact_match?
+        path = Path.new('test/cases/fixtures_test.rb')
+
+        _assertions = %w[
+          test/cases/fixtures_test.rb
+        ].each do |file|
+          assert path.possible_test?(file), "#{path} not matching: #{file}"
+        end
+
+        _invalids = %w[
+          test/fixtures_test.rb
+          lib/cases/fixtures_test.rb
+          lib/fixtures_test.rb
+          test/cases/fixtures_spec.rb
+          test/fixtures_spec.rb
+          lib/cases/fixtures_spec.rb
+          lib/fixtures_spec.rb
+          lib/active_record/test_fixtures.rb
+          test/cases/test_fixtures_test.rb
+          test/cases/fixtures_test_test.rb
+          test/cases/something_else_test.rb
+        ].each do |file|
+          refute path.possible_test?(file), "#{path} matching: #{file}"
+        end
+      end
+
+      def test_possible_test_with_a_incomplete_test_file_path?
+        path = Path.new('fixtures_test.rb')
+
+        _assertions = %w[
+          fixtures_test.rb
+          test/cases/fixtures_test.rb
+          test/fixtures_test.rb
+          lib/cases/fixtures_test.rb
+          lib/fixtures_test.rb
+        ].each do |file|
+          assert path.possible_test?(file), "#{path} not matching: #{file}"
+        end
+
+        _invalids = %w[
+          test/cases/fixtures_spec.rb
+          test/fixtures_spec.rb
+          lib/cases/fixtures_spec.rb
+          lib/fixtures_spec.rb
+          lib/active_record/test_fixtures.rb
+          test/cases/test_fixtures_test.rb
+          test/cases/fixtures_test_test.rb
+          test/cases/something_else_test.rb
+        ].each do |file|
+          refute path.possible_test?(file), "#{path} matching: #{file}"
+        end
       end
     end
   end
