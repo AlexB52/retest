@@ -28,6 +28,7 @@ jobs:
           - version: '3.2'
           - version: '3.3'
           - version: '3.4'
+          - version: '4.0'
     name: Ruby ${{ matrix.ruby.version }} test (${{ matrix.os }})
     env:
       BUNDLE_GEMFILE: ${{ matrix.ruby.gemfile || 'Gemfile' }}
