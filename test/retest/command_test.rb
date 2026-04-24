@@ -65,6 +65,12 @@ module Retest
     def test_invalid_options
       @subject.options = Options.new(["--rspec", "--rails"])
       assert_equal Command::Rspec.new(all: false), @subject.command
+
+      @subject.options = Options.new(["--rails", "--ruby", "--rake"])
+      assert_equal Command::Rails.new(all: false), @subject.command
+
+      @subject.options = Options.new(["--ruby", "--rake"])
+      assert_equal Command::Ruby.new(all: false), @subject.command
     end
   end
 

@@ -32,6 +32,14 @@ module Retest
       assert_equal File.read('test/retest/options/help.txt'), @subject.help
     end
 
+    def test_diff
+      @subject.args = %w[--diff main]
+      assert_equal "main", @subject.params[:diff]
+
+      @subject.args = %w[--diff=origin/main]
+      assert_equal "origin/main", @subject.params[:diff]
+    end
+
     def test_version?
       @subject.args = ["--version"]
       assert @subject.version?
@@ -66,6 +74,21 @@ module Retest
 
       assert_equal %w[--notify --rake --all], copy.args
       refute_equal copy.object_id, @subject.object_id
+    end
+
+    def test_command_with_flags_before_and_after
+      @subject.args = ["--rails", "bin/test", "--all"]
+
+      assert_equal "bin/test", @subject.command
+      assert @subject.full_suite?
+      assert @subject.params[:rails]
+    end
+
+    def test_unknown_options_are_ignored
+      @subject.args = ["--unknown", "--notify", "bin/test"]
+
+      assert_equal "bin/test", @subject.command
+      assert @subject.notify?
     end
 
     def test_listener
