@@ -27,7 +27,7 @@ module Retest
         COMMAND  The test command to rerun when a file changes.
                  Use <test> or <changed> placeholders to tell retest where to
                  reference the matching spec or the changed file in the command.
-                 
+
 
       Options:
             --all                Run all the specs of a specificied ruby setup
@@ -86,9 +86,7 @@ module Retest
 
     def args=(args)
       @args = args.dup
-      @params = DEFAULT_PARAMS.transform_values do |value|
-        value.is_a?(Array) ? value.dup : value
-      end
+      @params = DEFAULT_PARAMS.transform_values(&:dup)
       parse(@args)
     end
 
@@ -159,18 +157,18 @@ module Retest
 
     def build_parser
       OptionParser.new do |opts|
-        opts.on('--diff=git-branch', '--diff git-branch') { |value| params[:diff] = value }
-        opts.on('--exts=<EXTENSIONS>', '--exts EXTENSIONS') { |value| params[:exts] = parse_extensions(value) }
+        opts.on('--diff=git-branch', '--diff git-branch')         { |value| params[:diff]    = value }
+        opts.on('--exts=<EXTENSIONS>', '--exts EXTENSIONS')       { |value| params[:exts]    = parse_extensions(value) }
         opts.on('-w', '--watcher=<WATCHER>', '--watcher WATCHER') { |value| params[:watcher] = parse_watcher(value) }
-        opts.on('--all') { params[:all] = true }
-        opts.on('--notify') { params[:notify] = true }
-        opts.on('-h', '--help') { params[:help] = true }
-        opts.on('-v', '--version') { params[:version] = true }
-        opts.on('--polling') { params[:polling] = true }
-        opts.on('--rspec') { params[:rspec] = true }
-        opts.on('--rake') { params[:rake] = true }
-        opts.on('--rails') { params[:rails] = true }
-        opts.on('--ruby') { params[:ruby] = true }
+        opts.on('--all')                                          { params[:all]             = true }
+        opts.on('--notify')                                       { params[:notify]          = true }
+        opts.on('-h', '--help')                                   { params[:help]            = true }
+        opts.on('-v', '--version')                                { params[:version]         = true }
+        opts.on('--polling')                                      { params[:polling]         = true }
+        opts.on('--rspec')                                        { params[:rspec]           = true }
+        opts.on('--rake')                                         { params[:rake]            = true }
+        opts.on('--rails')                                        { params[:rails]           = true }
+        opts.on('--ruby')                                         { params[:ruby]            = true }
       end
     end
 

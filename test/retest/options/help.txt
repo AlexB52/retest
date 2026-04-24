@@ -6,7 +6,7 @@ Arguments:
   COMMAND  The test command to rerun when a file changes.
            Use <test> or <changed> placeholders to tell retest where to
            reference the matching spec or the changed file in the command.
-           
+
 
 Options:
       --all                Run all the specs of a specificied ruby setup
