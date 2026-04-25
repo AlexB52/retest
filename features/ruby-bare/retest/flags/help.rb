@@ -9,9 +9,9 @@ class TestHelpFlag < Minitest::Test
     launch_retest 'retest --help'
 
     assert_output_matches <<~EXPECTED
-      Usage: retest  [OPTIONS] [COMMAND]
+      Usage: retest [options] [COMMAND]
 
-      Watch a file change and run it matching spec.
+      Watch files and rerun matching tests when they change.
     EXPECTED
   end
 
@@ -19,9 +19,9 @@ class TestHelpFlag < Minitest::Test
     launch_retest 'retest -h'
 
     assert_output_matches <<~EXPECTED
-      Usage: retest  [OPTIONS] [COMMAND]
+      Usage: retest [options] [COMMAND]
 
-      Watch a file change and run it matching spec.
+      Watch files and rerun matching tests when they change.
     EXPECTED
   end
 end
