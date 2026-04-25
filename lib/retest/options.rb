@@ -82,7 +82,7 @@ module Retest
 
     def parse(args)
       remaining = args.dup
-      parser.order!(remaining)
+      parser.parse!(remaining)
       params[:command] = remaining.shift
       raise OptionParser::InvalidArgument, remaining.join(' ') unless remaining.empty?
     end

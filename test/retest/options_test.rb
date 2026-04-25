@@ -84,12 +84,28 @@ module Retest
       assert @subject.params[:rails]
     end
 
-    def test_command_with_flags_after_it_raises
+    def test_command_with_flags_after_it
+      @subject.args = ["--rails", "bin/test", "--all"]
+
+      assert_equal "bin/test", @subject.command
+      assert @subject.full_suite?
+      assert @subject.params[:rails]
+    end
+
+    def test_command_with_option_value_after_it
+      @subject.args = ["bin/test", "--watcher", "watchexec", "--diff", "origin/main"]
+
+      assert_equal "bin/test", @subject.command
+      assert_equal :watchexec, @subject.watcher
+      assert_equal "origin/main", @subject.params[:diff]
+    end
+
+    def test_command_with_unknown_flags_after_it_raises
       error = assert_raises(OptionParser::ParseError) do
-        @subject.args = ["--rails", "bin/test", "--all"]
+        @subject.args = ["bin/test", "--unknown"]
       end
 
-      assert_equal "invalid argument: --all", error.message
+      assert_equal "invalid option: --unknown", error.message
     end
 
     def test_unknown_options_raise
