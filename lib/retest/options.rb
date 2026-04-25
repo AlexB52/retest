@@ -30,9 +30,7 @@ module Retest
 
     def args=(args)
       @args = args.dup
-      @params = DEFAULT_PARAMS.transform_values do |value|
-        value.is_a?(Array) ? value.dup : value
-      end
+      @params = DEFAULT_PARAMS.transform_values(&:dup)
       parse(@args)
     end
 
