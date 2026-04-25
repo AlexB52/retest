@@ -58,11 +58,11 @@ module Retest
     end
 
     def test_extensions
-      @subject.args = ["--exts rb"]
+      @subject.args = ["--exts", "rb"]
 
       assert_equal %w[rb], @subject.extensions
 
-      @subject.args = ["--exts rb,js, html,css ,ts"]
+      @subject.args = ["--exts", "rb,js, html,css ,ts"]
 
       assert_equal %w[rb js html css ts], @subject.extensions
     end
@@ -76,19 +76,28 @@ module Retest
       refute_equal copy.object_id, @subject.object_id
     end
 
-    def test_command_with_flags_before_and_after
-      @subject.args = ["--rails", "bin/test", "--all"]
+    def test_command_is_positional_after_options
+      @subject.args = ["--rails", "--all", "bin/test"]
 
       assert_equal "bin/test", @subject.command
       assert @subject.full_suite?
       assert @subject.params[:rails]
     end
 
-    def test_unknown_options_are_ignored
-      @subject.args = ["--unknown", "--notify", "bin/test"]
+    def test_command_with_flags_after_it_raises
+      error = assert_raises(OptionParser::ParseError) do
+        @subject.args = ["--rails", "bin/test", "--all"]
+      end
 
-      assert_equal "bin/test", @subject.command
-      assert @subject.notify?
+      assert_equal "invalid argument: --all", error.message
+    end
+
+    def test_unknown_options_raise
+      error = assert_raises(OptionParser::ParseError) do
+        @subject.args = ["--unknown", "--notify", "bin/test"]
+      end
+
+      assert_equal "invalid option: --unknown", error.message
     end
 
     def test_listener
@@ -104,8 +113,11 @@ module Retest
       @subject.args = %w[-w listen]
       assert_equal :listen, @subject.watcher
 
-      @subject.args = %w[-w hello]
-      assert_equal :installed, @subject.watcher
+      error = assert_raises(OptionParser::ParseError) do
+        @subject.args = %w[-w hello]
+      end
+
+      assert_equal "invalid argument: -w hello", error.message
 
       @subject.args = %w[] # default when no listeners are install by default
       assert_equal :installed, @subject.watcher
