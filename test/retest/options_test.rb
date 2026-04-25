@@ -32,6 +32,14 @@ module Retest
       assert_equal File.read('test/retest/options/help.txt'), @subject.help
     end
 
+    def test_diff
+      @subject.args = %w[--diff main]
+      assert_equal "main", @subject.params[:diff]
+
+      @subject.args = %w[--diff=origin/main]
+      assert_equal "origin/main", @subject.params[:diff]
+    end
+
     def test_version?
       @subject.args = ["--version"]
       assert @subject.version?
@@ -50,11 +58,11 @@ module Retest
     end
 
     def test_extensions
-      @subject.args = ["--exts rb"]
+      @subject.args = ["--exts", "rb"]
 
       assert_equal %w[rb], @subject.extensions
 
-      @subject.args = ["--exts rb,js, html,css ,ts"]
+      @subject.args = ["--exts", "rb,js, html,css ,ts"]
 
       assert_equal %w[rb js html css ts], @subject.extensions
     end
@@ -66,6 +74,46 @@ module Retest
 
       assert_equal %w[--notify --rake --all], copy.args
       refute_equal copy.object_id, @subject.object_id
+    end
+
+    def test_command_is_positional_after_options
+      @subject.args = ["--rails", "--all", "bin/test"]
+
+      assert_equal "bin/test", @subject.command
+      assert @subject.full_suite?
+      assert @subject.params[:rails]
+    end
+
+    def test_command_with_flags_after_it
+      @subject.args = ["--rails", "bin/test", "--all"]
+
+      assert_equal "bin/test", @subject.command
+      assert @subject.full_suite?
+      assert @subject.params[:rails]
+    end
+
+    def test_command_with_option_value_after_it
+      @subject.args = ["bin/test", "--watcher", "watchexec", "--diff", "origin/main"]
+
+      assert_equal "bin/test", @subject.command
+      assert_equal :watchexec, @subject.watcher
+      assert_equal "origin/main", @subject.params[:diff]
+    end
+
+    def test_command_with_unknown_flags_after_it_raises
+      error = assert_raises(OptionParser::ParseError) do
+        @subject.args = ["bin/test", "--unknown"]
+      end
+
+      assert_equal "invalid option: --unknown", error.message
+    end
+
+    def test_unknown_options_raise
+      error = assert_raises(OptionParser::ParseError) do
+        @subject.args = ["--unknown", "--notify", "bin/test"]
+      end
+
+      assert_equal "invalid option: --unknown", error.message
     end
 
     def test_listener
@@ -81,8 +129,11 @@ module Retest
       @subject.args = %w[-w listen]
       assert_equal :listen, @subject.watcher
 
-      @subject.args = %w[-w hello]
-      assert_equal :installed, @subject.watcher
+      error = assert_raises(OptionParser::ParseError) do
+        @subject.args = %w[-w hello]
+      end
+
+      assert_equal "invalid argument: -w hello", error.message
 
       @subject.args = %w[] # default when no listeners are install by default
       assert_equal :installed, @subject.watcher

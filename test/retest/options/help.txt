@@ -1,53 +1,41 @@
-Usage: retest  [OPTIONS] [COMMAND]
+Usage: retest [options] [COMMAND]
 
-Watch a file change and run it matching spec.
+Watch files and rerun matching tests when they change.
 
 Arguments:
-  COMMAND  The test command to rerun when a file changes.
-           Use <test> or <changed> placeholders to tell retest where to
-           reference the matching spec or the changed file in the command.
-           
+    COMMAND                          Command to rerun when a file changes.
+                                     Use <test> for the matching test file and
+                                     <changed> for the changed file.
 
 Options:
-      --all                Run all the specs of a specificied ruby setup
-      --diff=git-branch    Pipes all matching tests from diffed branch to test
-                           command
-      --exts=<EXTENSIONS>  Comma separated of filenames extensions to filter
-                           to (default "rb")
-  -h, --help               Print usage
-      --notify             Play a sound when specs pass or fail (macOS only)
-      --polling            Use polling method when listening to file changes
-                           Some filesystems won't work without it
-                           VM/Vagrant Shared folders, NFS, Samba, sshfs...
-      --rails              Shortcut for a standard Rails setup
-      --rake               Shortcut for a standard Rake setup
-      --rspec              Shortcut for a standard RSpec setup
-      --ruby               Shortcut for a Ruby project
-  -v, --version            Print retest version
-  -w, --watcher=<WATCHER>  Tool used to watch file events (permitted: listen,
-                           watchexec)
+        --all                        Run the full test suite for the selected setup
+        --diff BRANCH                Run tests matching files changed from BRANCH
+        --exts EXTENSIONS            Comma-separated file extensions to watch (default: rb)
+    -h, --help                       Show this help
+        --notify                     Play a sound when tests pass or fail (macOS only)
+        --polling                    Use polling for file watching
+        --rails                      Use the standard Rails test command
+        --rake                       Use the standard Rake test command
+        --rspec                      Use the standard RSpec test command
+        --ruby                       Use the standard Ruby test command
+    -v, --version                    Show retest version
+    -w, --watcher WATCHER            File watcher to use (listen or watchexec)
 
 Examples:
-  Runs a matching rails test after a file change
-    $ retest 'bin/rails test <test>'
-    $ retest --rails
-
-  Runs rubocop and matching rails test after a file change
-    $ retest 'rubocop <changed> && bin/rails test <test>'
-
-  Runs all rails tests after a file change
-    $ retest 'bin/rails test'
-    $ retest --rails --all
-
-  Runs a hardcoded command after a file change
-    $ retest 'ruby lib/bottles_test.rb'
-
-  Let retest identify which command to run
     $ retest
+        Auto-detect the project setup and rerun matching tests
 
-  Let retest identify which command to run for all tests
     $ retest --all
+        Auto-detect the project setup and run the full suite
 
-  Run a sanity check on changed files from a branch
+    $ retest --rails
+        Use the standard Rails test command
+
+    $ retest 'bin/rails test <test>'
+        Rerun the matching Rails test file
+
+    $ retest 'rubocop <changed> && bin/rails test <test>'
+        Run a check on the changed file, then run the matching test
+
     $ retest --diff main
-    $ retest --diff origin/main --rails
+        Run tests matching files changed from main

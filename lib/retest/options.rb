@@ -1,135 +1,24 @@
-require 'tty-option'
+require 'optparse'
 
 module Retest
   class Options
-    include TTY::Option
+    DEFAULT_PARAMS = {
+      all: false,
+      diff: nil,
+      exts: %w[rb],
+      help: false,
+      notify: false,
+      polling: false,
+      rake: false,
+      rails: false,
+      rspec: false,
+      ruby: false,
+      version: false,
+      watcher: nil,
+      command: nil
+    }.freeze
 
-    usage do
-      program "retest"
-
-      command nil
-
-      desc "Watch a file change and run it matching spec."
-
-      example <<~EOS
-      Runs a matching rails test after a file change
-        $ retest 'bin/rails test <test>'
-        $ retest --rails
-      EOS
-
-      example <<~EOS
-      Runs rubocop and matching rails test after a file change
-        $ retest 'rubocop <changed> && bin/rails test <test>'
-      EOS
-
-      example <<~EOS
-      Runs all rails tests after a file change
-        $ retest 'bin/rails test'
-        $ retest --rails --all
-      EOS
-
-      example <<~EOS
-      Runs a hardcoded command after a file change
-        $ retest 'ruby lib/bottles_test.rb'
-      EOS
-
-      example <<~EOS
-      Let retest identify which command to run
-        $ retest
-      EOS
-
-      example <<~EOS
-      Let retest identify which command to run for all tests
-        $ retest --all
-      EOS
-
-      example <<~EOS
-      Run a sanity check on changed files from a branch
-        $ retest --diff main
-        $ retest --diff origin/main --rails
-      EOS
-    end
-
-    argument :command do
-      optional
-      desc <<~EOS
-      The test command to rerun when a file changes.
-      Use <test> or <changed> placeholders to tell retest where to reference the matching spec or the changed file in the command.
-      EOS
-    end
-
-    option :diff do
-      desc "Pipes all matching tests from diffed branch to test command"
-      long "--diff=git-branch"
-    end
-
-    option :exts do
-      desc "Comma separated of filenames extensions to filter to"
-      long "--exts=<EXTENSIONS>"
-      default "rb"
-      convert :list
-    end
-
-    option :watcher do
-      desc "Tool used to watch file events"
-      permit %i[listen watchexec]
-      long "--watcher=<WATCHER>"
-      short "-w"
-      convert :sym
-    end
-
-    flag :all do
-      long "--all"
-      desc "Run all the specs of a specificied ruby setup"
-    end
-
-    flag :notify do
-      long "--notify"
-      desc "Play a sound when specs pass or fail (macOS only)"
-    end
-
-    flag :help do
-      short "-h"
-      long "--help"
-      desc "Print usage"
-    end
-
-    flag :version do
-      short "-v"
-      long "--version"
-      desc "Print retest version"
-    end
-
-    option :polling do
-      long '--polling'
-      desc <<~DESC.strip
-        Use polling method when listening to file changes
-        Some filesystems won't work without it
-        VM/Vagrant Shared folders, NFS, Samba, sshfs...
-      DESC
-    end
-
-    flag :rspec do
-      long "--rspec"
-      desc "Shortcut for a standard RSpec setup"
-    end
-
-    flag :rake do
-      long "--rake"
-      desc "Shortcut for a standard Rake setup"
-    end
-
-    flag :rails do
-      long "--rails"
-      desc "Shortcut for a standard Rails setup"
-    end
-
-    flag :ruby do
-      long "--ruby"
-      desc "Shortcut for a Ruby project"
-    end
-
-    attr_reader :args
+    attr_reader :args, :params
 
     def self.command(args)
       new(args).command
@@ -140,8 +29,21 @@ module Retest
     end
 
     def args=(args)
-      @args = args
-      parse args
+      @args = args.dup
+      @params = DEFAULT_PARAMS.transform_values(&:dup)
+      parse(@args)
+    end
+
+    def help
+      parser.to_s
+    end
+
+    def command
+      params[:command]
+    end
+
+    def auto?
+      command.nil?
     end
 
     def help?
@@ -174,6 +76,70 @@ module Retest
 
     def merge(options = [])
       self.class.new(@args.dup.concat(options))
+    end
+
+    private
+
+    def parse(args)
+      remaining = args.dup
+      parser.parse!(remaining)
+      params[:command] = remaining.shift
+      raise OptionParser::InvalidArgument, remaining.join(' ') unless remaining.empty?
+    end
+
+    def parser
+      OptionParser.new do |opts|
+        opts.banner = 'Usage: retest [options] [COMMAND]'
+        opts.separator <<~ARGUMENTS
+
+          Watch files and rerun matching tests when they change.
+
+          Arguments:
+              COMMAND                          Command to rerun when a file changes.
+                                               Use <test> for the matching test file and
+                                               <changed> for the changed file.
+
+        ARGUMENTS
+        opts.separator 'Options:'
+        opts.on('--all',                                         'Run the full test suite for the selected setup')        { params[:all] = true }
+        opts.on('--diff BRANCH',                                 'Run tests matching files changed from BRANCH')          { |value| params[:diff] = value }
+        opts.on('--exts EXTENSIONS',                             'Comma-separated file extensions to watch (default: rb)'){ |value| params[:exts] = parse_extensions(value) }
+        opts.on('-h', '--help',                                  'Show this help')                                        { params[:help] = true }
+        opts.on('--notify',                                      'Play a sound when tests pass or fail (macOS only)')     { params[:notify] = true }
+        opts.on('--polling',                                     'Use polling for file watching')                         { params[:polling] = true } #Some filesystems won't work without it VM/Vagrant Shared folders, NFS, Samba, sshfs...
+        opts.on('--rails',                                       'Use the standard Rails test command')                   { params[:rails] = true }
+        opts.on('--rake',                                        'Use the standard Rake test command')                    { params[:rake] = true }
+        opts.on('--rspec',                                       'Use the standard RSpec test command')                   { params[:rspec] = true }
+        opts.on('--ruby',                                        'Use the standard Ruby test command')                    { params[:ruby] = true }
+        opts.on('-v', '--version',                               'Show retest version')                                   { params[:version] = true }
+        opts.on('-w', '--watcher WATCHER', %w[listen watchexec], 'File watcher to use (listen or watchexec)')             { |value| params[:watcher] = value.to_sym }
+
+        opts.separator <<~EXAMPLES
+
+          Examples:
+              $ retest
+                  Auto-detect the project setup and rerun matching tests
+
+              $ retest --all
+                  Auto-detect the project setup and run the full suite
+
+              $ retest --rails
+                  Use the standard Rails test command
+
+              $ retest 'bin/rails test <test>'
+                  Rerun the matching Rails test file
+
+              $ retest 'rubocop <changed> && bin/rails test <test>'
+                  Run a check on the changed file, then run the matching test
+
+              $ retest --diff main
+                  Run tests matching files changed from main
+        EXAMPLES
+      end
+    end
+
+    def parse_extensions(value)
+      value.split(',').map(&:strip).reject(&:empty?)
     end
   end
 end
