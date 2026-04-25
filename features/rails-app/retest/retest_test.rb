@@ -133,7 +133,7 @@ class TestRailsAliasCommand < Minitest::Test
   end
 
   def test_start_retest_with_placeholder
-    launch_retest "retest --rails 'bin/retest <test>'"
+    launch_retest "retest 'bin/retest <test>' --rails"
 
     assert_output_matches <<~OUTPUT
       Setup: [RAILS]

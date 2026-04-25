@@ -2,7 +2,7 @@ class CustomExtensionTest < Minitest::Test
   include RetestHelper
 
   def setup
-    @command = %Q{retest --exts=txt "echo 'I captured a change'"}
+    @command = %Q{retest "echo 'I captured a change'" --exts="txt"}
   end
 
   def teardown
