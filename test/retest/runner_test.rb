@@ -40,6 +40,12 @@ module Retest
         assert_match "hello world", out
       end
 
+      def test_returns_the_child_process_exit_status
+        @subject.command = Command::Hardcoded.new(command: "ruby -e 'exit 23'")
+
+        assert_equal 23, @subject.run
+      end
+
       def test_sync_files
         @subject.cached_test_file = 'file_path_test.rb'
 

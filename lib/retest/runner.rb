@@ -101,9 +101,11 @@ module Retest
       @pid = spawn(command)
       Process.wait
       @pid = nil
-      result = $?.exitstatus&.zero? ? :tests_pass : :tests_fail
+      exit_status = $?.exitstatus
+      result = exit_status&.zero? ? :tests_pass : :tests_fail
       changed
       notify_observers(result)
+      exit_status
     end
 
     def log(message)
