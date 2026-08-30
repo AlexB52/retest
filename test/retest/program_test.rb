@@ -63,6 +63,18 @@ module Retest
         ])
       end
 
+      def test_line_numbered_test_paths
+        @subject.force_batch(<<~INPUT)
+          test/retest/command/ruby_test.rb:19
+          runner_test.rb:24
+        INPUT
+
+        check_runner_runs_files(%w[
+          test/retest/command/ruby_test.rb:19
+          test/retest/runner_test.rb:24
+        ])
+      end
+
       def test_unknown_test_paths
         @subject.force_batch(<<~INPUT)
           test/retest/command_test.rb
