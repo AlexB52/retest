@@ -87,6 +87,8 @@ end
 puts "Ready to refactor! You can make file changes now"
 
 def run_command(input:, program:)
+  input = Retest::FileChangeQueue.collapse(input)
+
   case input.strip
   when /^file changed:\s(.*)$/
     puts "File changed: #{$1}"
@@ -146,6 +148,16 @@ def run_command(input:, program:)
   end
 end
 
+def read_available(connection)
+  data = connection.readpartial(4096)
+
+  loop do
+    data << connection.read_nonblock(4096)
+  end
+rescue IO::WaitReadable
+  data
+end
+
 connections = [$stdin, listen_rd]
 loop do
   puts "\nType interactive command and press enter. Enter 'h' for help."
@@ -154,7 +166,12 @@ loop do
   ready = IO.select(connections)
   readable_connections = ready[0]
   readable_connections.each do |conn|
-    data = conn.readpartial(4096)
+    data = if conn == listen_rd
+      read_available(conn)
+    else
+      conn.readpartial(4096)
+    end
+
     run_command(input: data.to_s.chomp, program: program)
   end
 end
