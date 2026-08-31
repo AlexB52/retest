@@ -21,7 +21,15 @@ module Retest
       end
 
       def diff_files(branch)
-        `git diff #{branch}...HEAD --name-only --diff-filter=ACMRT -z`.split("\x0")
+        branch_diff_files   = git_diff_files("#{branch}...HEAD")
+        staged_diff_files   = git_diff_files("--staged")
+        unstaged_diff_files = git_diff_files
+
+        (
+          branch_diff_files +
+          staged_diff_files +
+          unstaged_diff_files
+        ).uniq
       end
 
       def untracked_files
@@ -30,6 +38,10 @@ module Retest
 
       def tracked_files
         `git ls-files -z`.split("\x0")
+      end
+
+      def git_diff_files(*args)
+        IO.popen(['git', 'diff', *args, '--name-only', '--diff-filter=ACMRT', '-z'], &:read).split("\x0")
       end
     end
   end
