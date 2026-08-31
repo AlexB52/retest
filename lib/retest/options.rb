@@ -7,6 +7,7 @@ module Retest
       diff: nil,
       exts: %w[rb],
       help: false,
+      name_only: false,
       notify: false,
       polling: false,
       rake: false,
@@ -62,6 +63,10 @@ module Retest
       params[:notify]
     end
 
+    def name_only?
+      params[:name_only]
+    end
+
     def force_polling?
       params[:polling]
     end
@@ -105,6 +110,7 @@ module Retest
         opts.on('--diff BRANCH',                                 'Run tests matching files changed from BRANCH')          { |value| params[:diff] = value }
         opts.on('--exts EXTENSIONS',                             'Comma-separated file extensions to watch (default: rb)'){ |value| params[:exts] = parse_extensions(value) }
         opts.on('-h', '--help',                                  'Show this help')                                        { params[:help] = true }
+        opts.on('--name-only',                                   'Print matching test file names without running them')   { params[:name_only] = true }
         opts.on('--notify',                                      'Play a sound when tests pass or fail (macOS only)')     { params[:notify] = true }
         opts.on('--polling',                                     'Use polling for file watching')                         { params[:polling] = true } #Some filesystems won't work without it VM/Vagrant Shared folders, NFS, Samba, sshfs...
         opts.on('--rails',                                       'Use the standard Rails test command')                   { params[:rails] = true }
@@ -134,6 +140,9 @@ module Retest
 
               $ retest --diff main
                   Run tests matching files changed from main
+
+              $ retest --diff main --name-only
+                  Print tests matching files changed from main
         EXAMPLES
       end
     end

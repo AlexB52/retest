@@ -20,13 +20,18 @@ module Retest
       initialize_forced_selection([])
     end
 
-    def run(file, force_run: false)
+    def run(file, force_run: false, name_only: false)
       if paused? && !force_run
         @stdout.puts "Main program paused. Please resume program first."
         return
       end
 
       if forced_selection?
+        if name_only
+          print_names(selected_test_files)
+          return
+        end
+
         @stdout.puts <<~HINT
           Forced selection enabled.
           Reset to default settings by typing 'r' in the interactive console.
@@ -36,17 +41,37 @@ module Retest
         return
       end
 
+      test_files = if name_only
+        repository.matching_tests([file])
+      end
+
       test_file = if runner.has_test?
         repository.find_test(file)
+      end
+
+      if name_only
+        print_names(test_files)
+        return
       end
 
       runner.run changed_files: [file], test_files: [test_file]
     end
 
-    def diff(branch)
+    def diff(branch, name_only: false)
       raise "Git not installed" unless VersionControl::Git.installed?
 
-      test_files = repository.find_tests VersionControl::Git.diff_files(branch)
+      changed_files = VersionControl::Git.diff_files(branch)
+      test_files = if name_only
+        repository.matching_tests(changed_files)
+      else
+        repository.find_tests(changed_files)
+      end
+
+      if name_only
+        print_names(test_files)
+        return true
+      end
+
       runner.run(test_files: test_files)
     end
 
@@ -71,6 +96,12 @@ module Retest
 
     def clear_terminal
       system('clear 2>/dev/null') || system('cls 2>/dev/null')
+    end
+
+    private
+
+    def print_names(paths)
+      paths.compact.each { |path| @stdout.puts path }
     end
   end
 end

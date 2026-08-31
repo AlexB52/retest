@@ -38,6 +38,10 @@ module Retest
 
       @subject.args = %w[--diff=origin/main]
       assert_equal "origin/main", @subject.params[:diff]
+
+      @subject.args = %w[--diff main --name-only]
+      assert_equal "main", @subject.params[:diff]
+      assert @subject.name_only?
     end
 
     def test_version?
@@ -55,6 +59,14 @@ module Retest
       refute @subject.notify?
       @subject.args = ["--notify"]
       assert @subject.notify?
+    end
+
+    def test_name_only?
+      refute @subject.name_only?
+
+      @subject.args = ["--name-only"]
+
+      assert @subject.name_only?
     end
 
     def test_extensions

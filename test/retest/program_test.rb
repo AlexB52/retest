@@ -2,6 +2,71 @@ require 'test_helper'
 
 module Retest
   class ProgramTest < Minitest::Test
+    class TestNameOnly < Minitest::Test
+      class TestRunner < EmptyRunner
+        def has_test?
+          true
+        end
+      end
+
+      class ChangedOnlyRunner < EmptyRunner
+        def has_test?
+          false
+        end
+      end
+
+      def setup
+        @repository = Repository.new(files: %w[
+          lib/bottles.rb
+          test/bottles_test.rb
+          test/glasses_test.rb
+        ])
+        @runner = TestRunner.new
+        @stdout = StringIO.new
+        @subject = Program.new(runner: @runner, repository: @repository, stdout: @stdout)
+      end
+
+      def test_run_prints_matching_test_without_running_command
+        @subject.run('lib/bottles.rb', name_only: true)
+
+        assert_equal "test/bottles_test.rb\n", @stdout.string
+        assert_empty @runner.journal
+      end
+
+      def test_run_prints_matching_test_for_changed_only_commands
+        runner = ChangedOnlyRunner.new
+        subject = Program.new(runner: runner, repository: @repository, stdout: @stdout)
+
+        subject.run('lib/bottles.rb', name_only: true)
+
+        assert_equal "test/bottles_test.rb\n", @stdout.string
+        assert_empty runner.journal
+      end
+
+      def test_run_prints_forced_selection_without_running_command
+        @subject.force_selection(['test/glasses_test.rb'])
+        @stdout.truncate(0)
+        @stdout.rewind
+        @runner.journal.clear
+
+        @subject.run('lib/bottles.rb', name_only: true)
+
+        assert_equal "test/glasses_test.rb\n", @stdout.string
+        assert_empty @runner.journal
+      end
+
+      def test_diff_prints_matching_tests_without_running_command
+        VersionControl::Git.stub(:installed?, true) do
+          VersionControl::Git.stub(:diff_files, %w[lib/bottles.rb test/glasses_test.rb]) do
+            @subject.diff('main', name_only: true)
+          end
+        end
+
+        assert_equal "test/bottles_test.rb\ntest/glasses_test.rb\n", @stdout.string
+        assert_empty @runner.journal
+      end
+    end
+
     class ForceBatchTest < Minitest::Test
       def setup
         @repository = Repository.new(files: %w[

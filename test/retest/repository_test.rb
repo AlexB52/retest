@@ -220,6 +220,41 @@ module Retest
     end
   end
 
+  class TestRepoMatchingTests < Minitest::Test
+    def setup
+      @subject = Repository.new(files: %w(
+        app/models/holding.rb
+        test/models/schedule/holdings_test.rb
+        test/models/taxation/holdings_test.rb
+        test/models/holdings_test.rb
+        test/program_test.rb
+        README.md
+      ))
+    end
+
+    def test_matching_tests_returns_all_candidates_without_prompting
+      assert_equal [
+        'test/models/holdings_test.rb',
+        'test/models/schedule/holdings_test.rb',
+        'test/models/taxation/holdings_test.rb',
+      ], @subject.matching_tests(%w[app/models/valuation/holdings.rb])
+    end
+
+    def test_matching_tests_sorts_and_deduplicates
+      assert_equal [
+        'test/models/holdings_test.rb',
+        'test/models/schedule/holdings_test.rb',
+        'test/models/taxation/holdings_test.rb',
+        'test/program_test.rb',
+      ], @subject.matching_tests(%w[
+        app/models/valuation/holdings.rb
+        test/program_test.rb
+        test/program_test.rb
+        README.md
+      ])
+    end
+  end
+
   class TestRepoSearchTests < Minitest::Test
     def setup
       @subject = Repository.new(files: %w(

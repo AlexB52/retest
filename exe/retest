@@ -34,15 +34,17 @@ program = Retest::Program.new(
 )
 
 # === LOGGING ===
-case command
-when Retest::Command::Rails then puts "Setup: [RAILS]"
-when Retest::Command::Rspec then puts "Setup: [RSPEC]"
-when Retest::Command::Rake  then puts "Setup: [RAKE]"
-when Retest::Command::Ruby  then puts "Setup: [RUBY]"
-else                             puts "Setup: [UNKNOWN]"
-end
+unless options.name_only? && options.params[:diff]
+  case command
+  when Retest::Command::Rails then puts "Setup: [RAILS]"
+  when Retest::Command::Rspec then puts "Setup: [RSPEC]"
+  when Retest::Command::Rake  then puts "Setup: [RAKE]"
+  when Retest::Command::Ruby  then puts "Setup: [RUBY]"
+  else                             puts "Setup: [UNKNOWN]"
+  end
 
-puts "Command: '#{command}'"
+  puts "Command: '#{command}'"
+end
 
 # === TRAP INTERRUPTION ===
 Signal.trap(:INT) do
@@ -56,7 +58,7 @@ end
 
 # === DIFF ACTION ===
 if options.params[:diff]
-  exit program.diff(options.params[:diff])
+  exit program.diff(options.params[:diff], name_only: options.name_only?)
 end
 
 # === LOGGING ===
@@ -86,11 +88,18 @@ Retest.listen(options, listener: watcher) do |modified, added, removed|
 end
 puts "Ready to refactor! You can make file changes now"
 
-def run_command(input:, program:)
+def diff_command(arguments)
+  values = arguments.split(/\s+/).reject(&:empty?)
+  name_only = values.delete('--name-only')
+
+  [values.join(' '), name_only]
+end
+
+def run_command(input:, program:, name_only: false)
   case input.strip
   when /^file changed:\s(.*)$/
-    puts "File changed: #{$1}"
-    program.run($1)
+    puts "File changed: #{$1}" unless name_only
+    program.run($1, name_only: name_only)
   when 'p', 'pause'
     program.pause
     puts "Program is paused\n"
@@ -122,7 +131,8 @@ def run_command(input:, program:)
     puts "Running all tests\n"
     program.run_all
   when /^di?f?f?\s(.*)$/
-    program.diff($1)
+    branch, diff_name_only = diff_command($1)
+    program.diff(branch, name_only: diff_name_only)
   when 'c', 'clear'
     program.clear_terminal
   when 'h', 'help'
@@ -138,6 +148,8 @@ def run_command(input:, program:)
         fb, force batch        Force a selection of tests based on raw data list
         r, reset               Reset forced selection
         d, diff [BRANCH]       Run specs changed relative to a Git branch
+           diff [BRANCH] --name-only
+                                Print changed specs without running them
         c, clear               Clear the window
         e, exit                Exit Retest
     HELP
@@ -155,6 +167,6 @@ loop do
   readable_connections = ready[0]
   readable_connections.each do |conn|
     data = conn.readpartial(4096)
-    run_command(input: data.to_s.chomp, program: program)
+    run_command(input: data.to_s.chomp, program: program, name_only: options.name_only?)
   end
 end
