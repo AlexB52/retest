@@ -157,5 +157,72 @@ module Retest
         capture_subprocess_io { @subject.run('path.rb') }
       end
     end
+
+    class QueueTest < Minitest::Test
+      class SlowRunner
+        attr_reader :journal
+
+        def initialize
+          @journal = []
+          @running = Queue.new
+          @continue = Queue.new
+        end
+
+        def has_test?
+          true
+        end
+
+        def run(*args, **kwargs)
+          @journal << { method: __method__, args: args, kwargs: kwargs }
+          @running.push(true)
+          @continue.pop
+        end
+
+        def wait_until_running
+          @running.pop
+        end
+
+        def continue_running
+          @continue.push(true)
+        end
+      end
+
+      class Repository
+        def find_test(file)
+          "#{file.sub('.rb', '')}_test.rb"
+        end
+      end
+
+      def setup
+        @runner = SlowRunner.new
+        @subject = Program.new(runner: @runner, repository: Repository.new, stdout: StringIO.new)
+      end
+
+      def test_keeps_the_latest_queued_file_when_a_run_is_already_active
+        running_thread = Thread.new { @subject.run('first.rb') }
+
+        @runner.wait_until_running
+        @subject.run('second.rb')
+        @subject.run('latest.rb')
+
+        @runner.continue_running
+        @runner.wait_until_running
+        @runner.continue_running
+        running_thread.join
+
+        assert_equal [
+          {
+            method: :run,
+            args: [],
+            kwargs: { changed_files: ['first.rb'], test_files: ['first_test.rb'] }
+          },
+          {
+            method: :run,
+            args: [],
+            kwargs: { changed_files: ['latest.rb'], test_files: ['latest_test.rb'] }
+          }
+        ], @runner.journal
+      end
+    end
   end
 end
