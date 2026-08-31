@@ -36,7 +36,8 @@ class InteractiveCommandTest < Minitest::Test
         f, force               Force a selection of tests to run on every file change
         fb, force batch        Force a selection of tests based on raw data list
         r, reset               Reset forced selection
-        d, diff [BRANCH]       Run specs changed relative to a Git branch
+        d, diff [BRANCH] [--name-only]
+                                Run or print specs changed relative to a Git branch
         c, clear               Clear the window
         e, exit                Exit Retest
 
