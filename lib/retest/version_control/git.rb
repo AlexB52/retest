@@ -21,8 +21,12 @@ module Retest
       end
 
       def diff_files(branch)
+        branch_diff_files   = git_diff_files("#{branch}...HEAD")
+        staged_diff_files   = git_diff_files("--staged")
+        unstaged_diff_files = git_diff_files
+
         (
-          branch_diff_files(branch) +
+          branch_diff_files +
           staged_diff_files +
           unstaged_diff_files
         ).uniq
@@ -36,22 +40,9 @@ module Retest
         `git ls-files -z`.split("\x0")
       end
 
-      def branch_diff_files(branch)
-        git_diff_files("#{branch}...HEAD")
-      end
-
-      def staged_diff_files
-        git_diff_files("--cached")
-      end
-
-      def unstaged_diff_files
-        git_diff_files
-      end
-
       def git_diff_files(*args)
         IO.popen(['git', 'diff', *args, '--name-only', '--diff-filter=ACMRT', '-z'], &:read).split("\x0")
       end
-      private_class_method :branch_diff_files, :staged_diff_files, :unstaged_diff_files, :git_diff_files
     end
   end
 end
