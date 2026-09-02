@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 
+require 'shellwords'
 require 'retest'
 
 $stdout.sync = true
@@ -129,8 +130,9 @@ def run_command(input:, program:)
   when 'ra', 'run all'
     puts "Running all tests\n"
     program.run_all
-  when /^di?f?f?\s(.*)$/
-    program.diff($1)
+  when /^di?f?f?(?:\s+(.*))?$/
+    branch, *flags = Shellwords.split($1.to_s)
+    program.diff(branch.to_s, name_only: flags.include?('--name-only'))
   when 'c', 'clear'
     program.clear_terminal
   when 'h', 'help'
@@ -146,6 +148,7 @@ def run_command(input:, program:)
         fb, force batch        Force a selection of tests based on raw data list
         r, reset               Reset forced selection
         d, diff [BRANCH]       Run specs changed relative to a Git branch
+                               Add --name-only to print matching test files without running
         c, clear               Clear the window
         e, exit                Exit Retest
     HELP
