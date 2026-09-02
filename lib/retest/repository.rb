@@ -30,6 +30,15 @@ module Retest
         .sort
     end
 
+    def find_matching_tests(paths)
+      paths
+        .select { |path| path.end_with?('.rb') }
+        .flat_map { |path| MatchingOptions.for(path, files: files) }
+        .compact
+        .uniq
+        .sort
+    end
+
     def search_tests(paths)
       result = {}
       ruby_files = paths.select { |path| path.end_with?('.rb') }

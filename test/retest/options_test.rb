@@ -35,9 +35,21 @@ module Retest
     def test_diff
       @subject.args = %w[--diff main]
       assert_equal "main", @subject.params[:diff]
+      refute @subject.name_only?
 
       @subject.args = %w[--diff=origin/main]
       assert_equal "origin/main", @subject.params[:diff]
+    end
+
+    def test_name_only_requires_diff
+      @subject.args = %w[--diff main --name-only]
+      assert @subject.name_only?
+
+      error = assert_raises(OptionParser::ParseError) do
+        @subject.args = %w[--name-only]
+      end
+
+      assert_equal "invalid option: --name-only requires --diff", error.message
     end
 
     def test_version?
