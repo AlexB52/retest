@@ -176,10 +176,11 @@ module Retest
       end
 
       def test_name_only_prints_matching_test_files
-        with_git_diff_files(%w[lib/retest/command.rb lib/retest/options.rb lib/retest/program.rb]) do
+        exit_status = with_git_diff_files(%w[lib/retest/command.rb lib/retest/options.rb lib/retest/program.rb]) do
           @subject.diff('main', name_only: true)
         end
 
+        assert_equal 0, exit_status
         assert_equal <<~OUTPUT, @stdout.string
           test/retest/command_test.rb
           test/retest/options_test.rb

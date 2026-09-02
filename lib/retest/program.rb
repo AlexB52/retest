@@ -48,7 +48,10 @@ module Retest
 
       changed_files = VersionControl::Git.diff_files(branch)
       test_files = repository.find_tests(changed_files)
-      return stdout.puts(test_files) if name_only
+      if name_only
+        stdout.puts(test_files)
+        return 0
+      end
 
       runner.run(test_files: test_files)
     end

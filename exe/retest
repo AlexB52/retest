@@ -21,8 +21,7 @@ end
 if options.params[:diff] && options.name_only?
   repository = Retest::Repository.new(files: Retest::VersionControl.files, prompt: Retest::Prompt.new)
   program = Retest::Program.new(repository: repository)
-  program.diff(options.params[:diff], name_only: true)
-  exit
+  exit program.diff(options.params[:diff], name_only: true)
 end
 
 prompt     = Retest::Prompt.new
@@ -64,8 +63,7 @@ end
 
 # === DIFF ACTION ===
 if options.params[:diff]
-  program.diff(options.params[:diff], name_only: options.name_only?)
-  exit
+  exit program.diff(options.params[:diff], name_only: options.name_only?)
 end
 
 # === LOGGING ===
