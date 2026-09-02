@@ -160,6 +160,7 @@ module Retest
 
     class DiffTest < Minitest::Test
       def setup
+        @prompt = Prompt.new(input: StringIO.new("1\n"), output: StringIO.new)
         @repository = Repository.new(files: %w[
           lib/retest/command.rb
           lib/retest/program.rb
@@ -168,7 +169,7 @@ module Retest
           test/retest/matching_options_test.rb
           test/retest/options_test.rb
           test/retest/program_test.rb
-        ])
+        ], prompt: @prompt)
         @runner = EmptyRunner.new
         @stdout = StringIO.new
         @subject = Program.new(runner: @runner, repository: @repository, stdout: @stdout)
@@ -181,7 +182,6 @@ module Retest
 
         assert_equal <<~OUTPUT, @stdout.string
           test/retest/command_test.rb
-          test/retest/matching_options_test.rb
           test/retest/options_test.rb
           test/retest/program_test.rb
         OUTPUT
