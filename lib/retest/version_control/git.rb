@@ -28,7 +28,8 @@ module Retest
         (
           branch_diff_files +
           staged_diff_files +
-          unstaged_diff_files
+          unstaged_diff_files +
+          untracked_files
         ).uniq
       end
 

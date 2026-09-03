@@ -7,15 +7,26 @@ listen_rd, listen_wr = IO.pipe
 
 options = Retest::Options.new(ARGV)
 
+# === EARLY EXITS ===
+
 if options.help?
   puts options.help
-  return
+  exit
 end
 
 if options.version?
   puts Retest::VERSION
-  return
+  exit
 end
+
+if options.params[:diff] && options.name_only?
+  repository = Retest::Repository.new(files: Retest::VersionControl.files, prompt: Retest::Prompt.new)
+
+  exit Retest::Program.new(repository: repository)
+    .diff(options.params[:diff], name_only: true)
+end
+
+# === SETUP ===
 
 prompt     = Retest::Prompt.new
 repository = Retest::Repository.new(files: Retest::VersionControl.files, prompt: prompt)
@@ -33,7 +44,19 @@ program = Retest::Program.new(
   runner: runner
 )
 
+# === TRAP INTERRUPTION ===
+
+Signal.trap(:INT) do
+  if !runner.interrupt_run
+    puts "Goodbye"
+    listen_rd.close
+    listen_wr.close
+    exit
+  end
+end
+
 # === LOGGING ===
+
 case command
 when Retest::Command::Rails then puts "Setup: [RAILS]"
 when Retest::Command::Rspec then puts "Setup: [RSPEC]"
@@ -44,22 +67,14 @@ end
 
 puts "Command: '#{command}'"
 
-# === TRAP INTERRUPTION ===
-Signal.trap(:INT) do
-  if !runner.interrupt_run
-    puts "Goodbye"
-    listen_rd.close
-    listen_wr.close
-    exit
-  end
-end
-
 # === DIFF ACTION ===
+
 if options.params[:diff]
-  exit program.diff(options.params[:diff])
+  exit program.diff(options.params[:diff], name_only: options.name_only?)
 end
 
 # === LOGGING ===
+
 if watcher == Retest::Watcher::Watchexec
   puts "Watcher: [WATCHEXEC]"
 else
@@ -74,6 +89,7 @@ end
 puts launching_message
 
 # === MAIN ACTION ===
+
 Retest.listen(options, listener: watcher) do |modified, added, removed|
   begin
     repository.sync(added: added, removed: removed)
@@ -121,8 +137,10 @@ def run_command(input:, program:)
   when 'ra', 'run all'
     puts "Running all tests\n"
     program.run_all
-  when /^di?f?f?\s(.*)$/
-    program.diff($1)
+  when /^di?f?f?(?:\s+(.*))?$/
+    arguments = $1.to_s.split
+    name_only = arguments.delete('--name-only')
+    program.diff(arguments.join(' '), name_only: name_only)
   when 'c', 'clear'
     program.clear_terminal
   when 'h', 'help'
@@ -138,6 +156,7 @@ def run_command(input:, program:)
         fb, force batch        Force a selection of tests based on raw data list
         r, reset               Reset forced selection
         d, diff [BRANCH]       Run specs changed relative to a Git branch
+                               Add --name-only to print matching test files without running
         c, clear               Clear the window
         e, exit                Exit Retest
     HELP

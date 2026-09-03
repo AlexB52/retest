@@ -52,11 +52,13 @@ class GitChangesTest < Minitest::Test
     rename_file('lib/to_be_renamed_with_test_file.rb', 'lib/renamed_with_test_file.rb', sleep_for: 0)
     rename_file('test/to_be_renamed_with_test_file_test.rb', 'test/renamed_with_test_file_test.rb', sleep_for: 0)
     create_file('lib/created.rb', sleep_for: 0)
-    create_file('lib/created_with_test_file.rb', sleep_for: 0)
-    create_file('test/created_with_test_file_test.rb', sleep_for: 0)
 
     `git add .`
     `git commit -m "Rename, Add and Remove files"`
+
+
+    create_file('lib/created_with_test_file.rb', sleep_for: 0)
+    create_file('test/created_with_test_file_test.rb', sleep_for: 0)
 
     launch_retest 'retest --diff=main --ruby'
 
@@ -65,6 +67,28 @@ class GitChangesTest < Minitest::Test
         - test/created_with_test_file_test.rb
         - test/renamed_with_test_file_test.rb
         - test/to_be_renamed_test.rb
+    EXPECTED
+  end
+
+  def test_diffs_from_other_branch_with_name_only
+    delete_file('lib/to_be_deleted.rb', sleep_for: 0)
+    rename_file('lib/to_be_renamed.rb', 'lib/renamed.rb', sleep_for: 0)
+    rename_file('lib/to_be_renamed_with_test_file.rb', 'lib/renamed_with_test_file.rb', sleep_for: 0)
+    rename_file('test/to_be_renamed_with_test_file_test.rb', 'test/renamed_with_test_file_test.rb', sleep_for: 0)
+    create_file('lib/created.rb', sleep_for: 0)
+
+    `git add .`
+    `git commit -m "Rename, Add and Remove files"`
+
+    create_file('lib/created_with_test_file.rb', sleep_for: 0)
+    create_file('test/created_with_test_file_test.rb', sleep_for: 0)
+
+    launch_retest 'retest --diff=main --name-only'
+
+    assert_output_matches <<~EXPECTED
+      test/created_with_test_file_test.rb
+      test/renamed_with_test_file_test.rb
+      test/to_be_renamed_test.rb
     EXPECTED
   end
 end

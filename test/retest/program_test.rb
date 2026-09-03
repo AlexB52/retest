@@ -157,5 +157,61 @@ module Retest
         capture_subprocess_io { @subject.run('path.rb') }
       end
     end
+
+    class DiffTest < Minitest::Test
+      def setup
+        @prompt = Prompt.new(input: StringIO.new("1\n"), output: StringIO.new)
+        @repository = Repository.new(files: %w[
+          lib/retest/command.rb
+          lib/retest/program.rb
+          lib/retest/options.rb
+          test/retest/command_test.rb
+          test/retest/matching_options_test.rb
+          test/retest/options_test.rb
+          test/retest/program_test.rb
+        ], prompt: @prompt)
+        @runner = EmptyRunner.new
+        @stdout = StringIO.new
+        @subject = Program.new(runner: @runner, repository: @repository, stdout: @stdout)
+      end
+
+      def test_name_only_prints_matching_test_files
+        exit_status = with_git_diff_files(%w[lib/retest/command.rb lib/retest/options.rb lib/retest/program.rb]) do
+          @subject.diff('main', name_only: true)
+        end
+
+        assert_equal 0, exit_status
+        assert_equal <<~OUTPUT, @stdout.string
+          test/retest/command_test.rb
+          test/retest/options_test.rb
+          test/retest/program_test.rb
+        OUTPUT
+        assert_empty @runner.journal
+      end
+
+      def test_diff_runs_matching_test_files
+        with_git_diff_files(%w[lib/retest/command.rb]) do
+          @subject.diff('main')
+        end
+
+        assert_equal [
+          {
+            method: :run,
+            args: [],
+            kwargs: { test_files: %w[test/retest/command_test.rb] }
+          }
+        ], @runner.journal
+      end
+
+      private
+
+      def with_git_diff_files(files)
+        Retest::VersionControl::Git.stub(:installed?, true) do
+          Retest::VersionControl::Git.stub(:diff_files, files) do
+            yield
+          end
+        end
+      end
+    end
   end
 end

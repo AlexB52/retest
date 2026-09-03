@@ -12,6 +12,7 @@ Options:
         --diff BRANCH                Run tests matching files changed from BRANCH
         --exts EXTENSIONS            Comma-separated file extensions to watch (default: rb)
     -h, --help                       Show this help
+        --name-only                  Print matching test files for --diff without running
         --notify                     Play a sound when tests pass or fail (macOS only)
         --polling                    Use polling for file watching
         --rails                      Use the standard Rails test command
@@ -39,3 +40,6 @@ Examples:
 
     $ retest --diff main
         Run tests matching files changed from main
+
+    $ retest --diff main --name-only
+        Print matching test files changed from main
