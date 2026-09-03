@@ -47,13 +47,14 @@ module Retest
       raise "Git not installed" unless VersionControl::Git.installed?
 
       changed_files = VersionControl::Git.diff_files(branch)
-      test_files = repository.find_tests(changed_files)
+      test_files    = repository.find_tests(changed_files)
+
       if name_only
         stdout.puts(test_files)
-        return 0
+        0 # exit value
+      else
+        runner.run(test_files: test_files)
       end
-
-      runner.run(test_files: test_files)
     end
 
     def run_all
