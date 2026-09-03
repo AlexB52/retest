@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 
-require 'shellwords'
 require 'retest'
 
 $stdout.sync = true
@@ -129,8 +128,9 @@ def run_command(input:, program:)
     puts "Running all tests\n"
     program.run_all
   when /^di?f?f?(?:\s+(.*))?$/
-    branch, *flags = Shellwords.split($1.to_s)
-    program.diff(branch.to_s, name_only: flags.include?('--name-only'))
+    arguments = $1.to_s.split
+    name_only = arguments.delete('--name-only')
+    program.diff(arguments.join(' '), name_only: name_only)
   when 'c', 'clear'
     program.clear_terminal
   when 'h', 'help'
