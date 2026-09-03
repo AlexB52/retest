@@ -88,7 +88,6 @@ module Retest
     def parse(args)
       remaining = args.dup
       parser.parse!(remaining)
-      raise OptionParser::InvalidOption, "--name-only requires --diff" if name_only? && params[:diff].nil?
       params[:command] = remaining.shift
       raise OptionParser::InvalidArgument, remaining.join(' ') unless remaining.empty?
     end
