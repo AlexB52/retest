@@ -39,6 +39,15 @@ module Retest
 
       @subject.args = %w[--diff=origin/main]
       assert_equal "origin/main", @subject.params[:diff]
+      refute @subject.name_only?
+
+      @subject.args = %w[--diff main --name-only]
+      assert_equal "main", @subject.params[:diff]
+      assert @subject.name_only?
+
+      @subject.args = %w[--diff=origin/main --name-only]
+      assert_equal "origin/main", @subject.params[:diff]
+      assert @subject.name_only?
     end
 
     def test_version?
