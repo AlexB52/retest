@@ -38,6 +38,7 @@ class InteractiveCommandTest < Minitest::Test
         r, reset               Reset forced selection
         d, diff [BRANCH]       Run specs changed relative to a Git branch
                                Add --name-only to print matching test files without running
+                               Add --pick=none or --pick=one to avoid prompts
         c, clear               Clear the window
         e, exit                Exit Retest
 
