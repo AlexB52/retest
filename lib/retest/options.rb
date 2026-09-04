@@ -9,6 +9,7 @@ module Retest
       help: false,
       name_only: false,
       notify: false,
+      pick: nil,
       polling: false,
       rake: false,
       rails: false,
@@ -67,6 +68,10 @@ module Retest
       params[:name_only]
     end
 
+    def pick
+      params[:pick] || 'prompt'
+    end
+
     def force_polling?
       params[:polling]
     end
@@ -90,6 +95,7 @@ module Retest
       parser.parse!(remaining)
       params[:command] = remaining.shift
       raise OptionParser::InvalidArgument, remaining.join(' ') unless remaining.empty?
+      raise OptionParser::InvalidArgument, '--pick requires --diff' if params[:pick] && !params[:diff]
     end
 
     def parser
@@ -112,6 +118,7 @@ module Retest
         opts.on('-h', '--help',                                  'Show this help')                                        { params[:help] = true }
         opts.on('--name-only',                                   'Print matching test files for --diff without running')  { params[:name_only] = true }
         opts.on('--notify',                                      'Play a sound when tests pass or fail (macOS only)')     { params[:notify] = true }
+        opts.on('--pick STRATEGY', %w[prompt none one],          'How --diff handles ambiguous matches (prompt, none, one)') { |value| params[:pick] = value }
         opts.on('--polling',                                     'Use polling for file watching')                         { params[:polling] = true } #Some filesystems won't work without it VM/Vagrant Shared folders, NFS, Samba, sshfs...
         opts.on('--rails',                                       'Use the standard Rails test command')                   { params[:rails] = true }
         opts.on('--rake',                                        'Use the standard Rake test command')                    { params[:rake] = true }

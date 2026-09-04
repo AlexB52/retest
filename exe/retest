@@ -23,7 +23,7 @@ if options.params[:diff] && options.name_only?
   repository = Retest::Repository.new(files: Retest::VersionControl.files, prompt: Retest::Prompt.new)
 
   exit Retest::Program.new(repository: repository)
-    .diff(options.params[:diff], name_only: true)
+    .diff(options.params[:diff], name_only: true, pick: options.pick)
 end
 
 # === SETUP ===
@@ -70,7 +70,7 @@ puts "Command: '#{command}'"
 # === DIFF ACTION ===
 
 if options.params[:diff]
-  exit program.diff(options.params[:diff], name_only: options.name_only?)
+  exit program.diff(options.params[:diff], name_only: options.name_only?, pick: options.pick)
 end
 
 # === LOGGING ===
@@ -140,7 +140,18 @@ def run_command(input:, program:)
   when /^di?f?f?(?:\s+(.*))?$/
     arguments = $1.to_s.split
     name_only = arguments.delete('--name-only')
-    program.diff(arguments.join(' '), name_only: name_only)
+    pick = 'prompt'
+    pick_argument = arguments.find { |argument| argument.start_with?('--pick=') }
+
+    if pick_argument
+      pick = pick_argument.split('=', 2).last
+      arguments.delete(pick_argument)
+    elsif (pick_index = arguments.index('--pick'))
+      arguments.delete_at(pick_index)
+      pick = arguments.delete_at(pick_index) || pick
+    end
+
+    program.diff(arguments.join(' '), name_only: name_only, pick: pick)
   when 'c', 'clear'
     program.clear_terminal
   when 'h', 'help'
@@ -157,6 +168,7 @@ def run_command(input:, program:)
         r, reset               Reset forced selection
         d, diff [BRANCH]       Run specs changed relative to a Git branch
                                Add --name-only to print matching test files without running
+                               Add --pick=none or --pick=one to avoid prompts
         c, clear               Clear the window
         e, exit                Exit Retest
     HELP

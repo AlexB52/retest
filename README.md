@@ -42,6 +42,7 @@ Run tests with your preferred commands, placeholders, or patterns:
 retest 'bin/rails test <test> && rubocop <changed>' # Flexible placeholders
 retest --all                                        # Run all tests on every file change
 retest --diff origin/main                           # Test changes from a branch
+retest --diff origin/main --name-only --pick=none   # Print non-ambiguous matches only
 ```
 
 ### **Interactive Companion**  

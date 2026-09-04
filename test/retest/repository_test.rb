@@ -218,6 +218,42 @@ module Retest
         'test/bottles_test.rb',
       ], @subject.find_tests(%w[bottles_test.rb])
     end
+
+    def test_find_tests_with_pick_none_skips_ambiguous_matches
+      @subject.files = %w(
+        core/app/controllers/admin/billing_agent_customers_controller.rb
+        spec/models/billing_agent_customer_spec.rb
+        core/spec/models/billing_agent_customer_spec.rb
+        core/spec/controllers/admin/billing_agent_customers_controller_spec.rb
+        test/program_test.rb
+        program.rb
+      )
+
+      assert_equal [
+        'test/program_test.rb',
+      ], @subject.find_tests(%w[app/models/billing_agent_customer.rb program.rb], pick: :none)
+    end
+
+    def test_find_tests_with_pick_one_uses_best_ambiguous_match
+      @subject.files = %w(
+        core/app/controllers/admin/billing_agent_customers_controller.rb
+        spec/models/billing_agent_customer_spec.rb
+        core/spec/models/billing_agent_customer_spec.rb
+        core/spec/controllers/admin/billing_agent_customers_controller_spec.rb
+      )
+
+      assert_equal [
+        'spec/models/billing_agent_customer_spec.rb',
+      ], @subject.find_tests(%w[app/models/billing_agent_customer.rb], pick: :one)
+    end
+
+    def test_find_tests_rejects_unknown_pick_strategy
+      error = assert_raises(ArgumentError) do
+        @subject.find_tests(%w[lib/bottles.rb], pick: :all)
+      end
+
+      assert_equal "unknown pick strategy: all", error.message
+    end
   end
 
   class TestRepoSearchTests < Minitest::Test
