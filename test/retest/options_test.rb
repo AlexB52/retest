@@ -50,6 +50,25 @@ module Retest
       assert @subject.name_only?
     end
 
+    def test_pick
+      @subject.args = %w[--diff main]
+      assert_equal 'prompt', @subject.pick
+
+      @subject.args = %w[--diff main --pick none]
+      assert_equal 'none', @subject.pick
+
+      @subject.args = %w[--diff=origin/main --pick=one]
+      assert_equal 'one', @subject.pick
+    end
+
+    def test_pick_requires_diff
+      error = assert_raises(OptionParser::ParseError) do
+        @subject.args = %w[--pick none]
+      end
+
+      assert_equal "invalid argument: --pick requires --diff", error.message
+    end
+
     def test_version?
       @subject.args = ["--version"]
       assert @subject.version?

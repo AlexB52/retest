@@ -162,6 +162,10 @@ module Retest
       def setup
         @prompt = Prompt.new(input: StringIO.new("1\n"), output: StringIO.new)
         @repository = Repository.new(files: %w[
+          core/app/controllers/admin/billing_agent_customers_controller.rb
+          spec/models/billing_agent_customer_spec.rb
+          core/spec/models/billing_agent_customer_spec.rb
+          core/spec/controllers/admin/billing_agent_customers_controller_spec.rb
           lib/retest/command.rb
           lib/retest/program.rb
           lib/retest/options.rb
@@ -187,6 +191,30 @@ module Retest
           test/retest/program_test.rb
         OUTPUT
         assert_empty @runner.journal
+      end
+
+      def test_name_only_skips_ambiguous_matches_with_pick_none
+        exit_status = with_git_diff_files(%w[app/models/billing_agent_customer.rb lib/retest/program.rb]) do
+          @subject.diff('main', name_only: true, pick: :none)
+        end
+
+        assert_equal 0, exit_status
+        assert_equal <<~OUTPUT, @stdout.string
+          test/retest/program_test.rb
+        OUTPUT
+        assert_empty @prompt.read_output
+      end
+
+      def test_name_only_uses_best_ambiguous_match_with_pick_one
+        exit_status = with_git_diff_files(%w[app/models/billing_agent_customer.rb]) do
+          @subject.diff('main', name_only: true, pick: :one)
+        end
+
+        assert_equal 0, exit_status
+        assert_equal <<~OUTPUT, @stdout.string
+          spec/models/billing_agent_customer_spec.rb
+        OUTPUT
+        assert_empty @prompt.read_output
       end
 
       def test_diff_runs_matching_test_files

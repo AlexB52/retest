@@ -14,6 +14,7 @@ Options:
     -h, --help                       Show this help
         --name-only                  Print matching test files for --diff without running
         --notify                     Play a sound when tests pass or fail (macOS only)
+        --pick STRATEGY              How --diff handles ambiguous matches (prompt, none, one)
         --polling                    Use polling for file watching
         --rails                      Use the standard Rails test command
         --rake                       Use the standard Rake test command
