@@ -73,6 +73,10 @@ module Retest
       def raise_multiple_test_not_supported
         raise MultipleTestsNotSupported, "Multiple test files run not supported for command: '#{to_s}'"
       end
+
+      def paths_without_line_numbers(files)
+        files.map { |file| file.to_s.sub(/:\d+\z/, '') }
+      end
     end
   end
 end

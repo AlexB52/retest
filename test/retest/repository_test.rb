@@ -138,6 +138,48 @@ module Retest
       assert_equal 'test/bottles_test.rb', @subject.find_test('test/bottles_test.rb')
     end
 
+    def test_called_with_line_numbered_test_file
+      @subject.files = %w(
+        test/songs/99bottles.txt
+        test/bottles_test.rb
+        program.rb
+        README.md
+        lib/bottles.rb
+        Gemfile
+        Gemfile.lock
+      )
+
+      assert_equal 'test/bottles_test.rb:19', @subject.find_test('test/bottles_test.rb:19')
+    end
+
+    def test_called_with_incomplete_line_numbered_test_file
+      @subject.files = %w(
+        test/songs/99bottles.txt
+        test/bottles_test.rb
+        program.rb
+        README.md
+        lib/bottles.rb
+        Gemfile
+        Gemfile.lock
+      )
+
+      assert_equal 'test/bottles_test.rb:19', @subject.find_test('bottles_test.rb:19')
+    end
+
+    def test_called_with_line_numbered_changed_file
+      @subject.files = %w(
+        test/songs/99bottles.txt
+        test/bottles_test.rb
+        program.rb
+        README.md
+        lib/bottles.rb
+        Gemfile
+        Gemfile.lock
+      )
+
+      assert_equal 'test/bottles_test.rb', @subject.find_test('lib/bottles.rb:19')
+    end
+
     def test_called_with_test_file_but_no_match
       @subject.files = []
 
@@ -218,6 +260,13 @@ module Retest
         'test/bottles_test.rb',
       ], @subject.find_tests(%w[bottles_test.rb])
     end
+
+    def test_find_line_numbered_test_files
+      assert_equal [
+        'test/bottles_test.rb:19',
+        'test/glasses_test.rb:24',
+      ], @subject.find_tests(%w[test/bottles_test.rb:19 glasses_test.rb:24])
+    end
   end
 
   class TestRepoSearchTests < Minitest::Test
@@ -244,19 +293,25 @@ module Retest
 
     def test_search_results
       assert_equal({
-        "test/bottles_test.rb" => "test/bottles_test.rb",
-        "lib/bottles.rb"       => "test/bottles_test.rb",
-        "test/plates_test.rb"  => "test/plates_test.rb",
-        "test/unknown_test.rb" => nil,
-        "lib/unknown.rb"       => nil,
-        "lib/glasses.rb"       => "test/glasses_test.rb",
+        "test/bottles_test.rb"    => "test/bottles_test.rb",
+        "lib/bottles.rb"          => "test/bottles_test.rb",
+        "test/plates_test.rb"     => "test/plates_test.rb",
+        "test/program_test.rb:19" => "test/program_test.rb:19",
+        "test/unknown_test.rb"    => nil,
+        "test/unknown_test.rb:19" => nil,
+        "lib/unknown.rb"          => nil,
+        "lib/glasses.rb:24"       => "test/glasses_test.rb",
+        "lib/glasses.rb"          => "test/glasses_test.rb",
       }, @subject.search_tests(%w[
         test/bottles_test.rb
         lib/bottles.rb
         test/bottles_test.rb
         test/plates_test.rb
+        test/program_test.rb:19
         test/unknown_test.rb
+        test/unknown_test.rb:19
         lib/unknown.rb
+        lib/glasses.rb:24
         lib/glasses.rb
       ]))
     end

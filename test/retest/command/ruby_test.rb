@@ -26,8 +26,16 @@ module Retest
         assert_equal 'a/file/path.rb', @subject.format_batch('a/file/path.rb')
       end
 
+      def test_format_strips_line_numbers
+        assert_equal 'a/file/path.rb', @subject.format_batch('a/file/path.rb:19')
+      end
+
       def test_format_with_multiple_files
         assert_equal %Q{-e "require './a/file/path.rb';require './another/file/path.rb';"}, @subject.format_batch('a/file/path.rb', 'another/file/path.rb')
+      end
+
+      def test_format_with_multiple_files_strips_line_numbers
+        assert_equal %Q{-e "require './a/file/path.rb';require './another/file/path.rb';"}, @subject.format_batch('a/file/path.rb:19', 'another/file/path.rb:24')
       end
 
       def test_switch_to
@@ -73,8 +81,16 @@ module Retest
         assert_equal 'a/file/path.rb', @subject.format_batch('a/file/path.rb')
       end
 
+      def test_format_strips_line_numbers
+        assert_equal 'a/file/path.rb', @subject.format_batch('a/file/path.rb:19')
+      end
+
       def test_format_with_multiple_files
         assert_equal %Q{-e "require './a/file/path.rb';require './another/file/path.rb';"}, @subject.format_batch('a/file/path.rb', 'another/file/path.rb')
+      end
+
+      def test_format_with_multiple_files_strips_line_numbers
+        assert_equal %Q{-e "require './a/file/path.rb';require './another/file/path.rb';"}, @subject.format_batch('a/file/path.rb:19', 'another/file/path.rb:24')
       end
 
       def test_switch_to

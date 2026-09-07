@@ -2,6 +2,8 @@ module Retest
   class Command
     class Ruby < Base
       def format_batch(*files)
+        files = paths_without_line_numbers(files)
+
         files.size > 1 ? %Q{-e "#{files.map { |file| "require './#{file}';" }.join}"} : files.first
       end
 

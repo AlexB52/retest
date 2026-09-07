@@ -12,14 +12,16 @@ module Retest
       return unless path
       return if path.empty?
 
-      unless cache.key?(path)
-        ok_to_cache, test_file = select_from path, MatchingOptions.for(path, files: files)
+      matching_path = path_without_line_number(path)
+
+      unless cache.key?(matching_path)
+        ok_to_cache, test_file = select_from matching_path, MatchingOptions.for(matching_path, files: files)
         if ok_to_cache
-          cache[path] = test_file
+          cache[matching_path] = test_file
         end
       end
 
-      cache[path]
+      with_line_number(path, cache[matching_path])
     end
 
     def find_tests(paths)
@@ -32,7 +34,7 @@ module Retest
 
     def search_tests(paths)
       result = {}
-      ruby_files = paths.select { |path| path.end_with?('.rb') }
+      ruby_files = paths.select { |path| ruby_file?(path) }
 
       ruby_files.each do |path|
         result[path] ||= find_test(path)
@@ -69,6 +71,28 @@ module Retest
     end
 
     private
+
+    def ruby_file?(path)
+      path_without_line_number(path).end_with?('.rb')
+    end
+
+    def path_without_line_number(path)
+      path.to_s.sub(/:\d+\z/, '')
+    end
+
+    def line_number(path)
+      path.to_s[/:(\d+)\z/, 1]
+    end
+
+    def with_line_number(path, test_file)
+      return test_file unless test_file
+      number = line_number(path)
+
+      return test_file unless number
+      return test_file unless MatchingOptions::Path.new(path_without_line_number(path)).test?
+
+      "#{test_file}:#{number}"
+    end
 
     def select_from(path, matching_tests)
       case matching_tests.count
